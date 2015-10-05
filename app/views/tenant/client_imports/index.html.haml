@@ -1,0 +1,52 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+    %p You can import large numbers of clients by entering them into our custom spreadsheet template and importing them back into the system.
+    %div
+      = link_to 'Download Excel Template', ENV['CLIENT_IMPORT_TEMPLATE_URL'], class: 'btn', target: '_blank'
+
+      - import_button_classes = 'btn btn-primary no-print'
+      - if @current_import.try(:status) == 0 or @current_import.try(:status) == 2
+        - import_button_classes += ' disabled' 
+      = link_to 'Import Clients', new_tenant_client_import_url, remote: true, id: 'import-clients-button', class: import_button_classes
+
+- if @current_import.try(:status) == 0
+  .status-container
+    = render 'importing_clients'
+
+- elsif @current_import.try(:status) == 1
+  .status-container
+    .row.import-status
+      .col-lg-8.col-lg-offset-2
+        .alert.alert-success
+          %h2 
+            %strong Import completed
+
+          %p Your client import completed successfully.
+
+          %div{style: 'padding-top: 10px'}
+            = link_to 'View All Clients', tenant_clients_url, class: 'btn btn-primary no-print'
+
+- elsif @current_import.try(:status) == 2
+  .status-container
+    .row.import-status
+      .col-lg-8.col-lg-offset-2
+        .alert.alert-danger
+          %h2 
+            %strong Invalid data in spreadsheet
+
+          %p The following errors were found in your spreadsheet:
+
+          %ul
+          - @current_import.error_messages.each do |message|
+            %li= message
+
+          %div{style: 'padding-top: 10px'}
+            = link_to 'Upload corrected spreadsheet', edit_tenant_client_import_url(@current_import), remote: true, class: 'btn btn-primary no-print'
+- else
+  .status-container
+
+= render 'tenant/qrid_photos/upload_progress_template'

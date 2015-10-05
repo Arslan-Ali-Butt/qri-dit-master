@@ -1,0 +1,45 @@
+- method = resource.new_record? ? 'post' : (action_name == 'delete' ? 'delete' : 'patch')
+- case method
+  - when 'post'
+    - url = { controller: controller_name, action: 'index' }
+    - button = case controller_name
+      - when 'qrid_photos'
+        - 'Add'
+      - when 'report_notes'
+        - 'Submit'
+      - else
+        - 'Next'
+  - when 'delete'
+    - url = { controller: controller_name, action: 'destroy', id: resource.id }
+    - button = 'Confirm'
+  - else
+    - url = { controller: controller_name, action: 'update', id: resource.id }
+    - button = 'Save changes'
+
+.row.visible-lg.visible-md
+  .col-lg-12
+    .pull-left{style: 'display: inline-block;'}
+      %h1
+        %span{style: 'color: #000; display: inline-block;'}
+          Choose Basic Information
+      %p
+        Enter the basic QRID information and choose a name for this QRID.
+    %div{style: 'display: inline-block; padding-top: 30px;', class: 'pull-right'}
+      =image_tag('tenant/progress_1.png')          
+.hidden-lg.hidden-md Please use a tablet or a desktop computer to create a QRID.  Creating QRIDs is not compatible with small devices.
+= render 'error_messages', resource: resource
+= form_for resource, url: url, method: method, html: {class: "form-horizontal #{resource.class.name.demodulize.downcase}-form  visible-lg visible-md", role: 'form', multipart: (controller_name == 'qrid_photos')} do |f|
+  - if method == 'delete'
+    = render 'delete_fields', f: f
+  - else
+    = render 'form_fields', f: f
+  = hidden_field_tag(:end_of_wizard_return_path, params[:return_path])  if params[:return_path].present?
+  .row
+    %fieldset
+      .form-group.form-actions.pull-right{style: 'margin-right: 30px'}
+        %div
+          - unless controller_name == 'qrids' && action_name == 'edit'
+            = f.button button, name: nil, type: 'submit', class: "clean-exit btn  #{method == 'delete' ? 'btn-danger' : 'btn-success'}", data: {disable_with: "Submitting..."}
+          - if controller_name == 'reports'
+            = f.button 'Save and send', name: 'send', type: 'submit', value: 1, class: 'btn btn-success'
+          = link_to 'Cancel', url_for(controller: controller_name), class: 'btn btn-default', role: 'button'

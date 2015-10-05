@@ -1,0 +1,10 @@
+<% if controller_name != 'permatasks' %>
+<% page_title = case controller_name
+    when 'users'      then 'Add a Team Member'
+    when 'clients'    then 'Add a Client'
+    else "Add a New #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}"
+  end %>
+
+$('#myModal').html('<%= escape_javascript(render('modal_form', page_title: page_title, resource: @resource)) %>');
+$('#myModal').modal('show');
+<% end %>

@@ -1,0 +1,102 @@
+@media print {
+  body, .container {
+    margin: 0;
+    padding: 0;
+  }
+  footer {
+    display: none;
+  }
+  .no-print {
+    display: none;
+  }
+
+  .print-only {
+    display: block;
+  }
+
+  .header-logo {
+    padding: 0px;
+    margin-left: -110px;
+    margin-top: 25px;   
+  }
+  
+  .header-user-info {
+    padding: 0px;
+    margin-left: 0px;
+    margin-top: 25px;
+  }
+
+  a[href]:after {
+    content: none;
+  }
+  #report_qrid dd{
+    margin-left: 30px !important;    
+  }
+  .panel{
+    page-break-inside:avoid;
+  }
+  #report_details{
+    .panel-body{
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    td{
+      padding: 0;
+      border: 0!important;
+      display: block;
+      float: left;
+      &:nth-child(even){
+        padding-right: 15px;
+        float: right;
+      }
+      &:nth-child(odd){
+        padding-left: 15px;
+      }
+    }
+    tr{
+      display: block;
+      float: right;
+      width: 50%;
+      border: 0!important;
+      &:nth-child(even){
+        border-right: 1px solid;
+      }
+    }
+  }
+  #report_location>*{
+    float:left;
+  }
+  #report_comments{
+    page-break-before:always;
+    page-break-inside:auto;
+  }
+  .my_reports_show,.reports_show{
+    h1{
+      text-align: center;
+    }
+  }
+  #content,.panel-body{
+    padding: 0 !important;
+  }
+  #mobile_calendar{
+    width: 100%;
+    table,tr,td,th{
+      border: 1px solid;
+    }
+    table{
+      width: 100%;
+    }
+    td,th{
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+  .row{
+    margin: 0;
+  }
+  .my_assignments_index{
+    #mobile_calendar > table > tbody > tr > th:nth-child(4),#mobile_calendar > table > tbody > tr > td:nth-child(4){
+      display: none;
+    }
+  }
+}

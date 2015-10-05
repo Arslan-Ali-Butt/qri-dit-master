@@ -1,0 +1,22 @@
+= form_tag({}, remote: true, class: 'form-horizontal') do
+  = hidden_field_tag :latitude, params[:latitude]
+  = hidden_field_tag :longitude, params[:longitude]
+  = hidden_field_tag :accuracy, params[:accuracy]
+  = hidden_field_tag :started_at_i, Time.now.to_i
+
+  - if @resource.permatasks.empty?
+    = hidden_field_tag :permatask, 0
+  - else
+    .radio.select-checklist
+      .label
+        %label{style: 'font-weight: bold'}
+          = radio_button_tag :permatask, 0
+          Is this a Scheduled Visit? (QRID Report)
+    - @resource.permatasks.each do |task|
+      .radio.select-checklist
+        .label
+          %label{style: 'font-weight: bold'}
+            = radio_button_tag :permatask, task.id
+            = task.name
+  .col-sm-12
+    = button_tag 'Continue', name: nil, type: 'submit', class: 'btn btn-primary', style: 'width:100%'

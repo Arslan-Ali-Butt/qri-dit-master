@@ -1,0 +1,3 @@
+<% page_title = "Report ##{@resource.id}" %>
+$('#myModal').html('<%= escape_javascript(render('modal_report', page_title: page_title, resource: @resource)) %>');
+$('#myModal').modal();

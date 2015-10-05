@@ -1,0 +1,6 @@
+- logo = Admin::Tenant.cached_find_by_host(request.host).logo
+- company_uri = Admin::Tenant.cached_find_by_host(request.host).company_uri.to_s
+- if logo && company_uri
+  %a{:title => 'Company Website', :href => company_uri, :target => '_blank'}
+    .company-logo
+      = image_tag(logo.photo.expiring_url(300, :thumbnail))

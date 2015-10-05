@@ -1,0 +1,10 @@
+<% page_title = "Edit #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}" %>
+$('#myModal').html('<%= escape_javascript(render('modal_form', page_title: page_title, resource: @resource)) %>');
+if ($('#myModal').hasClass('in')) {
+    initMap();
+} else {
+    $('#myModal').modal('show');
+    $('#myModal').on('shown.bs.modal', function (e) {
+        initMap();
+    });
+}

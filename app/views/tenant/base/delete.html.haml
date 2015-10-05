@@ -1,0 +1,7 @@
+- page_title = case controller_name
+  - when 'users'      then 'Delete Staff'
+  - when 'clients'    then 'Delete Client'
+  - else "Delete #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}"
+
+= tenant_page_title page_title
+= render 'form', page_title: page_title, resource: @resource

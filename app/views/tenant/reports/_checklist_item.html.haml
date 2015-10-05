@@ -1,0 +1,23 @@
+-# suppress reporter comments from the client's view according to appropriate company setting
+-if !( !(Admin::Tenant.cached_find_by_host(request.host).try(:allow_clients_view_comments)) and tsk.task_type == 'Comment' and (current_user.role?('Client')||((!current_user.role?('Client'))&&controller_name =='c_reports')))
+  - if !@resource.report_tasks.where(task_id: tsk.id).first.nil?
+    - report_task = @resource.report_tasks.where(task_id: tsk.id).first
+    .media
+      .media-body
+        - has_children = @resource.report_tasks.where(task_id: tsk.descendants.pluck(:id)).count > 0
+        - answer = tsk.children.where(name: report_task.description).first
+        - flaggable = (report_task.task_type == 'Question' and (!answer.nil? and answer.children.count > 0))
+      
+        %h4.media-heading{class:"#{report_task.task_type} #{'text-danger' if has_children and flaggable}"}= report_task.task_type == "Comment" ? "Comment" : report_task.name
+        %p{class: "#{'text-danger' if has_children and flaggable}"}= report_task.description
+        - if has_children
+          - tsk.children.each do |child|
+            = render partial: 'tenant/reports/checklist_item', locals: { tsk: child }
+
+  - elsif @resource.report_tasks.where(task_id: tsk.descendants.pluck(:id)).count > 0
+    .media
+      .media-body
+        - if tsk.task_type != "Answer"
+          %h4.media-heading{class:"#{tsk.task_type}"}= tsk.name
+        - tsk.children.each do |child|
+          = render partial: 'tenant/reports/checklist_item', locals: { tsk: child }

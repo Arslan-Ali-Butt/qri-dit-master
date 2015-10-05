@@ -1,0 +1,143 @@
+= page_title 'Review & Activation'
+#myModal.modal.fade
+.row
+  .col-lg-12{style: 'text-align: center;'}
+    %h2 Review &amp; Activation
+
+= render 'error_messages', resource: @tenant
+= form_for(@tenant, as: :signup, url: signup_create_url, method: :post, html: {class: 'form-horizontal', role: 'form'}) do |f|
+  = render partial: 'purchase_params', locals: {f: f}
+  = render partial: 'details_params', locals: {f: f}
+  = render partial: 'confirmation_review_params', locals: {f: f}
+  .panel.panel-default
+    .panel-body
+      .row{style: "background: #fff;"}
+        .col-lg-4
+          %legend Company Profile
+          .form-group
+            = f.label :company_name, 'Company Name', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @tenant.company_name
+          .form-group
+            = f.label :company_website, 'Company Website', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @tenant.company_website
+          .form-group
+            = f.label :name, 'Name', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @tenant.name
+          .form-group.row
+            = f.label :phone, 'Phone', class: 'col-sm-4 control-label'
+            .col-xs-3
+              %p.form-control-static= @tenant.phone
+            = f.label :phone, 'ext.', class: 'col-sm-1 control-label'
+            .col-xs-2
+              %p.form-control-static= @tenant.phone_ext
+          .form-group
+            = f.label :admin_email, 'Admin Email', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @tenant.admin_email
+          .form-group
+            = f.label :subdomain, 'Subdomain', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= "#{@tenant.subdomain}.#{request.host_with_port.gsub(/www\./,'')}"
+        .col-lg-4
+          %legend Billing Info
+          .form-group
+            = f.label :billingaddress_line1, 'Address Line 1', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @tenant.billingaddress_line1
+          .form-group
+            = f.label :billingaddress_line2, 'Address Line 2', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @tenant.billingaddress_line2
+          .form-group
+            = f.label :billingaddress_city, 'City', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @tenant.billingaddress_city
+          .form-group
+            = f.label :billingaddress_state, 'State/Province', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @tenant.billingaddress_state
+          .form-group
+            = f.label :billingaddress_zip, 'Postal/Zip', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @tenant.billingaddress_zip
+          .form-group
+            = f.label :billingaddress_country, 'Country', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @tenant.billingaddress_country
+          .form-group
+            %label.col-sm-4.control-label Payment info
+            .col-sm-6
+              %p.form-control-static
+                Credit card
+                %strong= @tenant.card_brand
+                ends in
+                %strong= @tenant.card_last4
+          - if @tenant.billing_coupon.present?
+            .form-group
+              = f.label :payment_coupon, 'Coupon', class: 'col-sm-4 control-label'
+              .col-sm-6
+                %p.form-control-static= @tenant.billing_coupon
+                %span.help-block
+                = CouponValidator::description(@tenant.billing_coupon, @tenant.admin_email)
+                =link_to 'Modify', signup_details_url({signup: params[:signup], review: true}) unless CouponValidator::active?(@tenant.billing_coupon, @tenant.admin_email)
+        .col-lg-4
+          %legend Payment Details
+          .form-group
+            = f.label :billing_recurrence, 'Billing Cycle', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= %W(Monthly Yearly)[@tenant.billing_recurrence.to_i]
+          
+          .form-group  
+            = f.label :plan, 'Plan', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= @priceplan.title
+          .form-group
+            = f.label :date_from, 'Date From', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= Time.now.strftime('%F')
+          .form-group
+            = f.label :date_from, 'Date To', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= (Time.now + 1.month).strftime('%F')
+          .form-group
+            = f.label :price, 'Recurring Base Price', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= number_to_currency(@priceplan.price_per_month)
+          .form-group
+            %label.col-sm-4.control-label 3 Free Qrids
+            .col-sm-6
+              %p.form-control-static= number_to_currency(0)
+          .form-group
+            = f.label :total, 'Billed Now', class: 'col-sm-4 control-label'
+            .col-sm-6
+              %p.form-control-static= number_to_currency(0)
+      .row{style:"background:#000"}
+        .col-sm-8.col-sm-offset-2
+          %div.text-center{style: 'padding-top: 22px; padding-bottom: 22px;'}
+            %p
+              %span
+                = link_to 'Change Company Profile Information', signup_url({signup: params[:signup], review: true})
+              %span &nbsp;-&nbsp;
+              %span
+                = link_to 'Change Billing/Payment Information', signup_details_url({signup: params[:signup], review: true})
+      .row{style: 'background-color: #E1E1E0;'}
+        .col-sm-8.col-sm-offset-2
+          %div{style: 'margin: 24px;'}
+            %div.text-center{style: 'padding-top: 22px; padding-bottom: 22px;'}
+              %p
+                %span
+                  I have read and agree to the 
+                  = link_to 'Terms & Conditions', signup_tac_url(), remote: true            
+                %span{style: 'vertical-align: middle;'}
+                  = f.check_box :tac, style: 'width: 16px;'
+                %span
+                  %br/
+            %div.text-center
+              -if (@tenant.billing_coupon.present?&&CouponValidator::active?(@tenant.billing_coupon, @tenant.admin_email)) || !@tenant.billing_coupon.present?
+                = f.button 'Activate Now!', name: 'button', type: 'submit', class: 'btn btn-lg btn-success', disable_with: 'Please Wait...'
+              -else
+                %span{class: 'btn btn-lg btn-success',style:"background: #5cb85c,border-color:#4cae4c",rel: 'tooltip', title: "Please go back to Billing and either enter a valid coupon or remove the current one"} Activate Now!
+              

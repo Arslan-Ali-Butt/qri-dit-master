@@ -1,0 +1,25 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+    %p A site could be considered to be a packet of land or a single site of one single address. It's useful to know that a QRID must always belong to a single site and that any site can house an unlimited amount of QRIDs.
+  .col-lg-8
+    = render 'filter'
+.row.text-right
+  = render 'control_buttons', locals: { meta_button: true } 
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+      %thead
+        %tr
+          / %th Status
+          %th Site
+          %th City
+          %th Zone
+          %th Address
+          %th QRID
+          %th.no-print Quick Actions
+      %tbody.site-collection
+        = render partial: 'resource', collection: @resources

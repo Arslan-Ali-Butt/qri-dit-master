@@ -1,0 +1,10 @@
+- content_for(:header, "New Report Submitted")
+
+- callToActionUrl = tenant_report_url(id: @report, subdomain: Admin::Tenant.find(Apartment::Database.current_tenant.scan( /\d+$/ ).first).subdomain)
+
+%p
+  Hello #{@recipient.name},
+%p
+  #{@author.name} has just submitted a report for #{@report.qrid.site.name}.
+
+= render "layouts/emailbrand/call_to_action_button", :line1 => "Click here to", :line2 => "Review", :line3 => "", :linkUrl => callToActionUrl

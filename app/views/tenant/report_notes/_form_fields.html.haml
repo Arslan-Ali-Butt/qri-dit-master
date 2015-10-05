@@ -1,0 +1,9 @@
+%fieldset
+  - if params[:send_to].present?
+    = hidden_field_tag :send_to, params[:send_to]
+    = hidden_field_tag :confirmation, params[:confirmation]
+    = hidden_field_tag :submission, params[:submission]
+  .form-group
+    = f.label :note, 'Optional Comment', class: 'col-sm-3 control-label'
+    .col-sm-9
+      = f.text_area :note, class: 'form-control', rows: 6, autofocus: true

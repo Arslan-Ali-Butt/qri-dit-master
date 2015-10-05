@@ -1,0 +1,29 @@
+!!!
+%html{lang: 'en'}
+  %head
+    %title= content_for?(:title) ? content_for(:title) : 'QRIDit'
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1'}
+    = render 'layouts/favicon'
+    = stylesheet_link_tag 'tenant/application', media: 'all', 'data-turbolinks-track' => true
+    / [if lt IE 9]
+      %script{src: 'https://html5shim.googlecode.com/svn/trunk/html5.js'}
+    = javascript_include_tag 'tenant/application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body.affiliate
+    = render 'layouts/tenant/modal'
+    %div
+      =link_to "http://#{Admin::Tenant.cached_find_by_host(request.host).company_website}" do
+        -unless Admin::Tenant.cached_find_by_host(request.host).logo.nil?
+          =image_tag(Admin::Tenant.cached_find_by_host(request.host).logo.photo.expiring_url(300, :thumbnail),style:"margin-left:auto;margin-right:auto;display:block;margin-top:10px;margin-bottom:10px")
+      = render 'layouts/tenant/flash_message'
+    .container-fluid{style:"border-top:60px #00B2C0 solid;border-bottom: #51555A 5px solid;padding-bottom:5px;"}
+      .row
+        =yield
+    %span.company
+      Creative Innovation at Work &trade;
+    %span.copyright
+      Copyright &copy;
+      =Time.zone.now.year
+      %a{href: 'http://quickreportsystems.com'} Quick Report Systems &trade;
+    %span.brand
+      QR Code is a registered trademark of DENSO WAVE INCOPORATED.

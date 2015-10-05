@@ -1,0 +1,26 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+    %p A client will always own at least one site. A site could be considered to be a packet of land or a single site of one single address. It's useful to know that a QRID must always belong to a single site and that any site can house an unlimited amount of QRIDs.
+  .col-lg-8
+    = render partial: 'filter'
+.row.text-right
+  = render partial: 'control_buttons', locals: {meta_button: true}
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable#sites-table{data: {source: tenant_datatables_sites_url(format: 'json', context: 'datatables') }}
+      %thead
+        %tr
+          / %th Status
+          %th Site
+          %th Client
+          %th Client Type
+          %th City
+          %th Zone
+          %th QRID
+          %th.no-print Quick Actions
+      %tbody.site-collection
+        =# render partial: 'resource', collection: @resources

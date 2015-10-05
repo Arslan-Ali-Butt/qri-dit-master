@@ -1,0 +1,16 @@
+!!!
+%html{lang: 'en'}
+  %head
+    %title= content_for?(:title) ? content_for(:title) : 'QRIDit'
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    = render 'layouts/favicon'
+    = stylesheet_link_tag 'tenant/application', media: 'all', 'data-turbolinks-track' => true
+    / [if lt IE 9]
+      %script{src: '//html5shim.googlecode.com/svn/trunk/html5.js'}
+      = javascript_include_tag 'simpliq/respond'
+    = csrf_meta_tags
+  %body
+    .container
+      = yield
+
+    = javascript_include_tag 'tenant/application', 'data-turbolinks-track' => true

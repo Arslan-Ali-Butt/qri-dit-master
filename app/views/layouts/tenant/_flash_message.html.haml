@@ -1,0 +1,8 @@
+- if alert.present?
+  .alert.alert-dismissable.alert-danger
+    %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'alert', type: 'button'} &times;
+    = alert
+- if notice.present?
+  .alert.alert-dismissable.alert-success
+    %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'alert', type: 'button'} &times;
+    = notice

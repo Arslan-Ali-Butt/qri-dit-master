@@ -1,0 +1,7 @@
+- logo = Admin::Tenant.cached_find_by_host(request.host).logo
+
+- if logo
+  .header-logo
+    = image_tag(logo.photo.expiring_url(300, :thumbnail))
+- else
+  .header-logo

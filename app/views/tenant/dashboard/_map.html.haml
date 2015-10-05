@@ -1,0 +1,28 @@
+.box
+  .box-header{'data-original-title' => ''}
+    %h2
+      %i.fa.fa-globe
+      = succeed "Assignment Map" do
+        %span.break
+    .box-icon
+      %a.btn-minimize{href: '#'}
+        %i.fa.fa-chevron-up
+  .box-content
+    .row
+      .col-lg-12
+        %div
+          #map_all{data: {assignments_url: url_for(controller: current_user.role?(:reporter)? 'my_assignments' : 'assignments', action: :index)}}
+          %div{style: 'text-align:center; margin-top:15px;'}
+            #legend{style: 'display: inline-block; margin: 0 auto;'}
+              #icon_assigned{style: 'display: inline-block; margin: 0 10px;'}
+                Assigned
+                %br
+                = image_tag 'tenant/mapIcon-Assigned.png'
+              #icon_in_progress{style: 'display: inline-block; margin: 0 10px;'}
+                In Progress
+                %br                
+                = image_tag 'tenant/mapIcon-inProgress.png'
+              #icon_complete{style: 'display: inline-block; margin: 0 10px;'}
+                Completed
+                %br
+                = image_tag 'tenant/mapIcon-Complete.png'

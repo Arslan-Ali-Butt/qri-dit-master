@@ -1,0 +1,25 @@
+$('#myModal').modal('hide');
+$('.last-change').removeClass('last-change');
+<% if @resource.parent_id.to_i > 0 %>
+<% case @resource.task_type %>
+<%	when 'Question','Group' %>
+$('<%= escape_javascript(render('resource', resource: @resource)) %>').appendTo('.dd3-item[data-resource-id=<%= @resource.parent_id %>] > .dd-list');
+<%  when 'Photo','Comment','Instructions' %>
+$('<%= escape_javascript(render('resource', resource: @resource)) %>').prependTo('.dd3-item[data-resource-id=<%= @resource.parent_id %>] > .dd-list');
+<% end %>
+$('.dd3-item[data-resource-id=<%= @resource.parent_id %>]').parent('.dd-list').prev('.dd3-content.answer').hide();
+$('.dd3-item[data-resource-id=<%= @resource.parent_id %>]').children('.dd3-content.answer.collapse-children').removeClass('collapse-children');
+$('.dd3-item[data-resource-id=<%= @resource.parent_id %>]').show();
+$('.dd3-item[data-resource-id=<%= @resource.parent_id %>]').parent('.dd-list').prev('.dd3-content.question.collapse-children').removeClass('collapse-children')
+$('.dd3-item[data-resource-id=<%= @resource.parent_id %>]').children('.dd3-content.group.collapse-children').removeClass('collapse-children');
+$('.dd3-item[data-resource-id=<%= @resource.parent_id %>]').children('.dd3-content.instructions.collapse-children').removeClass('collapse-children')
+$('.dd3-item[data-resource-id=<%= @resource.parent_id %>]').parent('.dd-list').hide().fadeIn();
+$('.dd3-item[data-resource-id=<%= @resource.parent_id %>]').children('.dd-list').hide().fadeIn();
+<% else %>
+<% case @resource.task_type %>
+<%  when 'Question','Group' %>
+$('<%= escape_javascript(render('resource', resource: @resource)) %>').appendTo('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %>').hide().fadeIn();
+<%  when 'Photo','Comment','Instructions' %>
+$('<%= escape_javascript(render('resource', resource: @resource)) %>').prependTo('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %>').hide().fadeIn();
+<% end %>
+<% end %>

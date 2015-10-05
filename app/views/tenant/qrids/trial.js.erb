@@ -1,0 +1,15 @@
+<% if params[:preview].present? %>
+    $('#myModal').html('<%= escape_javascript(render('modal_trial')) %>');
+    $('#myModal').modal('show');
+<% else %>
+    <% if flash.now[:alert] || flash.now[:notice] %>
+        $('#flash .alert').hide();
+    <% end %>
+    $('<%= escape_javascript(render('layouts/tenant/flash_message')) %>').appendTo('#flash').hide().fadeIn().delay(3000).fadeOut();
+
+    <% if params[:permatask].present? %>
+        $('#qrid').html('<%= escape_javascript(render('trial_report')) %>');
+    <% else %>
+        $('#qrid').html('<%= escape_javascript(render('trial_select')) %>');
+    <% end %>
+<% end %>

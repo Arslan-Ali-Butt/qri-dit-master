@@ -1,0 +1,16 @@
+%menu.nestable-menu
+  - if on_top
+    %a.btn.btn-primary.add-node{data: {'remote' => 'true', 'work-type' => @resource.work_type_id, 'resource-type' =>'Group', 'client-type' => @resource.site.try(:owner).try(:client_type), 'on-top'=> 'true'}} 
+      %div{rel: 'tooltip', title: 'Create main group'}
+        Create New Group
+  - else
+    %a.btn.btn-primary.add-node{data: {'remote' => 'true', 'work-type' => @resource.work_type_id, 'resource-type' =>'Group', 'client-type' => @resource.site.try(:owner).try(:client_type)}} Create New Group
+  %button.btn.btn-info{type: 'button', data: {action: 'expand-all', confirm: 'Expanding all checklist items for large checklists like this one may cause considerable sluggishness in drag and drop behaviour.  Continue?'}} 
+    %div{rel: 'tooltip', title: 'Show all checklist items'}
+      Expand All
+  %button.btn.btn-danger{type: 'button', data: {action: 'collapse-all'}}
+    %div{rel: 'tooltip', title: 'Hide all but main categories'}
+      Collapse All
+  .div.pull-right{style: 'position: relative;'}
+    = link_to 'Add Templates', augment_tenant_qrid_path(@resource), class: 'btn btn-default add-templates', data: {'loading-text' => 'Please Wait...'} if params[:action].present? && params[:action] == 'edit'
+    = link_to 'Preview All', trial_tenant_qrid_url(qrid_id: @resource.id, permatask: 0, preview: 1), remote: true, class: 'btn btn-success', rel: 'tooltip', title: 'Preview and test your checklist to get a feel for exactly how a reporter in the field will see and use it.', role: 'button'

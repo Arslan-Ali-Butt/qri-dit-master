@@ -1,0 +1,4 @@
+$('#myModal').modal('hide');
+$('<%= escape_javascript(render('layouts/tenant/flash_message')) %>').appendTo('#flash').hide().fadeIn().delay(3000).fadeOut();
+
+$('<%= escape_javascript(render('resource', resource: @resource)) %>').appendTo('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %>').hide().fadeIn();

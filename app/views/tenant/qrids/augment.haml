@@ -1,0 +1,31 @@
+- page_title = 'Choose' + ' ' + @resource.work_type.name + ' ' + 'Templates'
+:javascript
+  g_gogogadgetqridbuilder = true
+
+.pull-left{style: 'display: inline-block;'}
+  %h1
+    %span{style: 'color: #000; display: inline-block;'}
+      = "Choose #{@resource.work_type.name} Templates"
+      %a{href:"#youtube",role:"button",data:{toggle:"modal"}}
+        =image_tag "tenant/film.svg",{style: "height: 40px;",rel:"tooltip",title:"Watch Video"}
+      %div{style:"display: none;"}
+        #youtube.modal.fade
+          .modal-dialog.modal-lg
+            .modal-content
+              .modal-header
+                %button.close{data:{dismiss:"modal"}} &times;
+                .modal-title Using the QRID Builder in QRIDit Home Watch
+              .modal-body
+                %iframe{width:"100%",height:"480",src:"https://www.youtube.com/embed/f5xrTQziXdY?rel=0",frameborder:"0",allowfullscreen:"true"}
+  %p
+    Choose the checklist templates and permatasks that you would like to add to this this QRID.
+.row
+= render 'error_messages', resource: @resource
+= form_for @resource, url: rehash_tenant_qrid_path(@resource), html: {class: "form-horizontal qrid-form", role: 'form'} do |f|
+  = render 'template_fields', f: f
+  .row
+    %fieldset
+      .form-group.form-actions.pull-right{style: 'margin-right: 30px'}
+        %div
+          = f.submit 'Add', {class: 'btn btn-success clean-exit', role: 'button'}
+          = link_to 'Cancel', url_for(controller: controller_name), class: 'btn btn-default', role: 'button'

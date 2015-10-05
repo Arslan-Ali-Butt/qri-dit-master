@@ -1,0 +1,24 @@
+/* Retina Display Hack
+=================================================================== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .timeslot {
+    .task .arrow {
+      background: asset-url("simpliq/timeline-left-arrow@2x.png") no-repeat;
+      background-size: 100%;
+    }
+    &.alt .task .arrow {
+      background: asset-url("simpliq/timeline-right-arrow@2x.png") no-repeat;
+      background-size: 100%;
+    }
+  }
+  ul.chat li {
+    &.left .message .arrow {
+      background: asset-url("simpliq/chat-left@2x.png") no-repeat 0px 0px;
+      background-size: 100%;
+    }
+    &.right .message .arrow {
+      background: asset-url("simpliq/chat-right@2x.png") no-repeat 0px 0px;
+      background-size: 100%;
+    }
+  }
+}

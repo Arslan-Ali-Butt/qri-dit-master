@@ -1,0 +1,98 @@
+- month_names = %W(January February March April May June July August September October November December)
+= form_for @tenant, url: tenant_process_change_plan_details_url(id: @tenant.id), remote: true, authenticity_token: true, method: :patch, as: :change_plan_details, html: {role: 'form', name: 'change_plan_details'} do |f|
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+        %h4.modal-title Upgrade Priceplan
+      .modal-body
+        %div{id: 'upgrade_priceplan'}
+          .row
+            - Admin::Priceplan.where('name not like \'secret%\'').order(:position).each do |pp|
+              - tenant_priceplan = Admin::Priceplan.find(@tenant.priceplan_id)
+              - if tenant_priceplan.qrid_num == pp.qrid_num
+                - action_desc = 'Current'
+                - btn_class = 'btn btn-info col-lg-8 col-lg-offset-1'
+                - opacity = 0.40.to_s
+                - fa = 'fa fa-check pull-left'
+              - elsif tenant_priceplan.qrid_num > pp.qrid_num
+                - action_desc = 'Downgrade'
+                - btn_class = 'btn btn-primary col-lg-8 col-lg-offset-1'
+                - opacity = 1.0.to_s
+                - fa = 'fa chevron-down pull-left'
+              - elsif tenant_priceplan.qrid_num < pp.qrid_num
+                - action_desc = 'Upgrade'
+                - btn_class = 'btn btn-success col-lg-8 col-lg-offset-1'
+                - opacity = 1.0.to_s
+                - fa = 'fa fa-chevron-up pull-left'
+              .col-lg-2{style: "width: 20%; opacity: #{opacity};"}
+                .row
+                  .col-lg-12
+                    %h4= pp.title
+                .row
+                  .col-lg-12
+                    = image_tag('tenant/qrcode.png', class: 'img-responsive', style: 'width: 25%; display: inline-block; vertical-align: middle;')
+                    %span{style: 'font-size: 18pt; display: inline-block; line-height: 20pt; vertical-align: middle;'} x
+                    %span{style: 'font-size: 36pt; display: inline-block; line-height: 38pt; vertical-align: bottom;'}= pp.qrid_num
+                .row
+                  .col-lg-12
+                    %span{style: 'font-family: Helvetica; font-weight: bolder; font-size: 24pt;'}
+                      = number_to_currency pp.price_per_month
+                    \/ month
+                .row
+                  %br
+                  = link_to '#upgrade_form', class: btn_class, onclick: '$(\'#upgrade_button\').show(); $(\'#upgrade_priceplan\').hide(); $(\'#upgrade_form\').show(); $(\'#change_plan_details_priceplan_id\').val(' + pp.id.to_s + ');' do
+                    %i{class: fa}
+                    = action_desc
+        %div{id: 'upgrade_form'}
+          .row
+            .col-lg-12
+              .form-group
+                %fieldset
+                  %legend Billing info
+                  #stripe_alert.alert.alert-danger{style: 'display: none'}
+                    #stripe_error_response
+                  .form-group
+                    .row
+                      = f.label :name_on_card, 'Name on Card', class: 'col-sm-2 control-label '
+                      .col-sm-4
+                        = text_field_tag nil, nil, class: 'form-control', data: { stripe: 'name'}
+                  .form-group
+                    .row
+                      .col-lg-2
+                        = f.label :card_number, 'Card Number', class: 'control-label'
+                      .col-lg-4
+                        = text_field_tag nil, nil, class: 'form-control', data: { stripe: 'number'}
+                      .col-lg-3
+                        = f.label :card_cvc, 'Card CVC Number', class: 'control-label'
+                      .col-lg-3
+                        = text_field_tag nil, nil, class: 'form-control', data: { stripe: 'cvc'}
+                  .form-group
+                    .row
+                      .col-lg-3
+                        = f.label :card_exp_month, 'Card Expiration Month', class: 'control-label'
+                      .col-lg-3
+                        = select_tag nil, options_for_select((1..12).to_a.map{ |m| ['%02d - %s' % [m,month_names[m - 1]],m] }), prompt: 'Select', class: 'form-control', data: { stripe: 'exp-month'}
+                      .col-lg-3
+                        = f.label :card_exp_year, 'Card Expiration Year', class: 'control-label'
+                      .col-lg-3
+                        = select_tag nil, options_for_select((0..7).to_a.map{ |y| [Time.now.year + y, Time.now.year + y]}, {prompt: 'Select'}), prompt: 'Select', class: 'form-control', data: { stripe: 'exp-year'}
+                  .form-group
+                    .row
+                      .col-lg-2
+                        = f.label :priceplan_id, 'Priceplan', class: 'control-label'
+                      .col-lg-4
+                        = f.collection_select :priceplan_id, Admin::Priceplan.where('name not like \'secret%\'').order(:position), :id, :title, {prompt: true}, {class: 'form-control'}
+                      .col-lg-2
+                        = f.label :billing_recurrence, 'Pay every', class: 'control-label'
+                      .col-lg-4
+                        = f.select :billing_recurrence, Admin::Tenant::PAYMENT_RECURRENCE, {prompt: true}, {class: 'form-control'}
+                  .form-group
+                    .row
+                      .col-lg-2
+                        = f.label :billing_coupon, 'Coupon', class: 'control-label'
+                      .col-lg-4
+                        = f.text_field :billing_coupon, class: 'form-control'
+      .modal-footer
+        = f.submit 'Activate Price Plan Now', id: 'upgrade_button', class: 'btn btn-success'
+        %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close

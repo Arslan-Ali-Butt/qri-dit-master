@@ -1,0 +1,26 @@
+- unless defined?(return_path)
+  - return_path = params[:return_path]  if params[:return_path].present?
+%tr{data: {'resource-id' => resource.id}}
+  %td= link_to resource.name, trial_tenant_qrid_url(id: resource.id, return_path: (defined?(return_path) ? return_path : ''))
+  - unless defined?(return_path) && return_path.present? && return_path.start_with?('/sites')
+    %td= link_to resource.site.name, tenant_site_url(id: resource.site_id)
+    %td= link_to resource.site.owner.try(:name), tenant_client_url(id: resource.site.owner_id)
+    %td= resource.site.owner.client_type
+    %td= resource.site.address.try(:city)
+    %td= resource.site.zone ? link_to(resource.site.zone.try(:name), tenant_zones_url) : ''
+  %td= link_to resource.work_type.name, tenant_work_types_url
+  /
+    - unless defined?(return_path) && return_path.present? && return_path.start_with?('/sites')
+      %td.center
+        %span{class: resource_status_class(resource.status)}= resource.status
+  - options = {qrid_id: resource.id, status: ['Open', 'In Progress']}
+  - assignment = Tenant::Assignment.list(Time.now, Time.now + 30.day, options).first
+
+  %td= qrids_repeat(assignment)
+  %td= qrids_next_assigned(assignment)
+    
+  - unless defined?(return_path) && return_path.present? && return_path.start_with?('/sites')
+    %td= assignment ? assignment.start_at.to_i : 10000000000
+
+  %td= qrids_overdue(options)
+  %td.center.no-print= qrids_buttons(resource, return_path)

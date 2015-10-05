@@ -1,0 +1,7 @@
+$('<%= escape_javascript(render('layouts/tenant/flash_message')) %>').appendTo('#flash').hide().fadeIn().delay(3000).fadeOut();
+var image=srctemp.shift();
+$('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %> [data-resource-id="new"]').first().replaceWith('<%= escape_javascript(render('resource', resource: @resource)) %>');
+a=$('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %> [data-resource-id="<%=@resource.id%>"]>a')
+img=$('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %> [data-resource-id="<%=@resource.id%>"]>a>img')
+image.assign_elems(a,img)
+image.OrientAndReplace();

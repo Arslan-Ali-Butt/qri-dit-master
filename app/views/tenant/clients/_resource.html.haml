@@ -1,0 +1,24 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td.center= clients_status(resource)
+  %td= resource.id
+  %td= link_to resource.name, url_for(controller: controller_name, action: :show, id: resource)
+  %td= resource.client_type
+  - sites = {}
+  - zones = {}
+  - cities = {}
+  - qrids = {}
+  - work_types = {}
+  - resource.sites.active.order(:name).each do |site|
+    - sites[site.id] = site.try(:name)
+    - zones[site.id] = site.zone.try(:name)
+    - cities[site.id]  = site.address.try(:city)
+    - site.qrids.active.order(:name).each do |qrid|
+      - qrids[qrid.id] = qrid.name
+      - work_types[qrid.id] = qrid.work_type.name
+
+  %td= clients_sites(sites)
+  %td= clients_zones(zones)
+  %td= clients_cities(cities)
+  %td= clients_qrids(qrids)
+  %td= clients_work_types(work_types)
+  %td.center.no-print= clients_buttons(resource)

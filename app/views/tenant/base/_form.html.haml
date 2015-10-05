@@ -1,0 +1,39 @@
+- method = resource.new_record? ? 'post' : (action_name == 'delete' ? 'delete' : 'patch')
+- case method
+  - when 'post'
+    - url = { controller: controller_name, action: 'index' }
+    - button = case controller_name
+      - when 'qrid_photos'
+        - 'Add'
+      - when 'report_notes'
+        - 'Submit'
+      -when 'sites'
+        -'Add Site'
+      - else
+        - 'Create'
+  - when 'delete'
+    - url = { controller: controller_name, action: 'destroy', id: resource.id }
+    - button = 'Confirm'
+  - else
+    - url = { controller: controller_name, action: 'update', id: resource.id }
+    - button = 'Save changes'
+
+.row
+  .col-lg-12
+    %h1= page_title
+= render 'error_messages', resource: resource
+= form_for resource, url: url, method: method, html: {class: "form-horizontal #{resource.class.name.demodulize.downcase}-form", role: 'form', multipart: (controller_name == 'qrid_photos')} do |f|
+  - if method == 'delete'
+    = render 'delete_fields', f: f
+  - else
+    = render 'form_fields', f: f
+  = hidden_field_tag(:return_path, params[:return_path])  if params[:return_path].present?
+  .row
+    %fieldset
+      .form-group.form-actions.pull-right{style: 'margin-right: 30px'}
+        %div
+          - unless controller_name == 'qrids' && action_name == 'edit'
+            = f.button button, name: nil, type: 'submit', class: "btn  #{method == 'delete' ? 'btn-danger' : 'btn-primary'}"
+          - if controller_name == 'reports'
+            = f.button 'Save and send', name: 'send', type: 'submit', value: 1, class: 'btn btn-success'
+          = link_to 'Cancel', url_for(controller: controller_name), class: 'btn btn-default', role: 'button'

@@ -1,0 +1,22 @@
+- if @resource.assignments.empty?
+  %p Are you sure to delete this team member?
+  = hidden_field_tag 'opt', 'destroy'
+- else
+  %p
+    %b WARNING:
+    Deleting this team member will unassign all of their current assignments.
+  %p Would you like to reassign their assignments to someone else?
+
+  %p.row
+    .radio.col-sm-4
+      %label
+        = radio_button_tag 'opt', 'destroy'
+        Yes
+        %span#last-warning{style: 'display:none;'} , reassign to:
+    .col-sm-8#last-warning{style: 'display:none;'}
+      = select_tag :reassign_to, options_from_collection_for_select(Tenant::Staff.by_role('Reporter').active.order(:name), :id, :name, current_user.id), class: 'form-control'
+  %p.row
+    .radio.col-sm-12
+      %label
+        = radio_button_tag 'opt', 'disable'
+        No thanks

@@ -1,0 +1,17 @@
+<% page_title = 
+    case params[:send_to]
+      when 'c' then 
+        if @parent.sent_at
+         'Submit a Comment'
+        else 'Submit report to Client'
+        end
+      when 'm'    then 'Submit report to a manager'
+        if @parent.replied_at
+         'Submit a Comment'
+        else 'Submit report to a manager'
+        end
+      else "Add a New #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}"
+    end %>
+
+$('#myModal').html('<%= escape_javascript(render('modal_form', page_title: page_title, resource: @resource)) %>');
+$('#myModal').modal('show');

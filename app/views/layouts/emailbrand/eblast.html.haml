@@ -1,0 +1,46 @@
+- tenant=Admin::Tenant.find(Apartment::Database.current_tenant.match(/\d+/).to_s.to_i)
+!!!
+%html
+  %head
+  %body{:style => "width: 100%; margin: 0; padding: 0;"}
+    %table{:style => "width: 100%", :border => 0, :cellpadding => 0, :cellspacing => 0}
+      %tr
+        %td{:align => "center"}
+          %center
+            %table{:style => "border-spacing: 0px;"}
+              %tr
+                %td
+                  -unless tenant.is_affiliate?
+                    =image_tag(attachments['emailBanner.png'].url, width: 600, height: 100)
+                  -else
+                    -current_tenant=Apartment::Tenant.current_tenant
+                    -Apartment::Tenant.switch("tenant#{tenant.parent_id}")
+                    -unless tenant.affiliate_owner.logo.nil?
+                      =image_tag(tenant.affiliate_owner.logo.photo.expiring_url(9999999, :thumbnail)) #TODO find way to show logo without timeout
+                    -Apartment::Tenant.switch(current_tenant)
+              %tr
+                %td{:align => "center", :width => "600"}
+                  %center
+                    %h1{:style => "color: #2EB4BF; font-size: 32pt; text-align: center; font-weight: bold; font-family: 'Arial Regular', Arial, Helvetica, sans-serif; padding: 0px 10px; margin: 0"}= yield(:header)
+              %tr
+                %td{:width => "600", :style => "padding-bottom: 24px;"}
+                  %p{:style => "font-family: 'Times New Roman', Times, serif; padding: 10px;"}= yield
+
+              %tr{:style => "padding-bottom: 0px;"}
+                %td{:align => "right", :bgcolor => "#27B5BF", :style => "padding: 0; margin: 0; padding-bottom: 10px; padding-left: 10px; padding-right: 10px;", :width => "600"}
+                  %center
+                    -unless tenant.is_affiliate?
+                      =image_tag(attachments['footerImage.png'].url, style: "display:block;")
+                  %h2{:style => "color: #FFFFFF; font-weight: normal; font-family: 'Arial Regular', Arial, Helvetica, sans-serif;"}
+                    -unless tenant.is_affiliate?
+                      800.686.2104
+                    -else
+                      =number_to_phone(tenant.affiliate_owner.phone)
+                    -unless tenant.is_affiliate?
+                      %a.footerLink{:href => "https://www.qridithomewatch.com", :style => "color: #ffffff"} www.qridithomewatch.com
+                    -else
+                      -unless tenant.affiliate_owner.company_website.blank?
+                        %a.footerLink{:href => tenant.affiliate_owner.company_website, :style => "color: #ffffff"}=tenant.affiliate_owner.company_website
+                  -unless tenant.is_affiliate?
+                    %span{:style => "color: #FFFFFF; font-family: 'Arial Regular', Arial, Helvetica, sans-serif;"}
+                      QRIDit Homewatch Edition Software was designed by Home Watch Business Owners specifically for the Home Watch industry and has been endorsed by the National Home Watch Association (NHWA).

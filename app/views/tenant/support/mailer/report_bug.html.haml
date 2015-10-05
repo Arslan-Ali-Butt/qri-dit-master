@@ -1,0 +1,22 @@
+!!!
+%html{lang: 'en'}
+  %head
+    %title A bug has been reported !
+  %body
+    %h2
+      A bug has been reported !
+    %p
+      = @resource.company
+      has reported a bug.  
+      The email address of the user who reported this bug is
+      = @resource.email + '.'
+    %h4
+      = @resource.bug
+    %p
+      = @resource.message
+    %p
+      = "The browser used to access the uri #{@resource.uri} was #{@resource.browser} version #{@resource.browser_version} on #{@resource.os}."
+    %p
+      Full User Agent String:
+      %br
+      = @resource.user_agent.to_s

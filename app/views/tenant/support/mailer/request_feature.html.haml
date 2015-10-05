@@ -1,0 +1,14 @@
+!!!
+%html{lang: 'en'}
+  %head
+    %title A feature has been requested
+  %body
+    %h3
+      A feature has been requested
+    %p
+      = @resource.company
+      has requested a feature.  
+      The email address of the user who requested this feature is
+      = @resource.email + '.'
+    %p
+      = @resource.message

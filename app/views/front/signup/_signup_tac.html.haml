@@ -1,0 +1,9 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header
+      %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+      %h4.modal-title Terms & Conditions
+    .modal-body
+      = render 'tac', layout: false
+    .modal-footer
+      %button.btn.btn-primary{'data-dismiss' => 'modal', type: 'button'} Close

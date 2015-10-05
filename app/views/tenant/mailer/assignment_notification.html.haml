@@ -1,0 +1,11 @@
+- company_name = ''
+- if m = Apartment::Tenant.current_tenant.match(/\d+/)
+  - company_name = Admin::Tenant.find(m[0]).try(:company_name)
+
+- callToActionUrl = tenant_my_assignment_url(id: @assignment, subdomain: Admin::Tenant.find(Apartment::Tenant.current_tenant.scan( /\d+$/ ).first).subdomain)
+
+%p Hello #{@assignment.assignee.name},
+- content_for(:header, "You Have a New Assignment From #{company_name}.")
+%p Click the link below to see the details about your latest assignment.
+
+= render "layouts/emailbrand/call_to_action_button", :line1 => "Click here to", :line2 => "Check Assignment", :line3 => "", :linkUrl => callToActionUrl

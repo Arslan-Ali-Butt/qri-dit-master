@@ -1,0 +1,8 @@
+
+Hello <%=@recipient.name%>,
+
+<%=@author.name%> has just submitted a report for <%=@report.qrid.site.name%>.
+
+You can use the following link to view the report.
+
+<%=tenant_report_url(id: @report, subdomain: Admin::Tenant.find(Apartment::Database.current_tenant.scan( /\d+$/ ).first).subdomain)%>

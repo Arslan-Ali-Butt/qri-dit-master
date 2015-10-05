@@ -1,0 +1,307 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/stylesheets, vendor/stylesheets,
+ * or vendor/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require font-awesome
+ *= require_self
+ *= require bootstrap
+ *= require bootstrap-slider.min
+ *= require_tree ../front
+ *= require_tree .
+ */
+
+//@import 'twitter/bootstrap';
+
+html, body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/*coloring text*/
+
+h2,h4 {
+  color:#00b2c0;
+}
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-left: 35px;
+  padding-right: 35px;
+}
+
+/* Custom page header */
+.header-wrapper {
+  border-bottom: 4px solid black;
+  padding-top: 0px;
+  background:#00b2c0;
+  margin:0;
+  height:350px;
+}
+.header {
+  padding-top:0;
+  margin:0 auto;
+}
+
+.masthead {
+  text-align:center;
+  position:relative;
+  background:#00b2c0;
+  height:310px;
+  margin-top:-270px;
+  width:1200px;
+  margin-left:50%;
+  left:-600px;
+}
+  .masthead h1 {
+    color:white;
+    font-weight:200;
+  }
+  .masthead h2 {
+    color:black;
+    font-weight:200;
+  }
+  .masthead ul {
+    margin-top:20px;
+    margin-left:150px;
+  }
+  .masthead ul li{
+    list-style: none;
+    float:left;
+    width:180px;
+    line-height:60px;
+    text-align:left;
+    margin-right:40px;
+    list-style-image:asset-url('front/checkbox-white.png');
+    color:white;
+  }
+  .masthead ul li strong {
+    font-weight:default;
+    color:black;
+  }
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 40px;
+  padding-bottom: 19px;
+}
+.nav-pills a{
+  color:white;
+}
+.nav-pills a:hover {
+  color:black;
+}
+/* Custom page footer */
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+  height: 60px;
+}
+
+.container p {
+  max-width:744px;
+  padding-left:40px;
+  margin-bottom:40px;
+}
+
+/* Customize container */
+@media (min-width: 968px) {
+  .container {
+    max-width: 930px;
+  }
+  .header {
+    max-width: 930px;
+  }
+}
+.container-narrow > hr {
+  margin: 30px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  background-color: transparent;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+.jumbotron .btn {
+  font-size: 21px;
+  padding: 14px 24px;
+}
+
+/* Supporting marketing content */
+.marketing {
+  margin: 40px 0;
+}
+.marketing p + h4 {
+  margin-top: 28px;
+}
+.sale-plan {
+  text-align: center;
+  padding: 4px;
+  /*margin-bottom: 20px;*/
+  line-height: 1.428571429;
+  background-color: white;
+  border-left:3px solid #dddddd;
+  border-right:3px solid #dddddd;
+  border-radius: 4px;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  max-width: 100%;
+  /*height: 200px;*/
+  position: relative;
+}
+.sale-plan .bottom-aligned {
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+}
+  .sale-plan p {
+    padding:0;
+    margin-bottom:10px;
+  }
+  .sale-plan h3 {
+    font-size:16px;
+    font-weight:800;
+  }
+
+.fivecol {
+  width: 20%;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 968px) {
+/* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    /*padding-left: 0;*/
+    /*padding-right: 0;*/
+  }
+/* Space out the masthead */
+  .header {
+    margin-bottom: 30px;
+  }
+/* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0;
+  }
+}
+
+.field_with_errors {
+  @extend .has-error !optional;
+}
+
+.happy {
+  color: LimeGreen;
+}
+
+
+.form-group a[data="tooltip"] {
+  background:#ccc;
+  padding:1px 6px;
+  border-radius: 10px;
+  // display:block;
+  // color:orange;
+  position:relative;
+}
+
+a[data="tooltip"]:after {
+  display: none;
+  content: attr(title);
+}
+
+a[data="tooltip"]:hover:after {
+  display:inline-block;
+  position:absolute;
+  left:0;
+  top:-12px;
+  min-width:300px;
+  background:#ccc;
+  padding:5px;
+  border-radius:10px;
+  text-decoration:none;
+  color:black;
+}
+
+label.checkmark {
+  width:30px;
+  height:30px;
+  position:relative;
+  display:block;
+  z-index:0;
+  left:50%;
+  margin-left:-17px;
+}
+  label.checkmark.checked:after {
+    content:asset-url('front/checkmark.png');
+  }
+
+.qridit-logo {
+  background:asset-url('front/qridit-logo-white.png') no-repeat;
+  text-indent:-9999px;
+  width:144px;
+  height:56px;
+}
+input[type="radio"]{
+  display:none;
+}
+.checkmark .border {
+  border:5px solid #ccc;
+  width:30px;
+  height:30px;
+  margin-left:4px;
+  display:block;
+  position:absolute;
+  z-index:-100;
+}
+.savings {
+  background:#f3f3f3;
+  display:inline-block;
+  padding: 0px 10px;
+  box-shadow: 0px 3px 3px rgba(0,0,0,.4);
+  margin-top:20px;
+  margin-left:-50px;
+}
+.savings big {
+  color:#00b2c0;
+  font-weight:200;
+}
+.row.gray {
+  background:#f3f3f3;
+  padding:10px 0;
+}
+  .row.gray p {
+    margin-bottom:0;
+  }
+
+  big strong {
+    color:#00b2c0;
+  }
+
+  .pricing .row .slider-handle {
+    background-image: none;
+    background-color: #00ABBA;
+  }
+
+  .pricing .row .slider-horizontal {
+    width: 100%;
+  }

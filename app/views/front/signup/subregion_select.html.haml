@@ -1,0 +1,9 @@
+- parent_region ||= params[:parent_region]
+- country = Carmen::Country.coded(parent_region)
+
+- if country.nil?
+  %em Please select a country above
+- elsif country.subregions?
+  = subregion_select(:signup, :billingaddress_state, parent_region, {}, {class: 'form-control'})
+- else
+  = text_field(:signup, :billingaddress_state)

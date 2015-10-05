@@ -1,0 +1,5 @@
+%script{id: "template-upload", type: "text/x-tmpl"}
+  .upload
+    {%=o.name%}
+    .progress
+      .progress-bar{"aria-valuenow".to_sym => 0, "aria-valuemin".to_sym => 0, "aria-valuemax".to_sym => 100, style: "width:0%", role: 'progressbar', }

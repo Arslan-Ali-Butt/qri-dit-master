@@ -1,0 +1,121 @@
+:javascript
+  $(document).ready(function(){
+
+    $("input[name='checkmark']").change(function(){
+      if($(this).is(":checked")){
+          $(this).next("label").addClass('checked');
+          $("input[name='checkmark']").not(this).next("label").removeClass('checked');
+          var chosenPackage = $(this).attr("data-url"); //Get radio name
+      }
+    });
+
+    $("input[name='checkmark']").click(function(){
+      $("input[name='checkmark-yearly']").next("label").removeClass('checked');
+      $("input[name='checkmark-yearly']").prop('checked', false)
+    });
+
+
+    $("input[name='checkmark-yearly']").change(function(){
+      if($(this).is(":checked")){
+          $(this).next("label").addClass('checked');
+          $("input[name='checkmark-yearly']").not(this).next("label").removeClass('checked');
+          var chosenPackage = $(this).attr("data-url"); //Get radio name
+      }
+    });
+
+    $("input[name='checkmark-yearly']").click(function(){
+      $("input[name='checkmark']").next("label").removeClass('checked');
+      $("input[name='checkmark']").prop('checked', false);
+    });
+
+
+    if($('input:checked').length == 0){
+      // $("[action='continue']").addClass('disabled');
+    }
+
+    $("[action='continue']").click(function(e){
+      thepackage = $('input:checked').attr("data-url");
+      if(thepackage !== 'undefined' && thepackage){
+        window.location.href = thepackage;
+      }
+      else{
+        alert('Please choose a package before continuing.');
+      }
+
+    });
+  });
+
+- @priceplans.in_groups_of(5, false) do |group|
+
+  %form{:action => "#"}
+    %h1 Pay Monthly
+    .pricing_content
+      %p Pay monthly with no commitment and enjoy all the benefits QRIDit has to offer your business. Please Select the plan that is right for you.
+    .row
+      - group.each do |priceplan|
+        .price
+          %p= (priceplan.title).gsub(/\n/,'<br>').html_safe
+          .clearfix
+            .ic
+              = image_tag "front/ic.jpg"
+            .ic_con= "x#{priceplan.qrid_num}"
+          .con_icn
+            %h2
+              -num = priceplan.price_per_month
+              %span>= number_to_currency(priceplan.price_per_month, precision: (num.round == num) ? 0 : 2)
+              \/Monthly
+
+      %h1 Pay Yearly
+      .pricing_content
+        %p Save 10% when committing to a year with us. That's more than one free month!
+      .row
+        - group.each do |priceplan|
+          .price
+            %p= (priceplan.title).gsub(/\n/,'<br>').html_safe
+            .clearfix
+              .ic
+                = image_tag "front/ic.jpg"
+              .ic_con= "x#{priceplan.qrid_num}"
+            .con_icn
+              %h2
+                -num = priceplan.price_per_year
+              %span>= number_to_currency(priceplan.price_per_year, precision: (num.round == num) ? 0 : 2)
+              \/Yearly
+      %br
+      .over_flow
+        .save_top.center-block
+          %p
+            %span You Save
+            an equivalent of
+        .save_b
+          .join &nbsp;
+          %ul
+            - group.each do |priceplan|
+              %li
+                %p
+                  %span>= number_to_currency(priceplan.price_per_month - (priceplan.price_per_year / 12), :precision => 0)
+                  \/month
+      .c_plans
+        %p{:style => "float:right;"}
+          * For higher numbers of QRIDs,
+          %span custom plans
+          are available.
+      .jumbotron{style: 'padding-top: 12px; padding-bottom: 12px;'}
+        %h3 We are currently in beta testing.  We'll be ready for you soon!
+      /
+        %h1 Provide Your Details
+        %fieldset#user-details
+          %input{:name => "", :type => "text", :placeholder => "First Name"}/
+          %input{:name => "", :type => "text", :placeholder => "Last Name"}/
+          %input{:name => "", :type => "text", :placeholder => "Company Name"}/
+          %input{:name => "", :type => "text", :placeholder => "Company Website"}/
+
+        %fieldset#user-message
+          .row
+            .col-lg-4
+              %input{:name => "", :type => "text", :placeholder => "ext."}/
+            .col-lg-8.padding_l_n
+              %input{:name => "", :type => "text", :placeholder => "Contact Phone Number"}/
+          %input{:name => "", :type => "email", :placeholder => "Admin Email"}/
+          %input{:name => "", :type => "text", :placeholder => "Sub Domain"}/
+          %input.submit{:name => "submit", :type => "submit", :value => "Submit"}/

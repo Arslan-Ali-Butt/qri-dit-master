@@ -1,0 +1,4 @@
+- page_title = "New #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}"
+
+= admin_page_title page_title
+= render 'form', page_title: page_title, resource: @resource

@@ -1,0 +1,28 @@
+= tenant_page_title 'Login'
+.row
+  .login-box
+    = render 'layouts/tenant/flash_message'
+    = render 'devise/shared/error_messages'
+    = render 'devise/shared/logo'
+    %h2{style:"font-size:26px;"} Login to your account
+    = form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'form-horizontal'}) do |f|
+      %fieldset
+        = f.email_field :email, class: 'input-large col-xs-12', autofocus: true, placeholder: 'Email', required: ''
+        = f.password_field :password, class: 'input-large col-xs-12', placeholder: 'Password', required: ''
+        .clearfix
+
+        - if devise_mapping.rememberable?
+          %label.remember
+            = f.check_box :remember_me
+            Remember me
+          .clearfix
+
+        = f.button 'Login', name: nil, type: 'submit', class: 'btn btn-primary col-xs-12'
+
+    %hr
+    = render 'devise/shared/links'
+    %br
+    %br
+    %br
+    %div.text-center
+      = image_tag 'tenant/QRIDit_logo.svg',style: "width:176px;"

@@ -1,0 +1,12 @@
+.row.import-status.import-status-ongoing
+  .col-lg-8.col-lg-offset-2
+    .alert.alert-info
+      = image_tag 'tenant/ajax-loader.gif', class: "loading"
+
+      %p.lead Importing your client list.  This won't take long...
+
+      %p
+        %button.btn.btn-default.refresh-page
+          %span.glyphicon.glyphicon-refresh 
+          Refresh
+        the page in a bit 

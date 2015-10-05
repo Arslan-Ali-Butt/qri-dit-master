@@ -1,0 +1,23 @@
+.tooltip-inner {
+  max-width: 300px;
+  min-width: 300px;
+  padding: 5px 8px;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  background-color: #000000;
+  border-radius: 4px;
+}
+
+fieldset input, .form-group input {
+  float:left;
+}
+
+fieldset span[rel='tooltip'], .form-group span[rel='tooltip'] {
+  float:right;
+  clear:none;
+  margin-right:-20px;
+  line-height:40px;
+  // padding-left:20px;
+  color:#00b1c1;
+}

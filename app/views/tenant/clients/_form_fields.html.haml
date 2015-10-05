@@ -1,0 +1,92 @@
+:javascript
+  $(document).ready(function() {
+    $('label[for="tenant_client_suspended_status"]').click(function(evt) {
+      evt.preventDefault();
+    });
+  });
+.row
+  %div{class: request.xhr? ? 'col-md-6' : 'col-lg-4'}
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Personal info
+      .panel-body
+        .form-group
+          = f.label :name, 'Name', class: 'col-sm-4 control-label'
+          .col-sm-8
+            = f.text_field :name, class: 'form-control', autofocus: true
+        .form-group
+          = f.label :email, 'Email', class: 'col-sm-4 control-label'
+          .col-sm-8
+            = f.email_field :email, class: 'form-control'
+            - if !@resource.accepted_or_not_invited?
+              %p.help-block
+                = "Invitation hasn't been accepted yet"
+            - if @resource.pending_reconfirmation?
+              %p.help-block
+                = "Currently waiting confirmation for: #{@resource.unconfirmed_email}"
+        .form-group
+          = f.label :client_type, 'Type', class: 'col-sm-4 control-label'
+          .col-sm-8
+            = f.select :client_type, Tenant::Client::CLIENT_TYPES, {prompt: true}, {class: 'form-control'}
+
+        - unless @resource.new_record?
+          .form-group
+            = f.label :suspended_status, 'Suspended', class: 'col-sm-4 control-label'
+            .col-sm-8
+              %div
+                %label
+                  = f.check_box :suspended_status
+  %div{class: request.xhr? ? 'col-md-6' : 'col-lg-4'}
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Contact info
+      .panel-body
+        .form-group
+          = f.label :phone_cell, 'Cell phone', class: 'col-sm-4 control-label'
+          .col-sm-8
+            .input-group
+              %span.input-group-addon
+                %i.fa.fa-phone
+              = f.text_field :phone_cell, class: 'form-control'
+        .form-group
+          = f.label :phone_landline, 'Landline phone', class: 'col-sm-4 control-label'
+          .col-sm-8
+            .input-group
+              %span.input-group-addon
+                %i.fa.fa-phone
+              = f.text_field :phone_landline, class: 'form-control'
+        .form-group
+          = f.label :phone_emergency, 'Emergency phone', class: 'col-sm-4 control-label'
+          .col-sm-8
+            .input-group
+              %span.input-group-addon
+                %i.fa.fa-phone
+              = f.text_field :phone_emergency, class: 'form-control'
+        .form-group
+          = f.label :phone_emergency_2, 'Emergency phone 2', class: 'col-sm-4 control-label'
+          .col-sm-8
+            .input-group
+              %span.input-group-addon
+                %i.fa.fa-phone
+              = f.text_field :phone_emergency_2, class: 'form-control'
+        .form-group
+          = f.label :notes, 'Notes', class: 'col-sm-4 control-label'
+          .col-sm-8
+            = f.text_area :notes, class: 'form-control', rows: 5
+        = f.fields_for :settings do |ff|
+          - unless @resource.settings.new_record?
+            = ff.hidden_field :id    
+          .form-group#disable_report_notifications
+            .col-sm-8.col-sm-offset-3
+              .checkbox
+                %label
+                  = ff.check_box :disable_report_notifications
+                  Disable Report Notifications  
+            = tenant_tooltip_hint "Choose whether you would like clients to receive email notifications of reports when reports are submitted by reporters."       
+
+  %div{class: request.xhr? ? 'col-sm-12' : 'col-lg-4'}
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Billing Address
+      .panel-body
+        = render 'tenant/address/form_fields', f: f

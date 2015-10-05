@@ -1,0 +1,21 @@
+!!!
+%html{lang: 'en'}
+  %head
+    %title= content_for?(:title) ? content_for(:title) : 'Quick Reports System'
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    = render 'layouts/favicon'
+    = stylesheet_link_tag    'front/application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'front/application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    -if current_page?(url_for(:controller => 'pages', :action => 'index'))
+    -else
+      = render 'layouts/front/header'
+    #wrap
+      .container
+        #flash
+          = render 'layouts/front/flash_message'
+        = yield
+    -if current_page?(url_for(:controller => 'pages', :action => 'index'))
+    -else
+      = render 'layouts/front/footer'

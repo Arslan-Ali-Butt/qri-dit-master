@@ -1,0 +1,27 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+    %p Reports are remotely sent from your smartphone or tablet to the administrator's account from any QRID location using 3G or WiFi technology. Upon receipt, the administrator will look through the contents of the report and make any necessary actions before approving it and sending it off to the client.
+  .col-lg-8
+    = render partial: 'filter'
+.row.text-right
+  = render partial: 'control_buttons', locals: { meta_data: true }
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+      %thead
+        %tr
+          %th QRID
+          %th Site
+          %th Client Type
+          %th Work Type
+          %th Reason
+          %th Started at
+          %th Finished at
+          %th Time spent
+          %th.no-print Quick Actions
+      %tbody.report-collection
+        = render partial: 'resource', collection: @resources

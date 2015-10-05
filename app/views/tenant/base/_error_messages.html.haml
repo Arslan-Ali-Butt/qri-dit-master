@@ -1,0 +1,8 @@
+- if resource.errors.any?
+  .alert.alert-danger
+    %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'alert', type: 'button'} &times;
+    = pluralize(resource.errors.count, 'error')
+    prohibited this record from being saved:
+    %ul
+      - resource.errors.full_messages.each do |msg|
+        %li= msg

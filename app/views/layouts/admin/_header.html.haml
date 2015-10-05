@@ -1,0 +1,28 @@
+%header.navbar
+  .container
+    %button.navbar-toggle{'data-target' => '.sidebar-nav.nav-collapse', 'data-toggle' => 'collapse', type: 'button'}
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+    %a#main-menu-toggle.hidden-xs.open
+      %i.fa.fa-bars
+    %a.navbar-brand.col-lg-2.col-sm-1.col-xs-12{href: admin_root_url}
+      %span QRIDit Admin
+    .nav-no-collapse.header-nav
+      %ul.nav.navbar-nav.pull-right
+        %li.dropdown
+          %a.btn.account.dropdown-toggle{'data-toggle' => 'dropdown', href: '#'}
+            .avatar
+            .user
+              %span.hello Welcome,
+              %span.name= current_landlord.try(:name)
+          %ul.dropdown-menu
+            %li.dropdown-menu-title
+            %li
+              %a{href: current_landlord ? edit_admin_landlord_url(current_landlord) : '#'}
+                %i.fa.fa-sun-o
+                Profile
+            %li
+              %a{href: admin_logout_url}
+                %i.fa.fa-off
+                Logout

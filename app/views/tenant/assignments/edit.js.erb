@@ -1,0 +1,72 @@
+<% page_title = "Edit #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}" %>
+$('#myModal').html('<%= escape_javascript(render('modal_form', page_title: page_title, resource: @resource)) %>');
+$('#myModal').modal();
+initCalendarPickers();
+
+$('.selectize').selectize(
+	{ plugins: ['remove_button'] }
+);
+$('.selectize-client-id').selectize(
+	{ plugins: ['remove_button']}
+);
+$('.selectize-site-id').selectize(
+	{ plugins: ['remove_button'] }
+)
+$('.selectize-qrid-id').selectize(
+	{ plugins: ['remove_button'] }
+);
+
+<% unless @resource.new_record? %>
+
+	<% recurrence_action_title_delete = "Delete Recurring #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}" %>
+	<% recurrence_action_message_delete = "Would you like to delete only this assignment or future instances as well?" %>
+
+	<% recurrence_action_title_update = "Edit Recurring #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}" %>
+	<% recurrence_action_message_update = "Would you like to edit only this assignment or future instances as well?" %>
+
+	$(document).on("click", "#delete-assignment, #update-assignment", function(e) {
+		<% unless @resource.recurrence.nil?  %>
+		switch ($(e.currentTarget).attr('id')) {
+			case 'update-assignment': {
+				$('#recurrenceModal').html('<%= escape_javascript(render('recurrence_modal', recurrence_action_title: recurrence_action_title_update, recurrence_action_message: recurrence_action_message_update, resource: @resource, action: 'update')) %>')
+				$('#recurrenceModal').modal()				
+
+				break;
+			}
+			case 'delete-assignment': {
+				$('#recurrenceModal').html('<%= escape_javascript(render('recurrence_modal', recurrence_action_title: recurrence_action_title_delete, recurrence_action_message: recurrence_action_message_delete, resource: @resource, action: 'destroy')) %>')
+				$('#recurrenceModal').modal()
+
+				break;
+			}
+		}
+		return false;
+		<% end %>
+	});
+
+	$(document).on("click", ".recurrence-btn", function(e) {
+
+		var buttonSelector = '';
+
+		if ($(e.currentTarget).data('action') == 'update') {
+			$('.assignment-form').prepend('<%= escape_javascript(hidden_field_tag("tenant_assignment[recurrence_action]", "update")) %>');
+			buttonSelector = '#update-assignment-hidden';
+		}
+		else {
+			// this was a delete action
+			$('.assignment-form').prepend('<%= escape_javascript(hidden_field_tag("tenant_assignment[recurrence_action]", "destroy")) %>');
+			buttonSelector = '#delete-assignment-hidden';
+		}
+
+		if ($(e.currentTarget).data('action-type') == 'this-only') {
+			$('.assignment-form').prepend('<%= escape_javascript(hidden_field_tag("tenant_assignment[recurrence_action_type]", "this-only")) %>');
+		}
+		else {
+			$('.assignment-form').prepend('<%= escape_javascript(hidden_field_tag("tenant_assignment[recurrence_action_type]", "this-all-following")) %>');
+		}
+
+		$(buttonSelector).click();
+		//$('#recurrenceModal').modal('close');
+	});
+
+<% end %>

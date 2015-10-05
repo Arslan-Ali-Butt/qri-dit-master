@@ -1,0 +1,27 @@
+= form_for @request, url: tenant_support_request_path, remote: true, authenticity_token: true, method: :patch, as: :tenant_support_request, html: {role: 'form'} do |f|
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+        %h4.modal-title Request a Feature
+      .modal-body
+        = f.hidden_field :email
+        = f.hidden_field :company
+        .form-group
+          = f.label :message, 'Help us improve our software by suggesting a feature you would like to see.', class: 'control-label'
+          = f.text_area :message, class: 'form-control', rows: 18, style: 'resize: none; overflow: hidden;'
+        .form-group.upload-screenshot
+          = f.label :screenshot, 'Upload any files that might help explain your request.'
+          = f.file_field :screenshot, class: 'form-control', style: 'width: 93%; float: left;', accept: 'image/jpeg', title: 'Upload any files that might help explain your request.'
+          = content_tag(:span, rel: 'tooltip', title: 'Please take a screenshot to show us what you are seeing.', style: 'width: 5%; float: left; margin-left: 2%; line-height: 30px;') do
+            = content_tag(:i, '', class: 'fa fa-question-circle')   
+            
+          .progress-container.col-sm-10       
+        .row
+          .col-sm-12
+            %br/
+        .modal-footer
+          = f.submit 'Submit Feature Request Now', id: 'request_feature', class: 'btn btn-success'
+          %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close
+
+= render 'tenant/qrid_photos/upload_progress_template'

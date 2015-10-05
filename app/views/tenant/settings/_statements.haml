@@ -1,0 +1,19 @@
+- statement_list_items && statement_list_items.each do |statement|
+  %tr
+    %td= "#{'%04d' % statement.id}"
+    %td= @subscription.product.name
+    %td
+      %span.datetime{data: {datetime: Time.at(@subscription.current_period_started_at).to_i }}
+      %span - 
+      %span.datetime{data: {datetime: Time.at(@subscription.current_period_ends_at).to_i }}
+    / %td= @subscription.credit_card.masked_card_number
+    %td
+      - if statement.settled_at.present?
+        %span.label.label-success
+          Paid
+      - else
+        %span.label.label-warning= statement.closed_at.present? ? "Unpaid" : "Current"
+
+    %td= number_to_currency statement.total_in_cents / 100.0
+    %td
+      = tenant_button :download, tenant_billing_show_statement_path(id: statement.id, format: 'pdf')

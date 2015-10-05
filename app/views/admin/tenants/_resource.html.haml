@@ -1,0 +1,13 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td= link_to resource.company_name, resource
+  %td= resource.subdomain
+  %td= resource.company_website
+  %td= resource.name
+  %td= resource.phone_ext.present? ? "#{resource.phone} (ext: #{resource.phone_ext})" : resource.phone
+  %td= resource.admin_email
+  %td.center
+    %span.label.label-success Active
+  %td.center
+    = admin_button :edit, edit_admin_tenant_url(resource)
+    = admin_button :delete, delete_admin_tenant_url(resource), remote: true
+    = admin_button :resend, admin_tenant_resend_url(resource), remote: true

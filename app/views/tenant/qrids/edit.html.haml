@@ -1,0 +1,24 @@
+- page_title = 'Customize Checklist'
+:javascript
+  g_gogogadgetqridbuilder = true   
+
+= tenant_page_title page_title
+
+%h1{style: 'display: inline-block;', class: 'pull-left'}
+  %span{style: 'color: #000; display: inline-block;'}
+    Edit QRID -
+    =@resource.name
+.row
+= render partial: 'control_buttons', locals: {assign_button: true, trial_button: true, qrcard_button: true, duplicate_button: true, meta_button: true}
+= render 'error_messages', resource: @resource
+= form_for @resource, html: {class: "form-horizontal qrid-form", role: 'form'} do |f|
+  = render 'form_fields', f: f
+  = hidden_field_tag(:return_path, params[:return_path])  if params[:return_path].present?
+  .row
+    %fieldset
+      .form-group.form-actions.pull-right{style: 'margin-right: 30px'}
+        %div
+          = f.submit 'Save', class: 'btn btn-success'
+          = link_to 'Cancel', url_for(controller: controller_name), class: 'btn btn-default', role: 'button'
+
+= render 'tenant/qrid_photos/upload_progress_template'

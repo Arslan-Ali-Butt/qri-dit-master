@@ -1,0 +1,3 @@
+<% Tenant::Task.each_with_level(@resource.self_and_descendants) do |task, level| %>
+<%unless(task.task_type.eql?("Answer"))%><%(level-task.ancestors.select{|ans| ans.task_type.eql?("Question")}.count()).times do%>	<% end %>|<%=task.task_type.downcase[0]%>|<%if(!task.parent.nil?&&task.parent.task_type.eql?("Answer"))%><%if(!task.parent.name.downcase.eql?("n/a"))%><%=task.parent.name.downcase[0]%><%else%>d<%end%><%end%>|<%=task.name%><%end%>
+<%end%>

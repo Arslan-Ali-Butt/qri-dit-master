@@ -1,0 +1,41 @@
+<% tenant=Admin::Tenant.find(Apartment::Database.current_tenant.match(/\d+/).to_s.to_i) %>
+Hello <%=@recipient.name%>,
+<%if tenant.is_affiliate? %>
+Thank you for purchasing the <%=tenant.affiliate_owner.company_name%>, Home Watch Reporting Software. You have made a great decision. Managing your home watch business has now become a lot easier!
+<%else%>
+Thank you for purchasing the QRIDit Home Watch Edition software. You have made a great decision. Managing your home watch business has now become a lot easier!
+<%end%>
+
+Here is your account information:
+
+  Your custom link:
+  <%=tenant_root_url%>
+
+  Email: 
+  <%=@recipient.email%>
+
+  Password:
+  Not exposed for security purposes.
+
+<%if tenant.is_affiliate? %>
+If you find yourself in need of assistance, or would like to suggest new features for the product, please do not hesitate to email <%=tenant.affiliate_owner.admin_email%>
+<%else%>
+If you find yourself in need of assistance, or would like to suggest new features for the product, please do not hesitate to email support@qridithomewatch.com or click support inside the QRIDit Home Watch Edition software.
+<%end%>
+In the future you will log into the system using this link:
+<%=new_user_session_url%>
+
+<%if tenant.is_affiliate? %>
+You can provide this link to your reporters and customers or use it to add a 'Login' button to your website that directs to this page. Your webmaster can easily take care of this for you.
+<%else%>
+You can provide this link to your reporters and customers or use it to add a 'QRIDit Login' button to your website that directs to this page. Your webmaster can easily take care of this for you.
+<%end%>
+<%unless tenant.is_affiliate? %>
+Please do not hesitate to contact our friendly and responsive email support team by visiting our help desk at http://qridit.freshdesk.com.
+<%end%>
+
+<%if tenant.is_affiliate? %>
+The <%=tenant.affiliate_owner.company_name%> Team
+<%else%>
+The Quick Report Systems Team
+<%end%>

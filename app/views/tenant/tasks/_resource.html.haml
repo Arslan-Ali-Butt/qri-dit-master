@@ -1,0 +1,56 @@
+%li{class: "dd-item dd3-item#{resource.id == @resource.id ? ' last-change' : ''}", data: {'resource-id' => resource.id}}
+  - if resource.respond_to?(:origin_id) && resource.origin_id 
+    %label.dd-checkbox
+      = check_box_tag '', resource.id, resource.checked
+  %div{class: "dd3-content #{resource.task_type.downcase}"}
+    - if resource.task_type.downcase == 'answer'
+      %span{class: resource.active ? 'active' : 'blocked', data: {'task-type' => resource.task_type}}= resource.name
+    - else
+      %span.editable{class: resource.active ? 'active' : 'blocked', data: {'task-type' => resource.task_type}}= resource.name
+      - if resource.task_type.downcase == 'question'
+        %i.glyphicon.icon-q
+      - elsif resource.task_type.downcase == 'photo'
+        %i.fa.fa-camera
+      - elsif resource.task_type.downcase == 'comment'
+        %i.fa.fa-comment
+      - elsif resource.task_type.downcase == 'instructions'
+        %i.fa.fa-info-circle
+      .controls
+        - unless Sortable::NESTING_RULES[resource.task_type].empty?
+          - if resource.task_type.downcase == 'group'
+            %a.btn.btn-default.preview{href: "#{ resource.class.to_s == "Tenant::Task" ? trial_tenant_task_path(resource, :format => :js) : trial_tenant_permatask_path(resource, :format => :js)}", rel: 'tooltip', title: 'Preview this Group', role: 'button', data: {'resource-id' => resource.id, 'remote' => true}}
+              %i.fa.fa-eye
+
+            %span.btn.btn-default.expand-group{data: {'resource-id' => resource.id} }
+              %i.glyphicon.glyphicon-chevron-down{rel: 'tooltip', title: 'Expand this entire group'}
+
+
+            %span.btn.btn-default.add-node{rel: 'tooltip', title: 'Create sub group', data: {'resource-type' => 'Group', 'resource-id' => resource.id}}
+              %i.fa.fa-th-large
+
+            %span.btn.btn-default.add-instructions{rel: 'tooltip', title: 'Provide an instruction', data: {'resource-type' => 'Instructions', 'resource-id' => resource.id}}
+              %i.glyphicon.glyphicon-info-sign
+            %span.btn.btn-default.add-node{rel: 'tooltip', title: 'Ask a question', data: {'resource-type' => 'Question', 'resource-id' => resource.id}}
+              %i.glyphicon.icon-q            
+          - elsif resource.task_type.downcase == 'question'
+            %a.btn.btn-default.toggle{rel: 'tooltip', title: '"Yes" Condition', data: {'toggle-condition' => 'Yes'}} Yes
+            %a.btn.btn-default.toggle{rel: 'tooltip', title: '"No" Condition', data: {'toggle-condition' => 'No'}} No
+            %a.btn.btn-default.toggle{rel: 'tooltip', title: '"N/A" Condition', data: {'toggle-condition' => 'N/A'}} N/A
+            %span.btn.btn-default.add-node{rel: 'tooltip', title: 'Conditional photo request', data: {'resource-type' => 'Photo', 'resource-id' => resource.id}}
+              %i.fa.fa-camera
+            %span.btn.btn-default.add-node{rel: 'tooltip', title: 'Conditional comment request', data: {'resource-type' => 'Comment', 'resource-id' => resource.id}}
+              %i.fa.fa-comment
+            %span.btn.btn-default.add-instructions{rel: 'tooltip', title: 'Provide an instruction', data: {'resource-type' => 'Instructions', 'resource-id' => resource.id}}
+              %i.glyphicon.glyphicon-info-sign
+            %span.btn.btn-default.add-node{rel: 'tooltip', title: 'Ask a question', data: {'resource-type' => 'Question', 'resource-id' => resource.id}}
+              %i.glyphicon.icon-q
+          - elsif resource.task_type.downcase == 'instructions'
+            %span.btn.btn-default.add-node{rel: 'tooltip', title: 'Conditional photo request', data: {'resource-type' => 'Photo', 'resource-id' => resource.id}}
+              %i.fa.fa-camera
+            %span.btn.btn-default.add-node{rel: 'tooltip', title: 'Conditional comment request', data: {'resource-type' => 'Comment', 'resource-id' => resource.id}}
+              %i.fa.fa-comment
+        - unless resource.task_type.downcase == 'answer'
+          = tenant_button :delete, url_for(controller: controller_name, action: :destroy, id: resource.id), method: :delete, remote: true, data: { confirm: 'Are you sure?' }          
+  %ol.dd-list
+    - resource.children.each do |child|
+      = render 'resource', resource: child

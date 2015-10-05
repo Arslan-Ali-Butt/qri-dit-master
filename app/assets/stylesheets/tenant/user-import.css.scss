@@ -1,0 +1,16 @@
+.import-status {
+  padding-top: 40px;
+
+  &.import-status-ongoing {
+      p {
+      text-align: center;
+    }
+
+    .loading {
+      display: block;
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+  
+}

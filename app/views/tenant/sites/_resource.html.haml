@@ -1,0 +1,32 @@
+- return_path = params[:return_path]  if params[:return_path].present?
+%tr{data: {'resource-id' => resource.id}}
+  /
+    %td.center
+      %span{class: resource_status_class(resource.status)}= resource.status
+  %td= link_to resource.name, tenant_site_url(id: resource)
+  - unless defined?(return_path) && return_path.present? && return_path.start_with?('/clients')
+    %td= link_to resource.owner.name, tenant_client_url(id: resource.owner_id)
+    %td= resource.owner.client_type
+  %td= resource.address.try(:city)
+  %td= resource.zone ? link_to(resource.zone.try(:name), tenant_zones_url) : ''
+
+  - qrids = {}
+  - work_types = {}
+  - assignments = {}
+  - resource.qrids.active.order(:name).each do |qrid|
+    - qrids[qrid.id] = qrid.name
+    - work_types[qrid.id] = qrid.work_type.name
+    - options = {qrid_id: qrid.id, status: ['Open', 'In Progress']}
+    - assignment = Tenant::Assignment.list(Time.now - 1.day, Time.now + 30.day, options).first
+    - assignments[assignment.assignee_id] = "#{assignment.assignee.try(:name)} - #{assignment.start_at}" if assignment
+  %td= sites_qrids(qrids)
+  - if defined?(return_path) && return_path.present? && return_path.start_with?('/clients')
+    %td
+      %ul
+        - work_types.each do |id, name|
+          %li= link_to name, tenant_work_types_url
+    %td
+      %ul
+        - assignments.each do |id, name|
+          %li= link_to name, tenant_staff_url(id: id)
+  %td.center.no-print= sites_buttons(resource, return_path)

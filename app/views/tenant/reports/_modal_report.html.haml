@@ -1,0 +1,10 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header
+      %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+      %h4.modal-title= page_title
+    .modal-body
+      %table.table.table-striped
+        = render 'important_report_info', resource: resource
+    .modal-footer
+      %button.btn.btn-default{'data-dismiss' => 'modal', name: nil, type: 'button'} Close

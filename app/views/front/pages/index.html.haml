@@ -1,0 +1,117 @@
+/ top content start
+.top_cont
+  .container.cont_main
+    %h1 What You Can Do With QRIDit Home Watch
+    .row
+      .col-lg-4
+        .icon_main
+          .iocn
+            = image_tag "front/icon_1.jpg"
+            /
+          .iocn_text
+            Receive Instant Reports
+        .icon_main
+          %p No matter how far away your clients' properties may be, you can rest assured that every report will be delivered to your office instantly. Connect with key issues and review them, suggest solutions to the property owner and receive a response back within minutes of the information first being recorded.
+      .col-lg-4
+        .icon_main
+          .iocn
+            = image_tag "front/icon_2.jpg", class: "icon_2"
+            /
+          .iocn_text
+            Prove You Were There!
+        .icon_main
+          .icon_main
+            %p How do you prove to a client that a member of your team actually made it out to their property on time? QRIDit Home Watch uses GPS positioning to provide evidence that a visit was made and then records and integrates this info into the final report that you send to the client.
+      .col-lg-4
+        .icon_main
+          .iocn
+            = image_tag "front/icon_3.jpg"
+            /
+          .iocn_text
+            Schedule with Ease
+        .icon_main
+          %p The checklist of scheduling assignments to your staff is done and dusted in seconds with QRIDit Home Watch. Simply drag and drop a team member's name into any assignment using our unique dynamic calendar tool. The assignee will be notified in an instant.
+      .col-lg-4
+        .icon_main
+          .iocn
+            = image_tag "front/task.png"
+            /
+          .iocn_text
+            Simple Checklist Creation
+        .icon_main
+          %p The flexibility of our QRID management system means that you have the freedom to create customized checklists for your team. Don't have the time? QRIDit comes with a multitude of ready to use templates and questions!
+      .col-lg-4
+        .icon_main
+          .iocn
+            = image_tag "front/icon_5.jpg"
+            /
+          .iocn_text
+            Time Log
+        .icon_main
+          %p QRIDit is very handy for keeping a record of your team's hours. The clock will start as soon as a team member captures the QR code on their smartphone and automatically stops when they submit their report.
+      .col-lg-4
+        .icon_main
+          .iocn
+            = image_tag "front/tech.png"
+            /
+          .iocn_text
+            QR Code Technology
+        .icon_main
+          %p Thanks to QRIDit's QR oriented report system, creating location specific Checklists for your team to engage with could not be easier. Simply build your task list by using the intuitive and user friendly QRID Builder, generate your QR code and attach it to your client’s property ready to deliver the Checklist information to your assignees when they arrive.
+  / top content end
+/ business start
+= render 'front/pages/payment'
+/ business end
+/ latest news start
+/ = render 'front/pages/news'
+/ latest news end
+/ slide-show start
+.row
+  .col-lg-12
+    / bottom slider start
+    / = render 'front/pages/testimonials'
+    / bottom slider end
+/ slide show end
+/ bottom content start
+.bottom_content
+  .container.cont_main
+    %h1 Simplify Your Home Watch Business with QRIDit
+    .row
+      .col-lg-6
+        %h6 QRIDit Easily Integrates into your Business
+        %p.gry QRIDit has been created in a manner that allows for easy integration into businesses of any size. Out-of-the-box standard reports for standard checklists; are instantly usable. Defaults can be adjusted to suit your own requirements.
+      .col-lg-6
+        %h6 Does Simplicity Have to Mean Less Functionality?
+        %p.gry We recognize that for some business management software applications the term "simple" can stand for "light on functionality". We can assure you that this rule does not apply to QRIDit. We are confident that QRIDit will provide you with the tools you need to manage your Home Watch business in a cost effective and efficient manner.
+      .col-lg-6
+        %h6 User Friendly and Easy on the Eyes
+        %p.gry QRIDit has been designed with the end-user in mind. We have spent a lot of time designing & testing the User Interface (with real home watch companies) to ensure that managers, reporters and clients can easily find what they need when they need it quickly and with as little digging as possible.
+      .col-lg-6
+        %h6 Our Commitment to You
+        %p.gry
+          We are committed to making QRIDit the most user friendly business management solution out there. If we have overlooked something that you need and it's something that we deem to be potentially useful for everyone else, we will work to include it in the next set of updates. If you would like to provide some suggestions, please
+          %a{:href => "/contact"} click here.
+/ bottom content end
+/ business start
+= render 'front/pages/payment'
+/ business end
+/ Qridit start
+=# render 'front/pages/customize'
+/ bottom logo start
+= render "front/pages/bottom"
+/ bottom logo ends
+
+:javascript
+  $(document).ready(function(){
+    $('.bxslider').bxSlider({
+                   mode: 'horizontal',
+                   slideMargin: 3,
+                   auto:true
+               });
+      });
+
+%script{:type => "text/javascript", :src => "//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"}
+
+:javascript
+  (function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';}(jQuery));var $mcj = jQuery.noConflict(true);
+

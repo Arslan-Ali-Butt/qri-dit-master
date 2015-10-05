@@ -1,0 +1,16 @@
+<% page_title = "New #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}" %>
+$('#myModal').html('<%= escape_javascript(render('modal_form', page_title: page_title, resource: @resource)) %>');
+if ($('#myModal').hasClass('in')) {
+    initMap();
+    // it would seem have to set the height manually to keep it the same size when there are validation errors
+    $('#myModal .modal-dialog').css('height', '647px');
+} else {
+    $('#myModal').modal({ width: '960', height: '500' });
+    $('#myModal').on('shown.bs.modal', function (e) {
+        initMap();
+    });
+}
+
+$('#myModal').on('hidden.bs.modal', function (e) {
+  $('#tenant_qrid_site_id')[0].selectize.clear();
+});

@@ -1,0 +1,12 @@
+- content_for(:header, "New Report Comment Submitted")
+- callToActionUrl = tenant_report_url(id: @report, subdomain: Admin::Tenant.find(Apartment::Database.current_tenant.scan( /\d+$/ ).first).subdomain)
+
+Hello #{@recipient.name},
+
+<%=@author.name%> has just left a comment on their <%=@report.submitted_at%> report.
+
+<%=@note.note%>
+
+You can use the following link to respond to their comment.
+
+<%=tenant_report_url(id: @report, subdomain: Admin::Tenant.find(Apartment::Database.current_tenant.scan( /\d+$/ ).first).subdomain)%>

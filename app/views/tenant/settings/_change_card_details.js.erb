@@ -1,0 +1,34 @@
+$(document).ready(function() {  
+  Stripe.setPublishableKey('<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>');  
+  var g_stripe_alert$ = $('#stripe_alert');
+  console.info("Element stripe_alert referenced.");
+  var g_stripe_error_response$ = $('#stripe_error_response');
+  console.info("Element stripe_error_response referenced.");
+  g_stripe_alert$.hide();
+  console.info("Element stripe_alert hidden.");
+  
+  $('[name="change_card_details"] [type="submit"]').click(function() {
+    $form = $('#edit_change_card_details')
+
+    Stripe.card.createToken($form, function(status, response) {
+      if(response.error) {        
+        console.error('Stripe.card.createToken:response contained errors.');
+        g_stripe_error_response$.html($('<p><span>An error occurred while processing this request:</span><br/>' + response.error.message + '</p>'));
+        g_stripe_alert$.show();
+      } else {
+        var change_card_details$ = $('[name="change_card_details"]');          
+        change_card_details$.append('<input type=\'hidden\' name=\'change_card_details[card_token]\' value=\'' + response['id'] + '\'>');
+        change_card_details$.append('<input type=\'hidden\' name=\'change_card_details[card_brand]\' value=\'' + response['card']['brand'] + '\'>');
+        change_card_details$.append('<input type=\'hidden\' name=\'change_card_details[card_last4]\' value=\'' + response['card']['last4'] + '\'>');        
+        console.info("String.card.createToken:response");
+        console.info("\ttoken:\t" + response['id']);
+        console.info("\tbrand:\t" + response['card']['brand']);
+        console.info("\tlast4:\t" + response['card']['last4']);
+        console.info("end Stripe.card.createToken:response");
+        change_card_details$.trigger('submit.rails');
+      }
+    });
+
+    return(false);
+  });
+});

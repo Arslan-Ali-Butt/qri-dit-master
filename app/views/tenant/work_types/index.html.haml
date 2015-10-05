@@ -1,0 +1,18 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-8
+    %h1= page_title
+    %p Work Types play a central role within QRIDit Home Watch. As well as being the foundation on which Templates are built upon they are useful for filtering assignments and reports into specific work-oriented categories. For your convenience and in order to allow you to get started as quickly as possible, QRIDit Home Watch comes ready-equipped with several universal default Work Types.
+  .col-lg-4
+    = link_to 'Add new work type', url_for(controller: controller_name, action: :new), remote: true, class: 'btn btn-primary pull-right', role: 'button'
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+      %thead
+        %tr
+          %th Name
+          %th.no-print Quick Actions
+      %tbody.worktype-collection
+        = render partial: 'resource', collection: @resources

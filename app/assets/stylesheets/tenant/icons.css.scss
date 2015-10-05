@@ -1,0 +1,33 @@
+.customicons {
+  display: inline-block;
+  position: relative;
+  width: 48px;
+  height: 40px;
+  color: #1d1d1b;
+  text-decoration: none;
+  vertical-align: middle;
+
+  &.message_new {
+    background: asset-url('tenant/icon-newmail.svg') top left no-repeat;
+    background-size: contain;
+  }
+  &.message_full {
+    background: asset-url('tenant/read.svg') top left no-repeat;
+    background-size: contain;
+    width: 25px;
+    height: 25px;
+  }
+  &.message_sent {
+    background: asset-url('tenant/icon-sent.svg') top left no-repeat;
+    background-size: contain;
+    width: 25px;
+    height: 25px;
+  }
+  
+  &.flag {
+    background: asset-url('tenant/icon-flagged.svg') top left no-repeat;
+    background-size: contain;
+    width: 25px;
+    height: 25px;
+  }
+}

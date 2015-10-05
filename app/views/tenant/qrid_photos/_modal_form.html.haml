@@ -1,0 +1,47 @@
+- method = resource.new_record? ? 'post' : (action_name == 'delete' ? 'delete' : 'patch')
+- case method
+  - when 'post'
+    - url = { controller: controller_name, action: 'index' }
+    - button = 'Done Uploading'
+  - when 'delete'
+    - url = { controller: controller_name, action: 'destroy', id: resource.id }
+    - button = 'Confirm'
+  - else
+    - url = { controller: controller_name, action: 'update', id: resource.id }
+    - button = 'Save changes'
+
+.modal-dialog{style: (%w(clients sites).include?(controller_name) && action_name != 'delete') ? 'width: 960px' : ''}
+  .modal-content
+
+    - form_classes = "form-horizontal #{resource.class.name.demodulize.downcase}-form"
+    - if resource.new_record?
+      - form_classes = "#{form_classes} fileinput-button"
+
+    = form_for resource, url: url, method: method, remote: true, html: {class: form_classes, role: 'form', multipart: (controller_name == 'qrid_photos')} do |f|
+      .modal-header
+        %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+        %h4.modal-title= page_title
+      .modal-body
+        = render 'error_messages', resource: resource
+        - if method == 'delete'
+          = render 'delete_fields', f: f
+        - else
+          = render 'form_fields', f: f
+        = hidden_field_tag(:return_path, params[:return_path])  if params[:return_path].present?
+        = hidden_field_tag(:qrid_id, params[:qrid_id])
+      .modal-footer
+        - if resource.new_record?
+          #qrid_photo_upload_button
+            = f.file_field :photo_url, class: 'form-control qrid_photo_input', autofocus: true, multiple: true
+            - if f.object.new_record?
+              %span.btn.btn-success
+                %i.fa.fa-upload
+                Add New Photo(s)
+        %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close
+        - if method == 'delete'
+          %button.btn.btn-danger{type: 'submit'}= button
+        - else
+          - if resource.new_record?
+            %a.btn.btn-primary#upload-qrid-photo{href: '#'}= button
+          - else
+            %button.btn.btn-primary{type: 'submit'}= button

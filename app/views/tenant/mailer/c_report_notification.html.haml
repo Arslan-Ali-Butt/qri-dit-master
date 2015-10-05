@@ -1,0 +1,28 @@
+- company_name = ''
+- if m = Apartment::Tenant.current_tenant.match(/\d+/)
+  - company_name = Admin::Tenant.find(m[0]).try(:company_name)
+
+- callToActionUrl = tenant_c_report_url(id: @report, subdomain: Admin::Tenant.find(Apartment::Tenant.current_tenant.scan( /\d+$/ ).first).subdomain)
+
+
+- if Tenant::ReportNote.where(report_id: @report).count > 1
+  - content_for(:header, "New Report Comment Submitted")
+- else
+  - content_for(:header, "New Report Submitted")
+%p
+  Hello #{@recipient.name},
+%p
+  - if Tenant::ReportNote.where(report_id: @report).count > 1
+    #{@author.name} from #{company_name} has just left a comment on your #{@report.submitted_at} report.
+  - else
+    There is a new report for you to review.
+%p
+  %i= @note.note
+
+%p
+  - if Tenant::ReportNote.where(report_id: @report).count > 1
+    You can use the following link to respond to their comment.
+  - else
+    You can use the following link to view the report.
+
+= render "layouts/emailbrand/call_to_action_button", :line1 => "Click here to", :line2 => "Respond", :line3 => "", :linkUrl => callToActionUrl

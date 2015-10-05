@@ -1,0 +1,106 @@
+%script{:src => "/assets/front/jquery.liquid-slider.js"}
+:javascript
+  $(document).ready(function(){
+    $('#main-slider').liquidSlider({
+      autoSlide:true
+    });
+  });
+- content_for :title, "QRIDit Home Watch Edition - Features"
+.pricing.feature
+  .header_2
+    .navbar-wrapper
+      / <img id="logo" src="img/logo.png" alt="Unslider logo" width="34" height="27">
+      .navbar.navbar-inverse.navbar-static-top{:role => "navigation"}
+        .container
+          .navbar-header
+            %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+              %span.sr-only Toggle navigation
+              %span.icon-bar
+              %span.icon-bar
+              %span.icon-bar
+            %a.navbar-brand.logo{:href => "index"}
+              = image_tag "front/logo.png"
+          .navbar-collapse.collapse
+            %ul.nav.navbar-nav
+              %li.active
+                = link_to("Home","index",:title=>"Home")
+              %li
+                = link_to("Contact","contact",:title=>"Contact")
+              %li
+                %a#men_icn Menu
+      .bannerli_3
+        .container
+          .inner
+            %h1 Features & Benefits
+            %h2 Simplify your Home Watch Business
+            .divr_2
+              = image_tag "front/div_3.png"
+            #main-slider.liquid-slider
+              %div
+                %p Assign Checklists to staff from the office without picking up the phone.
+              %div
+                %p Create and store easy to use customized Checklist lists that become reports when completed by staff.
+              %div
+                %p Create accounts for unlimited team members and clients.
+              %div
+                %p View and approve reports within an instant of them being sent from the site.
+              %div
+                %p Track live working locations of staff via our built in GPS tracking service.
+              %div
+                %p Generate electronic and paper reports for clients.
+              %div
+                %p Manage multiple business lines in one place.
+  / bottom content start
+  .bottom_content{:style => "border:0px;"}
+    .container.cont_main{:style => "margin-top:20px;"}
+      .row.mar_t
+        .col-lg-4
+          = image_tag "front/img_sam.jpg", width: "100%"
+        .col-lg-8.fre_li
+          %h1 Win the Adoration of Your Clients
+          %ul
+            %li
+              %p Provide clients with hard evidence of time and date that property has been serviced.
+            %li
+              %p Create customized reports that reflect your brand.
+            %li
+              %p Deliver intelligent reports to your clients that look professional and personalized.
+            %li
+              %p Resolve flagged issues quickly with your clients, bringing them peace of mind.
+            %li
+              %p Easily stay on top of your client's requirements all day, every day.
+      .row.mar_t
+        .col-lg-8.fre_li
+          %h1 Your Staff Will Love QRIDit Home Watch too!
+          %ul
+            %li
+              %p Simply scan the property's QR Code with a smartphone or tablet to obtain Checklist lists.
+            %li
+              %p Easily complete Checklists and immediately send as reports for management approval.
+            %li
+              %p Take unlimited photos of the site and send as part of a report.
+            %li
+              %p Clearly flag problem areas of general issues for client's attention along with detailed descriptions.
+            %li
+              %p Use built-in GPS functionality to find the location of their next job.
+        .col-lg-4
+          = image_tag "front/img_sam_2.jpg", width: "100%"
+  / bottom content end
+  / business start
+  .business
+    .container
+      %h2 Simplify Your Home Watch Business Today!
+      .btn_m
+        = link_to("Get Started Now","purchase",:class=>"btn")#%a.btn{:href => "pricing"} Get Started Now
+      .visa
+        %a{:href => "purchase", :title => "Payment"}
+          = image_tag  "front/visa.png"
+  / business end
+  / business start
+  = render "front/pages/never_stop"
+  / business end
+  / Qridit start
+  .main_qri
+  / Qridit end
+  / bottom logo start
+  = render "front/pages/bottom"

@@ -1,0 +1,24 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+    %p QRIDit is very handy for keeping a record of your team's hours. The clock will start as soon as a team member captures the QR Code on their smartphone and automatically stops when they submit their report. QRIDit keeps track of all of this information and uses it to provide up-to-the-second daily, weekly, monthly and yearly time reports.
+  .col-lg-8
+    = render 'filter'
+.row.text-right
+  = render 'control_buttons'
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable#time-table{data: {source: tenant_datatables_time_index_url(format: 'json', context: 'datatables') }}
+      %thead
+        %tr
+          %th Reporter Name
+          %th Base zone
+          %th Last report at
+          %th Time This Week
+          %th Time This Month
+          %th.no-print Quick Actions
+      %tbody.user-collection
+        =# render partial: 'resource', collection: @resources

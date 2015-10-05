@@ -1,0 +1,10 @@
+%fieldset
+  .form-group
+    = f.label :name, 'Name', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :name, class: 'form-control', autofocus: true
+  .form-group
+    = f.label :notes, 'Cities & Subzones', class: 'col-sm-2 control-label'
+    .col-sm-9
+      = f.text_area :notes, class: 'form-control', rows: 5
+    %span.col-sm-1{rel:"tooltip",title:"Provide a description for this zone.  This is for your reference only.  You can include specific towns/cities in a specific zone or use zones to break a large city into sub zones."}?

@@ -1,0 +1,37 @@
+= f.fields_for :address do |ff|
+  - unless @resource.address.new_record?
+    = ff.hidden_field :id
+  .form-group
+    = ff.label :house_number, 'House #', class: 'col-sm-4 control-label'
+    .col-sm-8
+      = ff.text_field :house_number, class: 'form-control'
+  .form-group
+    = ff.label :street_name, 'Street', class: 'col-sm-4 control-label'
+    .col-sm-8
+      = ff.text_field :street_name, class: 'form-control'
+  .form-group
+    = ff.label :line_2, 'Line 2', class: 'col-sm-4 control-label'
+    .col-sm-8
+      = ff.text_field :line_2, class: 'form-control'
+  .form-group
+    = ff.label :city, 'City', class: 'col-sm-4 control-label'
+    .col-sm-8
+      = ff.text_field :city, class: 'form-control'
+  .form-group
+    - c = Carmen::Country.coded(@resource.address.new_record? ? Admin::Tenant.cached_find_by_host(request.host).country_code : @resource.address.country)
+    - if c && c.subregions?
+      = ff.label :province, c.subregions.first.type.titlecase, class: 'col-sm-4 control-label', id: 'province_label'
+      .col-sm-8
+        = ff.subregion_select :province, c, {prompt: "Please select a #{c.subregions.first.type}", selected: @resource.address.province}, class: 'form-control'
+    - else
+      = ff.label :province, 'State / Province', class: 'col-sm-4 control-label'
+      .col-sm-8
+        = ff.text_field :province, class: 'form-control'
+  .form-group
+    = ff.label :postal_code, 'Zip / Postal Code', class: 'col-sm-4 control-label'
+    .col-sm-8
+      = ff.text_field :postal_code, class: 'form-control'
+  .form-group
+    = ff.label :country, 'Country', class: 'col-sm-4 control-label'
+    .col-sm-8
+      = ff.country_select :country, {priority: %w(CA US), prompt: 'Please select a country', :selected => @resource.address.new_record? ? Admin::Tenant.cached_find_by_host(request.host).country_code : @resource.address.country}, class: 'form-control'

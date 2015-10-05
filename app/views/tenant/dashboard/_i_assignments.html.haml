@@ -1,0 +1,30 @@
+.box
+  .box-header{'data-original-title' => ''}
+    %h2
+      %i.fa.fa-calendar
+      = succeed "Today's Assignments" do
+        %span.break
+    .box-icon
+      %a.btn-minimize{href: '#'}
+        %i.fa.fa-chevron-up
+  .box-content
+    %table.table.table-striped.table-bordered
+      %thead
+        %tr
+          %th Client
+          %th Site
+          %th QRID
+          %th Start at
+          %th Status
+          %th
+      %tbody.report-collection
+        - @assignments.reject {|row| row.qrid.nil?}.each do |resource|
+          %tr{data: {'resource-id' => resource.id}}
+            %td= resource.qrid.site.owner.try(:name)
+            %td= resource.qrid.site.name
+            %td=link_to resource.qrid.name, trial_tenant_my_qrid_path(resource.qrid.id)
+            %td= resource.start_at
+            %td= resource.status
+            %td.center
+              = tenant_button :show, tenant_my_assignment_path(resource)
+              = tenant_button :map, resource.qrid.site.direction_url, target: '_blank'

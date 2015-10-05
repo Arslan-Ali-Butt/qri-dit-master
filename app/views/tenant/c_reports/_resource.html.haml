@@ -1,0 +1,22 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td
+    = link_to tenant_c_report_path(resource) do
+      - if resource.unread_by_client
+        %i.customicons.message_new
+      - else
+        %i.customicons.message_full
+  %td
+    - if resource.flagged
+      %i.customicons.flag
+  %td= resource.qrid.name
+  %td= resource.qrid.site.name
+  %td= resource.qrid.work_type.name
+  %td= resource.submitted_at
+  %td= resource.sent_at
+  %td= resource.replied_at
+  %td
+    - unless resource.notes.empty?
+      = resource.notes.last.note
+  %td.center.no-print
+    = tenant_button :show, tenant_c_report_path(resource)
+    = tenant_button :photo, tenant_report_photos_url(report_id: resource.id)

@@ -1,0 +1,13 @@
+.row
+  .col-lg-3.col-sm-6.col-xs-6.col-xxs-12
+    .smallstat.box
+      = link_to admin_landlords_url do
+        %i.fa.fa-sun-o.blue
+      %span.title Landlords
+      %span.value= @landlords
+  .col-lg-3.col-sm-6.col-xs-6.col-xxs-12
+    .smallstat.box
+      = link_to admin_tenants_url do
+        %i.fa.fa-user.green
+      %span.title Tenants
+      %span.value= @tenants

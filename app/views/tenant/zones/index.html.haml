@@ -1,0 +1,22 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-8
+    %h1= page_title
+    %p Zones are attached to sites and staff members and can be created by the administrator or manager to a custom specification, meaning that the number of zones you create and the manner in which you name and designate them is entirely up to you. The open nature of zones means that your company's established zoning practices can easily be migrated into the QRIDit Home Watch system.
+  .col-lg-4
+    = link_to 'Add new zone', url_for(controller: controller_name, action: :new), remote: true, class: 'btn btn-primary pull-right', role: 'button'
+.row.text-right
+  = render 'control_buttons'
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+      %thead
+        %tr
+          %th Name
+          %th Cities & Subzones
+          %th Status
+          %th.no-print Quick Actions
+      %tbody.zone-collection
+        = render partial: 'resource', collection: @resources

@@ -1,0 +1,6 @@
+#robots.txt for http://qridithomewatch.com/
+
+User-agent: *
+Disallow: /signup
+Disallow: /login
+Disallow: /tmp

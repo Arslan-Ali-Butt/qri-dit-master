@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <style>
+      body {
+          font-family: "Times New Roman", Times, serif;
+      }
+
+      h1 {
+          color: #2EB4BF;
+          font-size: 32pt;
+          text-align: center;
+          font-family: "Arial Regular", Arial, Helvetica, sans-serif;
+      }
+
+      p, .footer {
+          padding: 0em 1.5em;
+      }
+
+      .footer {
+          padding-top: 4em;
+          text-align: center;
+      }
+
+      .actionButtonContainer {
+          text-align: center;
+          margin: 0 auto;
+          font-family: "Arial Regular", Arial, Helvetica, sans-serif;
+          max-width: 200px;
+      }
+
+      .actionButtonContainer > a {
+          text-decoration: none;
+      }
+
+      .actionButton {
+          padding: 0.5em;
+          text-align: center;
+          font-weight: bold;
+          background-color: #E53F45;
+          color: #fff;
+          border-radius: 10px 10px 10px 10px;
+          -moz-border-radius: 10px 10px 10px 10px;
+          -webkit-border-radius: 10px 10px 10px 10px;
+      }
+
+      .actionButton > span {
+          display: block;
+      }
+
+      .actionButton > .secondRowButton {
+          text-transform: uppercase;
+          font-size: 125%;
+      }
+
+
+  </style>
+</head>
+
+<body>
+<h1>
+  <%= yield :header %>
+</h1>
+<p>
+  <%= yield %>
+</p>
+
+<div class="actionButtonContainer">
+  <a href="#">
+    <div class="actionButton">
+      <span class="firstRowButton">Call-to-action</span>
+      <span class="secondRowButton">button</span>
+      <span class="thirdRowButton">Goes here</span>
+    </div>
+  </a>
+</div>
+
+<div class="footer">
+  <img src="QRIDITLogo-Sm.png" />
+</div>
+</body>
+</html>

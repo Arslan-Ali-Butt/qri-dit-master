@@ -1,0 +1,81 @@
+-if @owner.is_affiliate?
+  %h1="Affiliates can not accept affiliate requests"
+-elsif !@owner.allow_affiliate_requests
+  %h1="#{@owner.company_name} is currently not accepting affiliate requests"
+-else
+  %h1="Signup as an Affiliate of #{@owner.company_name}"
+  =form_for @resource, url: {controller:"affiliates",action:"create"} do |f|
+    .row{style: "margin:0;"}
+      .col-md-6
+        .form-group.form-inline
+          =f.label :subdomain, class: "sr-only"
+          .form-control=request.protocol
+          =f.text_field :subdomain, {class: "form-control",style: "width: 34vw"}
+          .form-control=".#{request.domain}"
+          -if @resource.errors.full_messages_for(:subdomain).any?
+            %ul
+              -@resource.errors.full_messages_for(:subdomain).each do |msg|
+                %li=msg
+        .form-group
+          =f.label :company_name, class: "sr-only"
+          =f.text_field :company_name, class: "form-control", placeholder: "Company Name"
+          -if @resource.errors.full_messages_for(:company_name).any?
+            %ul
+              -@resource.errors.full_messages_for(:company_name).each do |msg|
+                %li=msg
+        .form-group
+          =f.label :company_website, class: "sr-only"
+          =f.text_field :company_website, class: "form-control", placeholder: "Website"
+          -if @resource.errors.full_messages_for(:company_website).any?
+            %ul
+              -@resource.errors.full_messages_for(:company_website).each do |msg|
+                %li=msg
+        .form-group
+          =f.label :name, class: "sr-only"
+          =f.text_field :name, class: "form-control", placeholder: "Owner Name"
+          -if @resource.errors.full_messages_for(:name).any?
+            %ul
+              -@resource.errors.full_messages_for(:name).each do |msg|
+                %li=msg
+        .form-group.form-inline
+          =f.label :phone, class: "sr-only"
+          =f.text_field :phone, class: "form-control",style: "width: 79%", placeholder: "Phone"
+          -if @resource.errors.full_messages_for(:phone).any?
+            %ul
+              -@resource.errors.full_messages_for(:phone).each do |msg|
+                %li=msg
+          =f.label :phone_ext, class: "sr-only"
+          =f.text_field :phone_ext, class: "form-control",style: "width: 20%", placeholder: "Phone Extension"
+          -if @resource.errors.full_messages_for(:phone_ext).any?
+            %ul
+              -@resource.errors.full_messages_for(:phone_ext).each do |msg|
+                %li=msg
+        .form-group
+          =f.label :admin_email, class: "sr-only"
+          =f.text_field :admin_email, class: "form-control", placeholder: "Administrative Email"
+          -if @resource.errors.full_messages_for(:admin_email).any?
+            %ul
+              -@resource.errors.full_messages_for(:admin_email).each do |msg|
+                %li=msg
+        .form-group
+          =f.label :country_code, class: "sr-only"
+          =f.country_select :country_code,  {priority: %w(US CA)},class: "form-control"
+          -if @resource.errors.full_messages_for(:country_code).any?
+            %ul
+              -@resource.errors.full_messages_for(:country_code).each do |msg|
+                %li=msg
+        .form-group
+          =f.label :timezone, class: "sr-only"
+          =f.time_zone_select :timezone,nil, class: "form-control"
+          -if @resource.errors.full_messages_for(:timezone).any?
+            %ul
+              -@resource.errors.full_messages_for(:timezone).each do |msg|
+                %li=msg
+    .row{style: "margin:0;"}
+      .col-sm-12
+        %span{style: 'vertical-align: middle;'}
+          = f.check_box :tac, style: 'width: 16px;', required:true
+        I have read and agree to the
+        = link_to 'Terms & Conditions', tenant_affiliate_tac_path(format: :js), remote: true
+        %br
+        =f.submit "Create Your Affiliate Request"

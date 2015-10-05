@@ -1,0 +1,14 @@
+Hello <%=@assignment.assignee.name%>,
+
+<% company_name = ''
+if m = Apartment::Database.current_tenant.match(/\d+/)
+  company_name = Admin::Tenant.find(m[0]).try(:company_name)
+end %>
+The assignment for <%=company_name%> has been cancelled.
+
+Assignment details:
+
+- QRID: <%=@assignment.qrid.name%>
+- Site: <%=@assignment.qrid.site.address.house_number%> <%=@assignment.qrid.site.address.street_name%>, <%=@assignment.qrid.site.address.city%>, <%=@assignment.qrid.site.address.province%>, <%=@assignment.qrid.site.address.country%>
+- <%=@assignment.start_at%> - <%=@assignment.end_at%>
+		

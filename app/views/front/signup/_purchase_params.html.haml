@@ -1,0 +1,16 @@
+= f.hidden_field :priceplan_id
+= f.hidden_field :billing_recurrence
+= f.hidden_field :admin_email
+= f.hidden_field :subdomain
+= f.hidden_field :company_name
+= f.hidden_field :company_website, value: @tenant.company_website.gsub(/^(https?:\/\/)/,'')
+= f.hidden_field :phone
+= f.hidden_field :phone_ext
+= f.hidden_field :first_name
+= f.hidden_field :last_name
+= f.hidden_field :country_code
+
+- if params[:signup][:first_name].present? && params[:signup][:last_name].present?
+  = f.hidden_field :name, value: params[:signup][:first_name] + ' ' + params[:signup][:last_name]
+- else
+  = f.hidden_field :name

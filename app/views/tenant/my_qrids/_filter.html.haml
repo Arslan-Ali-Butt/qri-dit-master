@@ -1,0 +1,23 @@
+%form{method: :get, class: 'form-horizontal well no-print', role: 'form'}
+  .row
+    .col-sm-6
+      .form-group
+        = label_tag :site_id, 'Site', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :site_id, options_from_collection_for_select(Tenant::Site.active.order(:name), :id, :name, @site_id), prompt: 'All', class: 'form-control selectize'
+      .form-group
+        = label_tag :id, 'QRID', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :id, options_from_collection_for_select(Tenant::Qrid.active.order(:name), :id, :name, @id), prompt: 'All', class: 'form-control selectize'
+    .col-sm-6
+      .form-group
+        = label_tag :city, 'City', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :city, options_from_collection_for_select(Tenant::Address.where(addressable_type: 'Tenant::Site').order(:city), :city, :city, @city), prompt: 'All', class: 'form-control selectize'
+      .form-group
+        = label_tag :zone_id, 'Zone', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :zone_id, options_from_collection_for_select(Tenant::Zone.order(:name), :id, :name, @zone_id), prompt: 'All', class: 'form-control selectize'
+      .form-group.form-actions
+        .col-sm-offset-9.col-sm-3
+          = button_tag 'Filter', name: nil, type: 'submit', class: 'btn btn-primary pull-right'

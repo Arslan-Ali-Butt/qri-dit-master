@@ -1,0 +1,14 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td= resource.qrid.name
+  %td= resource.qrid.site.name
+  %td= resource.qrid.site.owner.client_type
+  %td= resource.qrid.work_type.name
+  %td= resource.try(:assignment).try(:permatask) ? 'Permatask' : 'Regular'
+  %td= resource.started_at
+  %td= resource.submitted_at
+  %td= time_from_sec(resource.submitted_at - resource.started_at)
+  %td.center.no-print
+    = tenant_button :show, url_for(controller: controller_name, action: :show, id: resource)
+    - unless @reporter_id
+      = tenant_button :edit, url_for(controller: controller_name, action: :edit, id: resource), remote: true
+    = tenant_button :photo, tenant_report_photos_url(report_id: resource.id)

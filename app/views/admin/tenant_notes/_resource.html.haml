@@ -1,0 +1,7 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td= Time.at(resource.created_at).to_s
+  %td= resource.author.try(:name)
+  %td= resource.title
+  %td.center
+    = admin_button :edit, edit_admin_tenant_note_url(tenant_id: resource.tenant_id, id: resource.id), remote: true
+    = admin_button :delete, admin_tenant_note_url(tenant_id: resource.tenant_id, id: resource.id), method: :delete, remote: true, data: { confirm: 'Are you sure?' }

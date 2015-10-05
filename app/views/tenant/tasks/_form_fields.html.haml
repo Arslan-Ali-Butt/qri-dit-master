@@ -1,0 +1,33 @@
+:javascript
+- if @resource.parent_id.to_i > 0
+  - parent_task_type = Tenant::Task.find(@resource.parent_id.to_i).try(:task_type)
+  - allowed_types = {}
+  - Sortable::NESTING_RULES[parent_task_type].each do |t|
+    - allowed_types[t == 'Group' ? 'Sub-Group' : t] = t
+- else
+  - allowed_types = {'Group' => 'Group'}
+%fieldset
+  = f.hidden_field :work_type_id
+  = f.hidden_field :client_type
+  - if @resource.parent_id
+    = f.hidden_field :parent_id
+  - if @resource.qrid_id
+    = f.hidden_field :qrid_id
+  = hidden_field_tag(:on_top, params[:on_top]) if params[:on_top].present?
+  .form-group
+    = f.label :name, 'Name', class: 'col-sm-2 control-label'
+    .col-sm-10
+      - if allowed_types.count == 1 && allowed_types['Answer']
+        = f.select :name, ['Yes', 'No'], {prompt: @resource.name.blank?}, {class: 'form-control'}
+      - else
+        = f.text_field :name, class: 'form-control'
+  .form-group
+    = f.label :task_type, 'Type', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.select :task_type, allowed_types, {prompt: allowed_types.count > 1}, {class: 'form-control'}
+  .form-group
+    .col-sm-10.col-sm-offset-2
+      .checkbox
+        %label
+          = f.check_box :active
+          Active

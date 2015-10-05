@@ -1,0 +1,2 @@
+module Tenant::AffiliateHelper
+end

@@ -1,0 +1,23 @@
+<% company_name = ''
+if m = Apartment::Database.current_tenant.match(/\d+/)
+  company_name = Admin::Tenant.find(m[0]).try(:company_name)
+end
+%>
+
+Hello <%=@recipient.name%>,
+
+<% if Tenant::ReportNote.where(report_id: @report).count > 1 %>
+<%=@author.name%> from <%=company_name%> has just left a comment on your <%=@report.submitted_at%> report.
+<% else %>
+There is a new report for you to review.
+<% end %>
+
+<%=@note.note%>
+
+<% if Tenant::ReportNote.where(report_id: @report).count > 1 %>
+You can use the following link to respond to their comment.
+<% else %>
+You can use the following link to view the report.
+<% end %>
+
+<%=tenant_c_report_url(id: @report, subdomain: Admin::Tenant.find(Apartment::Database.current_tenant.scan( /\d+$/ ).first).subdomain)%>

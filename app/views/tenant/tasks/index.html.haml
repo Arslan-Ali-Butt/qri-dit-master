@@ -1,0 +1,56 @@
+:javascript
+  g_gogogadgetqridbuilder = true;
+
+:css
+  .toggle.active {
+    background:#7ABC33;
+    color:#000;
+    text-shadow: 1px 1px #fff;
+  }
+  .glyphicon-lg {
+    font-size:2em;
+    line-height:1em;
+    display:block;
+    margin-top:0px;
+    margin-bottom:0px;
+    margin-right:5px;
+    float:left;
+  }
+
+- page_title = 'Templates'
+= tenant_page_title page_title
+.row
+  .col-lg-4
+    %h1
+      = page_title
+      %a{href:"#youtube",role:"button",data:{toggle:"modal"}}
+        =image_tag "tenant/film.svg",{style: "height: 40px;",rel:"tooltip",title:"Watch Video"}
+    %div{style:"display: none;"}
+      #youtube.modal.fade
+        .modal-dialog.modal-lg
+          .modal-content
+            .modal-header
+              %button.close{data:{dismiss:"modal"}} &times;
+              .modal-title Using Templates in QRIDit HomewWatch
+            .modal-body
+              %iframe{width:"100%",height:"480",src:"https://www.youtube.com/embed/HdwpDFICZc4?rel=0",frameborder:"0",allowfullscreen:"true"}
+    %p QRIDit Home Watch comes ready equipped with many Templates that can be easily integrated into your Checklist. You may permanently edit the templates if you wish or simply add new groups, sub-groups or questions to them. Any edits made to Templates will only be applied to new Checklists from the time of the edit onwards. You may add updated Templates to any existing QRIDs by simply selecting the related checkbox within Edit QRID mode.
+    - if @resources.empty?
+      - if @work_type_id.present? && @client_type.present?
+        %p There are no templates yet.
+      - else
+        %p Please select work and client types in order to create or edit templates.
+  .col-lg-8= render 'filter'
+  .data-storage{data: {'client-type' => @client_type, 'work-type-id' => @work_type_id}}
+  .col-lg-12
+    - unless @resources.empty?
+      .form-group.form-group-template-tasks
+        = render 'nestable_menu', on_top: true
+    .form-group.form-group-template-tasks
+      .loading-big      
+      %ol.dd-list.sortable-tree.task-collection.maticulating{data: {rebuild_url: rebuild_tenant_tasks_url, default_url: tenant_tasks_url(work_type_id: @work_type_id, client_type: @client_type), max_levels: 8}}
+        = render_sortable_tree @resources, controller_name, false, true
+
+    - if @work_type_id.present? && @client_type.present?
+      .form-group.form-group-template-tasks
+        = render 'nestable_menu', on_top: false

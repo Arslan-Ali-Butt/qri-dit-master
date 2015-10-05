@@ -1,0 +1,88 @@
+- page_title = @resource.qrid.qrid_name
+= tenant_page_title page_title
+
+%h1 Assignment Details
+.row
+  .col-sm-6
+    %h4.text-center= page_title
+
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Assignment
+      .panel-body
+        %p
+          %b Reporter Name:
+          = @resource.assignee.name
+        %p
+          %b Start at:
+          = @resource.start_at
+        %p
+          %b End at:
+          = @resource.end_at
+        %p
+          %b Comment:
+          = @resource.comment
+
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Site Info
+      .panel-body
+        %p
+          %b Zone:
+          %br
+          = @resource.qrid.site.zone.try(:name)
+        %p
+          %b Notes:
+          %br
+          = simple_format(@resource.qrid.site.notes)
+        %p
+          %b Alarm code:
+          = @resource.qrid.site.alarm_code
+        %p
+          %b Alarm safeword:
+          = @resource.qrid.site.alarm_safeword
+        %p
+          %b Alarm company:
+          = @resource.qrid.site.alarm_company
+        %p
+          %b Emergency number:
+          = @resource.qrid.site.emergency_number
+
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title QRID Info
+      .panel-body
+        %p
+          %b QRID:
+          = @resource.qrid.name
+        %p
+          %b Work Type:
+          = @resource.qrid.work_type.name
+        %p
+          %b Estimated duration:
+          = @resource.qrid.estimated_duration
+        -unless(current_user.role?(:reporter))
+          %p
+            = tenant_button :start, start_tenant_my_qrid_url(id: @resource.qrid.id)
+
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title QRID Photos
+      .panel-body
+        .row.qridphoto-collection
+          = render partial: 'tenant/qrid_photos/resource', collection: @resource.qrid.photos
+
+
+  .col-sm-6
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Location
+      .panel-body
+        %input#tenant_site_latitude{type: :hidden, value: @resource.qrid.site.latitude}
+        %input#tenant_site_longitude{type: :hidden, value: @resource.qrid.site.longitude}
+        %input#tenant_site_image{type: :hidden, value: image_path('tenant/mapIcon-Default.png')}
+        #map_site
+        %p{style: 'margin:10px 0; text-align:center;'}
+          %a.btn.btn-default{href: @resource.qrid.site.direction_url, target: '_blank'}
+            Get Directions
+        %p= simple_format(@resource.qrid.site.address.try(:to_s))

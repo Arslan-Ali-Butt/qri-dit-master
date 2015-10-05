@@ -1,0 +1,19 @@
+<%tenant=Admin::Tenant.find(Apartment::Database.current_tenant.match(/\d+/).to_s.to_i)%>
+Hello <%=@resource.name%>,
+<% if tenant.is_affiliate? %>
+Thank you for purchasing the <%=tenant.affiliate_owner.company_name%>, Home Watch Reporting Software. You have made a great decision.
+<% else %>
+Thank you for purchasing the QRIDit Home Watch Edition software. You have made a great decision.
+<% end %>
+
+In order to ensure you are the owner of this email account, please click the link below to activate your account. You will be prompted to create your account password as well.
+
+<%= accept_user_invitation_url(invitation_token: @token, subdomain: Admin::Tenant.find(Apartment::Database.current_tenant.scan( /\d+$/ ).first).subdomain) %>
+
+Welcome aboard!
+<% if tenant.is_affiliate? %>
+- The <%=tenant.affiliate_owner.company_name%> Team
+<% else %>
+- The Quick Report Systems Team
+<% end %>
+<%= render partial: 'devise/mailer/invitation_footer'%>

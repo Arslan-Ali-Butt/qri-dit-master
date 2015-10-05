@@ -1,0 +1,28 @@
+- page_title = 'My Reports'
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+    %p A report is remotely sent from an assigned team member's smartphone or tablet to your account from any QRID location using 3g or WiFi technology.
+  .col-lg-8
+    = render 'filter'
+.row.text-right
+  = render 'control_buttons'
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+      %thead
+        %tr
+          %th Read
+          %th Flagged
+          %th QRID
+          %th Site
+          %th Work Type
+          %th Submitted
+          %th Sent
+          %th Replied
+          %th Comments
+          %th.no-print Quick Actions
+      %tbody.report-collection
+        = render partial: 'resource', collection: @resources

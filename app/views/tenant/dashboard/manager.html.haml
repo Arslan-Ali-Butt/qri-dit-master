@@ -1,0 +1,17 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-6.col-s-12
+    = render 'm_assignments'
+    = render 'm_reports'
+  .col-lg-6.col-s-12
+    = render 'map'
+    .row
+      .col-lg-6.col-s-12
+        = render 'm_inbox'
+      .col-lg-6.col-s-12
+        = render 'weather'
+
+- if @show_getting_started_popup
+  #getting_started_popup

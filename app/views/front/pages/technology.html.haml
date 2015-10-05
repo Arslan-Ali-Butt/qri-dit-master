@@ -1,0 +1,63 @@
+.pricing.technology
+  .header_2
+    .navbar-wrapper
+      / <img id="logo" src="img/logo.png" alt="Unslider logo" width="34" height="27">
+      .navbar.navbar-inverse.navbar-static-top{:role => "navigation"}
+        .container
+          .navbar-header
+            %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+              %span.sr-only Toggle navigation
+              %span.icon-bar
+              %span.icon-bar
+              %span.icon-bar
+            %a.navbar-brand.logo{:href => "#"}
+              = image_tag "front/logo.png"
+          .navbar-collapse.collapse
+            %ul.nav.navbar-nav
+              %li.active
+                %a{:href => "/index"} Home
+              %li
+                %a{:href => "/contact"} Contact
+              %li
+                %a#men_icn Menu
+      .bannerli.bannerli_2
+        .container
+          .inner
+            %h1 Technology
+            .divr_2
+              = image_tag "front/div_3.jpg"
+            .pricing_inner
+              %h5 What is QRID?
+              %p
+                QRID stands for QR Identity. A QRID is what we call a named checklist housed within a humble, unobtrusive QR code. The term QRID can also serve as reference to the identity of the specific location in which the QR code exists.
+  / bottom content start
+  .bottom_content
+    .container.cont_main
+      .row.mar_t
+        .col-lg-6
+          %p Thanks to QRIDit's QR oriented report system, creating location specific Checklists for your team to engage with could not be easier. Simply build your task list by using the intuitive and user friendly QRID Builder, generate your QR code and attach it to your client's property ready to deliver the Checklist information to your assignees when they arrive.
+          %p When completed, the Checklist is submitted from the team members handset and immediately sent to your QRIDit account as a full, completed report. The submitted report can then be quickly assessed, adjusted and sent to your client within seconds.
+        = image_tag "front/technology_img_1.jpg"
+      .row.mar_t.mar_t_2
+        = image_tag "front/technology_img_2.jpg"
+        .col-lg-6
+          %p
+            QRIDs are created using a number of straightforward, easy to manage parameters, designed to allow the manager to set up and assign checklists quickly and with minimum fuss. Our flexible QRID Builder system means that a multitude of site specific questions and tasks can be communicated directly to your team members in the most remote or distant locations by one simple capture from a smartphone or tablet.
+            %span *
+          %p Any number of QRIDs can be created for any number of sites and you can make them as simple or as detailed as you like which means that your staff effectively begin work from the moment that they capture a QR code with their smartphone.
+          .sig
+            %p
+              %span * Requires an internet connection
+      .row
+        = image_tag "front/com.jpg"
+  / bottom content end
+  = render 'front/pages/never_stop'
+  / business end
+  / Qridit start
+  .main_qri
+  / Qridit end
+  / bottom logo start
+
+
+  / bottom logo end
+  = render "front/pages/bottom"

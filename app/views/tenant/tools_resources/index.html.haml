@@ -1,0 +1,50 @@
+%h2
+  Resources
+  -unless @tenant.is_affiliate?
+    and Support
+-unless @tenant.is_affiliate?
+  .panel.panel-default
+    .panel-heading
+      .panel-title Support
+    .panel-body
+      %p
+        %b Not sure how to get started? Having technical issues?
+      %p We offer a convenient customer portal that allows our clients to create an account, create support tickets and communicate back and forth with our friendly support team.
+      %p Whether you're a long-time customer, or just beginning your free trial, drop us an email and we will reply as quickly as possible.
+      %p
+        We will respond to your requests within 24 hours.
+        %br
+        Weekends and holidays may take longer.
+        %br
+        %br
+        =link_to(image_tag("tenant/support.svg"),"http://qridit.freshdesk.com/support/home",target: "_blank")
+.panel.panel-default
+  .panel-heading    
+    .panel-title Your Staff/Client Login URL
+  .panel-body
+    %p
+      -unless @tenant.is_affiliate?
+        It’s easy for your staff to log into QRIDit Homewatch Edition.
+      -else
+        ="It’s easy for your staff to log into #{@tenant.affiliate_owner.company_name}, Home Watch Reporting Software."
+      %br
+      Your account’s login url is as follows:
+      %br
+    %h3="#{request.host}/login"
+    %p It can be shared with your employees in a number of ways:
+    %ul
+      %li
+        %b Manually
+        %br
+        Copy/paste the login url above and share it in an email, save it in staff documentation etc…
+      %li
+        %b Place a login on your website
+        %br
+        -unless @tenant.is_affiliate?
+          Provide your webmaster with the login url provided above and they can add a simple link to your website. The link should be named ‘QRIDit Homewatch Staff Login’ and would generally be added into the header or the footer of the site for easy access.
+        -else
+          Provide your webmaster with the login url provided above and they can add a simple link to your website. The link should be named ‘Staff Login’ and would generally be added into the header or the footer of the site for easy access.
+      %li
+        %b Bookmark it!
+        %br
+        Encourage your staff to bookmark the login url on their desktops, tablets and mobile devices. Each device is different so they will need to check their device’s documentation to learn how to do this if they aren’t sure.

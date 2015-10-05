@@ -1,0 +1,26 @@
+= tenant_page_title 'Set password'
+.row
+  .login-box
+    = render 'layouts/tenant/flash_message'
+    = render 'devise/shared/error_messages'
+    = render 'devise/shared/logo'
+    
+    %h2 Set your password
+    %p
+      %span The first step is to provide the password you would like to use to log into the system.  Please enter it twice in the fields provided.
+    = form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put, class: 'form-horizontal' }) do |f|
+      %fieldset
+        = f.hidden_field :invitation_token
+        = f.password_field :password, class: 'input-large col-xs-12', placeholder: 'Password', required: ''
+        = f.password_field :password_confirmation, class: 'input-large col-xs-12', placeholder: 'Confirm password', required: ''
+        .clearfix
+
+        = f.button 'Set my password', name: nil, type: 'submit', class: 'btn btn-primary col-xs-12'
+
+    %hr
+    = render 'devise/shared/links'
+    %br
+    %br
+    %br
+    %div.text-center
+      = image_tag 'tenant/QRIDit_logo.svg',style: "width:176px;"

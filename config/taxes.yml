@@ -1,0 +1,337 @@
+"ON":
+  month:
+    startup:
+      - qhwe_startup_month_13_hst
+    entrepreneur:
+      - qhwe_entrepreneur_month_13_hst
+    business:
+      - qhwe_business_month_13_hst
+    corporate:
+      - qhwe_corporate_month_13_hst
+    corp_plus:
+      - qhwe_plus_month_13_hst
+  year:
+    startup:
+      - qhwe_startup_annual__13_hst
+    entrepreneur:
+      - qhwe_entrepreneur_annual__13_hst
+    business:
+      - qhwe_business_annual__13_hst
+    corporate:
+      - qhwe_corporate_annual__13_hst
+    corp_plus:
+      - qhwe_plus_annual__13_hst
+AB:
+  month:
+    startup:
+      - qhwe_startup_month_gst
+    entrepreneur:
+      - qhwe_entrepreneur_month_gst
+    business:
+      - qhwe_business_month_gst
+    corporate:
+      - qhwe_corporate_month_gst      
+    corp_plus:
+      - qhwe_plus_month_gst      
+  year:
+    startup:
+      - qhwe_startup_annual_gst
+    entrepreneur:
+      - qhwe_entrepreneur_annual_gst
+    business:
+      - qhwe_business__annual_gst
+    corporate:
+      - qhwe_corporate_annual_gst
+    corp_plus:
+      - qhwe_plus_annual_gst
+BC:
+  month:
+    startup:
+      - qhwe_startup_month_gst
+      - qhwe_startup_month_bc_pst
+    entrepreneur:
+      - qhwe_entrepreneur_month_gst
+      - qhwe_entrepreneur_month_bc_pst
+    business:
+      - qhwe_business_month_gst
+      - qhwe_business_month_bc_pst
+    corporate:
+      - qhwe_corporate_month_gst
+      - qhwe_corporate_month_bc_pst      
+    corp_plus:
+      - qhwe_plus_month_gst
+      - qhwe_plus_month_bc_pst      
+  year:
+    startup:
+      - qhwe_startup_annual_gst
+      - qhwe_startup_annual__bc_pst
+    entrepreneur:
+      - qhwe_entrepreneur_annual_gst
+      - qhwe_entrepreneur_annual__bc_pst
+    business:
+      - qhwe_business__annual_gst
+      - qhwe_business_annual__bc_pst
+    corporate:
+      - qhwe_corporate_annual_gst
+      - qhwe_corporate_annual__bc_pst
+    corp_plus:
+      - qhwe_plus_annual_gst
+      - qhwe_plus_annual__bc_pst
+MB:
+  month:
+    startup:
+      - qhwe_startup_month_gst
+      - qhwe_startup_month_mb_pst
+    entrepreneur:
+      - qhwe_entrepreneur_month_gst
+      - qhwe_entrepreneur_month_mb_pst      
+    business:
+      - qhwe_business_month_gst
+      - qhwe_business_month_mb_pst
+    corporate:
+      - qhwe_corporate_month_gst
+      - qhwe_corporate_month_mb_pst      
+    corp_plus:
+      - qhwe_plus_month_gst
+      - qhwe_plus_month_mb_pst      
+  year:
+    startup:
+      - qhwe_startup_annual_gst
+      - qhwe_startup_annual__mb_pst
+    entrepreneur:
+      - qhwe_entrepreneur_annual_gst
+      - qhwe_entrepreneur_annual__mb_pst
+    business:
+      - qhwe_business__annual_gst
+    corporate:
+      - qhwe_corporate_annual_gst
+      - qhwe_corporate_annual__mb_pst
+    corp_plus:
+      - qhwe_plus_annual_gst
+      - qhwe_plus_annual__mb_pst
+NB:
+  month:
+    startup:
+      - qhwe_startup_month_13_hst
+    entrepreneur:
+      - qhwe_entrepreneur_month_13_hst
+    business:
+      - qhwe_business_month_13_hst
+    corporate:
+      - qhwe_corporate_month_13_hst
+    corp_plus:
+      - qhwe_plus_month_13_hst
+  year:
+    startup:
+      - qhwe_startup_annual__13_hst
+    entrepreneur:
+      - qhwe_entrepreneur_annual__13_hst
+    business:
+      - qhwe_business_annual__13_hst
+    corporate:
+      - qhwe_corporate_annual__13_hst
+    corp_plus:
+      - qhwe_plus_annual__13_hst
+NL:
+  month:
+    startup:
+      - qhwe_startup_month_13_hst
+    entrepreneur:
+      - qhwe_entrepreneur_month_13_hst
+    business:
+      - qhwe_business_month_13_hst
+    corporate:
+      - qhwe_corporate_month_13_hst
+    corp_plus:
+      - qhwe_plus_month_13_hst
+  year:
+    startup:
+      - qhwe_startup_annual__13_hst
+    entrepreneur:
+      - qhwe_entrepreneur_annual__13_hst
+    business:
+      - qhwe_business_annual__13_hst
+    corporate:
+      - qhwe_corporate_annual__13_hst
+    corp_plus:
+      - qhwe_plus_annual__13_hst
+NS:
+  month:
+    startup:
+      - qhwe_startup_month_15_hst
+    entrepreneur:
+      - qhwe_entrepreneur_month_15_hst
+    business:
+      - qhwe_business_month_15_hst
+    corporate:
+      - qhwe_corporate_month_15_hst
+    corp_plus:
+      - qhwe_plus_month_15_hst
+  year:
+    startup:
+      - qhwe_startup_annual_15_hst
+    entrepreneur:
+      - qhwe_entrepreneur_annual_15_hst
+    business:
+      - qhwe_business_annual_15_hst
+    corporate:
+      - qhwe_corporate_annual_15_hst
+    corp_plus:
+      - qhwe_plus_annual_15_hst
+NT:
+  month:
+    startup:
+      - qhwe_startup_month_gst
+    entrepreneur:
+      - qhwe_entrepreneur_month_gst
+    business:
+      - qhwe_business_month_gst
+    corporate:
+      - qhwe_corporate_month_gst      
+    corp_plus:
+      - qhwe_plus_month_gst      
+  year:
+    startup:
+      - qhwe_startup_annual_gst
+    entrepreneur:
+      - qhwe_entrepreneur_annual_gst
+    business:
+      - qhwe_business__annual_gst
+    corporate:
+      - qhwe_corporate_annual_gst
+    corp_plus:
+      - qhwe_plus_annual_gst
+NU:
+  month:
+    startup:
+      - qhwe_startup_month_gst
+    entrepreneur:
+      - qhwe_entrepreneur_month_gst
+    business:
+      - qhwe_business_month_gst
+    corporate:
+      - qhwe_corporate_month_gst      
+    corp_plus:
+      - qhwe_plus_month_gst      
+  year:
+    startup:
+      - qhwe_startup_annual_gst
+    entrepreneur:
+      - qhwe_entrepreneur_annual_gst
+    business:
+      - qhwe_business__annual_gst
+    corporate:
+      - qhwe_corporate_annual_gst
+    corp_plus:
+      - qhwe_plus_annual_gst
+PE:
+  month:
+    startup:
+      - qhwe_startup_month_pei_hst
+    entrepreneur:
+      - qhwe_entrepreneur_month_pei_hst
+    business:
+      - qhwe_business_month_pei_hst
+    corporate:
+      - qhwe_corporate_annual_pei_hst
+    corp_plus:
+      - qhwe_plus_month_pei_hst
+  year:
+    startup:
+      - qhwe_startup_annual_pei_hst
+    entrepreneur:
+      - qhwe_entrepreneur_annual_pei_hst
+    business:
+      - qhwe_business_annual_pei_hst
+    corporate:
+    corp_plus:
+      - qhwe_plus_annual_pei_hst
+QC:
+  month:
+    startup:
+      - qhwe_startup_month_gst
+      - qhwe_startup_month__qst
+    entrepreneur:
+      - qhwe_entrepreneur_month_gst
+      - qhwe_entrepreneur_month__qst
+    business:
+      - qhwe_business_month_gst
+      - qhwe_business_month_qc_qst
+    corporate:
+      - qhwe_corporate_month_gst
+      - qhwe_corporate_monthqc_qst      
+    corp_plus:
+      - qhwe_plus_month_gst
+      - qhwe_plus_month_qc_qst      
+  year:
+    startup:
+      - qhwe_startup_annual_gst
+      - qhwe_startup_annual_qc_qst
+    entrepreneur:
+      - qhwe_entrepreneur_annual_gst
+      - qhwe_entrepreneur_annual_qc_qst
+    business:
+      - qhwe_business__annual_gst
+      - qhwe_business_annual_qc_qst
+    corporate:
+      - qhwe_corporate_annual_gst
+      - qhwe_corporate_annual_qc_qst
+    corp_plus:
+      - qhwe_plus_annual_gst
+      - qhwe_plus_annual_qc_qst
+SK:
+  month:
+    startup:
+      - qhwe_startup_month_gst
+      - qhwe_startup_month_sk_pst
+    entrepreneur:
+      - qhwe_entrepreneur_month_gst
+      - qhwe_entrepreneur_month_sk_pst
+    business:
+      - qhwe_business_month_gst
+      - qhwe_business_month_sk_pst
+    corporate:
+      - qhwe_corporate_month_gst
+      - qhwe_corporate_month_sk_pst      
+    corp_plus:
+      - qhwe_plus_month_gst
+      - qhwe_plus_month_sk_pst      
+  year:
+    startup:
+      - qhwe_startup_annual_gst
+      - qhwe_startup_annual_sk_pst
+    entrepreneur:
+      - qhwe_entrepreneur_annual_gst
+      - qhwe__entrepreneur_annual_sk_pst
+    business:
+      - qhwe_business__annual_gst
+      - qhwe__business_annual_sk_pst
+    corporate:
+      - qhwe_corporate_annual_gst
+      - qhwe__corporate_annual_sk_pst
+    corp_plus:
+      - qhwe_plus_annual_gst
+      - qhwe_plus_annual_sk_pst      
+YT:
+  month:
+    startup:
+      - qhwe_startup_month_gst
+    entrepreneur:
+      - qhwe_entrepreneur_month_gst
+    business:
+      - qhwe_business_month_gst
+    corporate:
+      - qhwe_corporate_month_gst      
+    corp_plus:
+      - qhwe_plus_month_gst      
+  year:
+    startup:
+      - qhwe_startup_annual_gst
+    entrepreneur:
+      - qhwe_entrepreneur_annual_gst
+    business:
+      - qhwe_business__annual_gst
+    corporate:
+      - qhwe_corporate_annual_gst
+    corp_plus:
+      - qhwe_plus_annual_gst

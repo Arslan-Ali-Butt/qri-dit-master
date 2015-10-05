@@ -1,0 +1,13 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header
+      %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+      %h4.modal-title QR-code for QRID '#{@resource.name}'
+    .modal-body
+      .text-center
+        %embed{src: url_for(format: :svg, width: 558, height: 419), type: 'image/svg+xml'}
+    .modal-footer
+      = link_to 'Print 3.5" x 2"', {format: :html, width: 3.5, height: 2, unit: 'in', print: true}, class: 'btn btn-primary', target: '_blank', role: 'button'
+      = link_to 'Print 6" x 4"', {format: :html, width: 6, height: 4, unit: 'in', print: true}, class: 'btn btn-primary', target: '_blank', role: 'button'
+      = link_to 'Print 7" x 5"', {format: :html, width: 7, height: 5, unit: 'in', print: true}, class: 'btn btn-primary', target: '_blank', role: 'button'
+      %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close

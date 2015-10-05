@@ -1,0 +1,10 @@
+- callToActionUrl = tenant_root_url
+- content_for(:header, "A company has requested to become one of your Affiliates")
+%p
+  Hello #{@recipient.name},
+
+%p="#{@tenant.name} of #{@tenant.company_name} Has requested to become your affiliate."
+
+%p
+  Please Click on the following link to view their request
+  =link_to "View your new affiliate request", tenant_affiliate_url(@tenant)

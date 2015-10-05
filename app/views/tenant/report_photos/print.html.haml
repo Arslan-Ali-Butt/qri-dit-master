@@ -1,0 +1,8 @@
+!!!
+:javascript
+  window.onload = function() {
+    window.print();
+  };
+%body
+  #printable-container
+    %img{alt: "Photo ##{@resource.id}", src: @resource.photo.expiring_url(300, :original)}

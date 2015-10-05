@@ -1,0 +1,43 @@
+%tr
+  %td
+    %label.control-label Site
+  %td
+    %p.form-control-static.pull-right= @resource.qrid.site.name
+%tr
+  %td
+    %label.control-label QRID
+  %td
+    %p.form-control-static.pull-right= @resource.qrid.name
+- submitted_for_permatask = @resource.is_permatask_report ? 'Yes': 'No'
+%tr
+  %td
+    %label.control-label Submitted For Permatask?
+  %td
+    %p.form-control-static.pull-right= submitted_for_permatask
+
+%tr
+  %td
+    %label.control-label Status
+  %td
+    %p.form-control-static.pull-right
+      %span.badge{style: 'background-color: ' + (@resource.try(:assignment).try(:status) == 'Done' ? 'rgb(0,178,192)' : 'Orange') + ';'}= @resource.try(:assignment).try(:status)
+%tr
+  %td
+    %label.control-label Reporter ID
+  %td
+    %p.form-control-static.pull-right= @resource.reporter.id.to_s
+%tr
+  %td
+    %label.control-label Arrival Date and Time
+  %td
+    %p.form-control-static.pull-right= @resource.started_at
+%tr
+  %td
+    %label.control-label Time of Submission
+  %td
+    %p.form-control-static.pull-right= @resource.submitted_at
+%tr
+  %td
+    %label.control-label Time Logged
+  %td
+    %p.form-control-static.pull-right= time_from_sec(@resource.submitted_at - @resource.started_at)

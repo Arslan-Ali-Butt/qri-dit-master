@@ -1,0 +1,49 @@
+- if !@resource.new_record?
+  :javascript
+    g_gogogadgetqridbuilder = true;
+- else
+  :javascript
+    g_gogogadgetqridbuilder = false;
+.row
+  - unless @resource.new_record?
+    .data-storage{data: {'site-id' => @resource.site.id, 'owner-id' => @resource.site.try(:owner_id), 'client-type' => @resource.site.try(:owner).try(:client_type), 'work-type-id' => @resource.work_type_id, 'qrid-id' => @resource.id}}
+  %div.col-sm-12
+    = f.hidden_field :work_type_id
+    = f.hidden_field :site_id
+    = f.hidden_field :name
+    = f.hidden_field :estimated_duration                
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Select checklist templates to use in this QRID
+      .panel-body
+        .panel-body
+          .form-group.form-group-tasks
+            .col-sm-12
+              %menu.nestable-menu
+                %button.btn.btn-info{type: 'button', data: {action: 'expand-all'}} 
+                  %div{rel: 'tooltip', title: 'Show all checklist items'}
+                    Expand All
+                %button.btn.btn-danger{type: 'button', data: {action: 'collapse-all'}}
+                  %div{rel: 'tooltip', title: 'Hide all but main categories'}
+                    Collapse All       
+              - tasks = @tasks.nil? ? Tenant::Task.join_recursive {|query| query.start_with(parent_id: nil).connect_by(id: :parent_id).order_siblings(position: :asc) }.where(active: true).where(qrid_id: @resource.id) : @tasks
+              - modified_checklists = @modified_checklists.nil? ? [] : @modified_checklists
+              .loading-big              
+              %ol.dd-list.sortable-tree.task-collection.maticulating{data: {rebuild_url: rebuild_tenant_tasks_url, default_url: url_for('#'), max_levels: 8}}
+                = render_sortable_tree tasks, 'tenant/tasks', true, false, modified_checklists
+.row
+  .col-sm-12
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Select Permatasks to associate with this QRID
+      .panel-body
+        .panel-body
+          .form-group.form-group-tasks
+            .col-sm-12
+              - permatasks = Tenant::Permatask.roots
+              %ol.dd-list.static-tree.maticulating
+                = render_static_tree permatasks, @resource.permatask_ids  
+  %div{style: 'display: hidden;'}                
+- if params[:return_path].present?
+  = hidden_field_tag :return_path, params[:return_path]
+= hidden_field_tag 'customize', 'true'

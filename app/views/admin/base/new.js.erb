@@ -1,0 +1,4 @@
+<% page_title = "New #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}" %>
+
+$('#myModal').html('<%= escape_javascript(render('modal_form', page_title: page_title, resource: @resource)) %>');
+$('#myModal').modal('show');

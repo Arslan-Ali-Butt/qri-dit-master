@@ -1,0 +1,127 @@
+- bannerImage = URI.join(root_url, image_path("emails/emailBanner-NoText.png"))
+
+:css
+  body {
+    font-family: "Times New Roman", Times, serif;
+  }
+
+  h1 {
+    color: #2EB4BF;
+    font-size: 32pt;
+    text-align: center;
+    font-family: "Arial Regular", Arial, Helvetica, sans-serif;
+  }
+
+  p, .footer {
+    padding: 0em 1.5em;
+  }
+
+  .footer {
+    padding-top: 4em;
+    text-align: center;
+  }
+
+  .actionButtonContainer {
+    text-align: center;
+    margin: 0 auto;
+    font-family: "Arial Regular", Arial, Helvetica, sans-serif;
+    max-width: 200px;
+  }
+
+  .actionButtonContainer > a {
+    text-decoration: none;
+  }
+
+  .actionButton {
+    padding: 0.5em;
+    text-align: center;
+    font-weight: bold;
+    background-color: #E53F45;
+    color: #fff;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+  }
+
+  .actionButton > span {
+    display: block;
+  }
+
+  .actionButton > .secondRowButton {
+    text-transform: uppercase;
+    font-size: 125%;
+  }
+
+  html,body {
+    margin: 0;
+    background-color: #27B5Bf;
+  }
+
+  .headerOne {
+    width: 100%;
+    background-image: url('#{bannerImage}');
+    background-repeat: no-repeat;
+    text-align: right;
+  }
+  
+  .headerOne > div > img {
+    margin-top: 40px;
+    margin-right: 0.75em;
+  }
+
+  .eBlastTextContainer {
+    background-color: #ffffff;
+    padding-bottom: 1em;
+  }
+
+  .emailBlastFooter {
+    width: 100%;
+    color: #ffffff;
+  }
+
+  .callout {
+    text-align: center;
+  }
+
+  .contactInfo {
+    padding: 0.75em;
+  }
+
+  .contactInfo > span {
+    display: block;
+    text-align: right;
+    font-family: "Arial Regular", Arial, Helvetica, sans-serif;
+  }
+
+  .contactInfo > span > .spaceRight {
+    margin-right: 1em;
+  }
+
+  .contactNumber {
+    font-size: 24pt;
+  }
+
+  .contactNumber > .webLink > a {
+    color: #ffffff;
+  }
+
+%div.eBlastTextContainer
+  %div.headerOne
+    %div=image_tag(URI.join(root_url, image_path("emails/emailBanner-Logo.png")))
+
+
+  %h1= yield(:header)
+
+  =yield
+
+%div.emailBlastFooter
+  %div.callout=image_tag(URI.join(root_url, image_path("emails/footerBottomImage.png")))
+  %div.contactInfo
+    %span.contactNumber 
+      %span.spaceRight
+        800.686.2104 
+      %span.webLink
+        =link_to 'www.qridithomewatch.com', 'https://www.qridithomewatch.com'
+    %span.testamonial
+      QRIDit Homewatch Edition Software was designed by Home Watch Business Owners specifically for the Home Watch industry and has been endorsed by the National Home Watch Association (NHWA).
+

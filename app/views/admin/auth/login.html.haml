@@ -1,0 +1,16 @@
+.row
+  .login-box
+    = render 'layouts/admin/flash_message'
+    %h2 Login to your account
+    = form_tag({}, {class: 'form-horizontal'}) do
+      %fieldset
+        = text_field_tag :name, params[:name], class: 'input-large col-xs-12', autofocus: '', placeholder: 'Username', required: ''
+        = password_field_tag :password, params[:password], class: 'input-large col-xs-12', placeholder: 'Password', required: ''
+        .clearfix
+        /
+          %label.remember{for: "remember"}
+            %input#remember{type: "checkbox"}>/
+            Remember me
+          .clearfix
+
+        = button_tag 'Login', type: 'submit', class: 'btn btn-primary col-xs-12'

@@ -1,0 +1,79 @@
+.body_contact
+  .header_2
+    .navbar-wrapper
+      / <img id="logo" src="img/logo.png" alt="Unslider logo" width="34" height="27">
+      .navbar.navbar-inverse.navbar-static-top{:role => "navigation"}
+        .container
+          .navbar-header
+            %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+              %span.sr-only Toggle navigation
+              %span.icon-bar
+              %span.icon-bar
+              %span.icon-bar
+            %a.navbar-brand.logo{:href => "index"}
+              = image_tag "front/logo.png"
+          .navbar-collapse.collapse
+            %ul.nav.navbar-nav
+              %li.active
+                = link_to("Home","index",:title=>"Home")
+              %li
+                = link_to("Contact","contact",:title=>"Contact")
+              %li
+                %a#men_icn Menu
+      .bannerli_1
+        .container
+          .inner
+            %h1 Contact Information
+            .divr_2
+              = image_tag "front/div_2.png"
+            .inner1
+              .left
+                CORPORATE ADDRESS:
+                %br
+                %b Quick Report Systems Inc.,
+                %br
+                1857 Daisy Lane.
+                %br
+                Coldwater, Ontario  L0K 1E0
+                %br
+                Canada
+              .right
+                %h1 Sales Inquires:
+                %h2
+                  1 800 686 2104
+                  %span (Toll Free)
+                %p Support is provided for our customers and can be accessed from any user account.
+                = image_tag "front/bg_arrow.png", style: "position:relative; bottom:-23px; left:0px;"
+  / bottom content start
+  - if alert.present?
+    .alert.alert-dismissable.alert-danger
+      %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'alert', type: 'button'} &times;
+      = alert.html_safe
+  - if notice.present?
+    .alert.alert-dismissable.alert-success
+      %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'alert', type: 'button'} &times;
+      = notice.html_safe
+  .bottom_content{:style => "border-top:0px;"}
+    .container.cont_main
+      = form_for @contact, method: :post, as: 'contact', url: contact_url do |f|
+        %h1{:style => "color:#00ABBA"} Email Us
+        %fieldset#user-details
+          = f.text_field :name, { placeholder: 'Your Name', class: 'form-control' }
+          = f.text_field :email, { placeholder: 'Your Email Address', class: 'form-control' }
+          = f.text_field :company, { placeholder: 'Company Name', class: 'form-control' }
+          = f.text_field :zip, { placeholder: 'Zip/Postal Code', class: 'form-control' }
+          = f.select :source, ['Advertisement', 'Facebook', 'Family or Friend', 'Business Associate', 'Magazine Article', 'Newspaper Story', 'Twitter', 'Website/Search Engine', 'Youtube', 'Other'].map{ |str| [str,str] }, {prompt: 'How Did You Find Us ?' }, { class: 'form-control' }
+        / end user-details
+        %fieldset#user-message
+          = f.text_area :message,{ cols: '0', rows: '0', placeholder: 'Your Message', class: 'form-control' }
+          = f.submit "Submit"
+        / end user-message
+  / bottom content end
+  / business start
+  = render 'front/pages/never_stop'
+  / business end
+  / Qridit start
+  .main_qri
+  / Qridit end
+  / bottom logo start
+  = render "front/pages/bottom"

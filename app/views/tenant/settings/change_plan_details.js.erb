@@ -1,0 +1,38 @@
+$('#myModal').html("<%= escape_javascript(render partial: 'change_plan_details', format: :html ) %>");
+
+Stripe.setPublishableKey('<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>');
+var g_stripe_alert$ = $('#stripe_alert');
+var g_stripe_error_response$ = $('#stripe_error_response');
+
+g_stripe_alert$.hide();
+
+$('[name="change_plan_details"] [type="submit"]').click(function() {
+  //console.log('stripe');
+  $form = $('#edit_change_card_details')
+
+  Stripe.card.createToken($form, function(status, response) {
+    console.log('response');
+    if(response.error) {
+      console.log('error');
+      g_stripe_error_response$.html($('<p><span><b>Oh snap!</b> An error occurred while processing this request.</span></p><p>' + response.error.message + '</p>'));        
+      g_stripe_alert$.show();
+    } else {
+      console.log('success');
+      var change_plan_details$ = $('[name="change_plan_details"]');
+      if(change_plan_details$.length) {          
+        console.log('append start');
+        change_plan_details$.append('<input type=\'hidden\' name=\'change_plan_details[card_token]\' value=\'' + response['id'] + '\'>');
+        change_plan_details$.append('<input type=\'hidden\' name=\'change_plan_details[card_brand]\' value=\'' + response['card']['brand'] + '\'>');
+        change_plan_details$.append('<input type=\'hidden\' name=\'change_plan_details[card_last4]\' value=\'' + response['card']['last4'] + '\'>');        
+        change_plan_details$.trigger('submit.rails');
+        console.log('append end');
+      }
+    }
+  });
+
+  return(false);
+});
+
+$('#upgrade_form').hide();
+$('#upgrade_button').hide();
+$('#myModal').modal('show');

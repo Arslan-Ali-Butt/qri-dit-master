@@ -1,0 +1,6 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td= resource.name
+  %td.center.no-print
+    - unless resource.fixed
+      = tenant_button :edit, url_for(controller: controller_name, action: :edit, id: resource), remote: true
+      = tenant_button :delete, url_for(controller: controller_name, action: :delete, id: resource), remote: true

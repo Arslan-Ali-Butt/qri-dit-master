@@ -1,0 +1,9 @@
+%form{method: :get, class: 'form-inline well clearfix', role: 'form'}
+  .pull-right
+    .form-group
+      = label_tag :work_type_id, 'Work Type', class: 'sr-only'
+      = select_tag :work_type_id, options_from_collection_for_select(Tenant::WorkType.order(:name), :id, :name, @work_type_id), prompt: 'Please Select Work Type', class: 'form-control'
+    .form-group
+      = label_tag :client_type, 'Client Type', class: 'sr-only'
+      = select_tag :client_type, options_for_select(Tenant::Client::CLIENT_TYPES, @client_type), prompt: 'Please Select Client Type', class: 'form-control'
+    = button_tag 'Filter', name: nil, type: 'submit', class: 'btn btn-primary'

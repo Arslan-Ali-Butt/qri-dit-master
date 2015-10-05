@@ -1,0 +1,25 @@
+.modal-dialog.modal-lg
+  .modal-content
+    = form_for resource, url: resource.new_record? ? {controller: controller_name} : {controller: controller_name, action: 'update', id: resource.id}, remote: true, html: {class: "form-horizontal #{resource.class.name.demodulize.downcase}-form", role: 'form'} do |f|
+      .modal-header
+        %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+        %h4.modal-title= page_title
+      .modal-body
+        = render 'error_messages', resource: resource
+        = render 'form_fields', f: f
+      .modal-footer
+        - unless resource.new_record? or resource.status == 'Done'
+          -# Only use the confirmation popup when the event does not have a recurrence
+          - if resource.recurrence.nil?
+            = link_to 'Delete', url_for(controller: controller_name, action: 'destroy', id: resource.id), method: :delete, remote: true, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'
+          - else
+            = link_to 'Delete', '#', data: {}, class: 'btn btn-danger', id: "delete-#{resource.class.name.demodulize.downcase}"
+
+          %button{name: nil, type: 'submit', style: 'display:none;', id: "delete-#{resource.class.name.demodulize.downcase}-hidden", data: { confirm: 'Are you sure?' }}
+
+        %button.btn.btn-default{'data-dismiss' => 'modal', name: nil, type: 'button'} Close
+        - if resource.new_record?
+          %button.btn.btn-primary.vissible-xs{name: nil, type: 'submit', id: "create-#{resource.class.name.demodulize.downcase}"} Create
+        - else
+          %button.btn.btn-primary.vissible-xs{name: nil, type: 'submit', id: "update-#{resource.class.name.demodulize.downcase}"} Save
+        %button{name: nil, type: 'submit', style: 'display:none;', id: "update-#{resource.class.name.demodulize.downcase}-hidden"}

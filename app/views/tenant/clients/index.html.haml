@@ -1,0 +1,28 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+    %p Your clients will LOVE the benefits that QRIDit has to offer them. The GPS feature provides the client with hard evidence that their site was visited as scheduled and instant reports mean that potential issues can be caught and communicated via QRIDit in a timely manner and before they get out of control.
+  .col-lg-8
+    = render 'filter'
+.row.text-right
+  = render 'control_buttons'
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable#clients-table{data: {source: tenant_datatables_clients_url(format: 'json', context: 'datatables') }}
+      %thead
+        %tr
+          %th Status
+          %th Id
+          %th Client
+          %th Client Type
+          %th Site
+          %th Zone
+          %th City
+          %th QRID
+          %th Work Type
+          %th.no-print Quick Actions
+      %tbody.user-collection
+        =# render partial: 'resource', collection: @resources

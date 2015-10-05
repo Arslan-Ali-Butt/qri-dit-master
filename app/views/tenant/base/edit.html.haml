@@ -1,0 +1,9 @@
+- unless controller_name == 'permatasks'
+  - page_title = case controller_name
+    - when 'users'      then 'Team Member Detail'
+    - when 'clients'    then 'Edit Client Detail'
+    - when 'sites'      then 'Site Detail'
+    - else "Edit #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}"
+
+  = tenant_page_title page_title
+  = render 'form', page_title: page_title, resource: @resource

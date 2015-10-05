@@ -1,0 +1,17 @@
+- page_title = "Duplicate QRID - #{@dup_resource.name}"
+= tenant_page_title page_title
+- url = duplicate_tenant_qrid_path(@dup_resource)
+- button = "Duplicate"
+%h1= page_title
+.row
+= render 'error_messages', resource: @resource
+= form_for @resource, url: url, method: "post", html: {class: "form-horizontal #{@resource.class.name.demodulize.downcase}-form", role: 'form'} do |f|
+  = render 'form_fields', f: f
+  = hidden_field_tag(:return_path, params[:return_path])  if params[:return_path].present?
+  .row
+    %fieldset
+      .form-group.form-actions.pull-right{style: 'margin-right: 30px'}
+        %div
+          = f.button button, name: nil, type: 'submit', class: "btn btn-primary"
+          = link_to 'Cancel', url_for(controller: controller_name), class: 'btn btn-default', role: 'button'
+

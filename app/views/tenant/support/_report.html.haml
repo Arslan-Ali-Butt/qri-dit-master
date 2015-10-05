@@ -1,0 +1,48 @@
+= form_for @report, url: tenant_support_report_path, remote: true, authenticity_token: true, method: :patch, as: :tenant_support_report, html: {role: 'form', class: 'form-horizontal'} do |f|
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+        %h4.modal-title Report a Bug
+      .modal-body
+        = f.hidden_field :email
+        = f.hidden_field :company
+        = f.hidden_field :browser
+        = f.hidden_field :os
+        = f.hidden_field :browser_version
+        = f.hidden_field :uri
+        = f.hidden_field :user_agent         
+        .form-group
+          .col-sm-4
+            = f.label :bug, 'Short Description of Bug', class: 'control-label'
+          .col-sm-6
+            = f.text_field :bug, class: 'form-control'
+        .form-group
+          .col-sm-4
+            = f.label :message, 'Description of Bug', class: 'control-label'
+          .col-sm-6
+            = f.text_area :message, class: 'form-control'
+        .form-group
+          .col-sm-4
+            = f.label :video, 'Video Link', class: 'control-label'
+          .col-sm-6
+            = f.text_field :video, class: 'form-control'
+          .col-sm-2
+            = tenant_tooltip_hint 'In order to make it easy for us to see your issue, you can use a service like screencast-o-matic.com to record your voice and mouse movements.'
+        .form-group.upload-screenshot
+          .col-sm-4
+            = f.label :screenshot, 'Upload any files that might help describe your report.'
+          .col-sm-6
+            = f.file_field :screenshot, class: 'form-control'
+          .col-sm-2
+            = tenant_tooltip_hint 'Please take a screenshot in JPEG file format to show us what you are seeing.'
+
+          .progress-container.col-sm-10
+        .row
+          .col-sm-12
+            %br/
+      .modal-footer
+        = f.submit 'Submit Bug Report Now', id: 'report_bug', class: 'btn btn-warning'
+        %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close
+
+= render 'tenant/qrid_photos/upload_progress_template'

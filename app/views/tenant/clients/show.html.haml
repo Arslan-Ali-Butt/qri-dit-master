@@ -1,0 +1,108 @@
+- page_title = 'Client Detail'
+= tenant_page_title page_title
+
+%h1= page_title
+.row
+  = render partial: 'control_buttons', locals: {edit_button: true}
+.row
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Personal info
+      .panel-body
+        %p
+          %b Name:
+          %br
+          = @resource.name
+        %p
+          %b Email:
+          %br
+          = @resource.email
+        - if !@resource.invitation_accepted?
+          %p.help-block
+            - if @resource.invitation_sent_at.present?
+              = "Invitation hasn't been accepted yet"
+            = link_to "#{@resource.invitation_sent_at.present? ? 'Resend Invite' : 'Invite User'}", url_for(controller: controller_name, action: :invite, id: @resource), method: :post, class: 'btn btn-warning no-print', role: 'button'  if !@resource.invitation_accepted? && can?(:invite, Tenant::User)
+        - if @resource.pending_reconfirmation?
+          %p.help-block
+            = "Currently waiting confirmation for: #{@resource.unconfirmed_email}"
+        %p
+          %b Client Type:
+          %br
+          = @resource.client_type
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Contact info
+      .panel-body
+        %p
+          %b Cell phone:
+          %br
+          = @resource.phone_cell
+        %p
+          %b Landline phone:
+          %br
+          = @resource.phone_landline
+        %p
+          %b Emergency phone:
+          %br
+          = @resource.phone_emergency
+        %p
+          %b Emergency phone 2:
+          %br
+          = @resource.phone_emergency_2
+        %p
+          %b Notes:
+          %br
+          = simple_format(@resource.notes)
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Billing Address
+      .panel-body
+        = simple_format(@resource.address.try(:to_s))
+
+.row
+  .col-sm-12
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Sites
+      .panel-body
+        %table.table.table-striped.table-bordered
+          %thead
+            %tr
+              / %th Status
+              %th Site
+              %th City
+              %th Zone
+              %th QRID
+              %th Work Type
+              %th Next Assigned
+              %th.no-print Quick Actions
+          %tbody.site-collection
+            = render partial: 'tenant/sites/resource', collection: @resource.sites.active.order(:name), locals: {return_path: tenant_client_path(@resource)}
+        %br
+        = link_to 'Add new Site', new_tenant_site_url(owner_id: @resource.id, return_path: tenant_client_path(@resource)), class: 'btn btn-primary no-print'
+.row
+  .col-sm-12
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Client's Reports
+      .panel-body
+        %table.table.table-striped.table-bordered
+          %thead
+            %tr
+              %th Read
+              %th Flagged
+              %th QRID
+              %th Site
+              %th Work Type
+              %th Submitted
+              %th Sent
+              %th Replied
+              %th Comments
+              %th.no-print Quick Actions
+          %tbody.site-collection
+            = render partial: 'tenant/c_reports/resource', collection: @reports

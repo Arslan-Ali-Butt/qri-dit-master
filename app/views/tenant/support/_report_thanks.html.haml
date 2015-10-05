@@ -1,0 +1,19 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+      %h4.modal-title Thanks
+    .modal-body
+      .row
+        .col-sm-12
+          .text-center
+            Your ticket has been submitted to our support team. Thanks for taking the time to let us know about this issue.
+      .row
+        .col-sm-12
+          %br/
+      .row
+        .col-sm-12
+          .text-center
+            = image_tag 'tenant/homewatch-logo.svg', style: 'width: 40%; height: auto;'
+    .modal-footer
+      %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close

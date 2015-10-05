@@ -1,0 +1,9 @@
+$('#myModal').modal('hide');
+$('.last-change').removeClass('last-change');
+<% if @resource.parent_id.to_i > 0 %>
+$('<%= escape_javascript(render('resource', resource: @resource)) %>').appendTo('[data-resource-id=<%= @resource.parent_id %>] > ol').hide().fadeIn();
+<% elsif params[:on_top].present? %>
+$('<%= escape_javascript(render('resource', resource: @resource)) %>').prependTo('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %>').hide().fadeIn();
+<% else %>
+$('<%= escape_javascript(render('resource', resource: @resource)) %>').appendTo('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %>').hide().fadeIn();
+<% end %>

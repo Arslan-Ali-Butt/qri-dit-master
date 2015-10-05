@@ -1,0 +1,68 @@
+- page_title = "QRID '#{@resource.name}'"
+= tenant_page_title page_title
+
+#geolocation_task
+.row
+  .col-lg-12
+    %h1= page_title
+.row
+  .qrid-info-wrapper
+    .col-lg-4
+      .box
+        .box-header
+          %h2
+            %i.checklist-icon
+            %span.break
+              Info
+          .box-icon
+            %a.btn-minimize
+              %i.fa.fa-chevron-up
+        .box-content
+          .col-md-12
+            Started at:
+            %b= Time.now
+          .col-md-12
+            Alarm Code:
+            %b=(@resource.alarm_code.nil?)?"":@resource.alarm_code
+          .col-md-12
+            Alarm Safeword:
+            %b=(@resource.alarm_safeword.nil?)?"":@resource.alarm_safeword
+          .col-md-12
+            Alarm Company:
+            %b=(@resource.alarm_company.nil?)?"":@resource.alarm_company
+          .col-md-12
+            Key Box Code:
+            %b=(@resource.key_box_code.nil?)?"":@resource.key_box_code
+          %span.col-md-6
+            Estimated:
+            %b= time_from_sec((@resource.estimated_duration || 0) * 3600)
+          %span.col-md-6
+            Timer:
+            %b#stopwatch 0:00:00
+          %span.col-md-6
+            Instructions:
+            %br
+            %div{style:"margin-left: 10px;"}
+              -unless @resource.site.instruction.blank?
+                Site:
+                =@resource.site.instruction
+                %br
+              -unless @resource.instruction.blank?
+                Qrid:
+                =@resource.instruction
+                %br
+              -if !@assignment.nil? && !@assignment.comment.blank?
+                Notes:
+                =@assignment.comment
+  .col-lg-8
+    .box
+      .box-header
+        %h2
+          %i.checklist-icon
+          %span.break
+            Checklist
+        .box-icon
+          %a.btn-minimize
+            %i.fa.fa-chevron-up
+      .box-content.qrid-content
+        #qrid

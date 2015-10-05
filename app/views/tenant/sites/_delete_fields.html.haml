@@ -1,0 +1,22 @@
+- if @resource.qrids.active.empty?
+  %p Are you sure to delete the site?
+  = hidden_field_tag 'opt', 'destroy'
+- else
+  %p
+    %b WARNING:
+    This site has associated content.
+  %p Would you like to delete this site and all of it's associated QRIDs, the QRIDs assignments, reports and time that has been tracked on those QRIDs or just the site itself?
+  %p
+    - unless @resource.status == 'Deleted'
+      .radio
+        %label
+          = radio_button_tag 'opt', 'disable'
+          Just the site
+    .radio
+      %label
+        = radio_button_tag 'opt', 'destroy'
+        The site and all of it's associated content
+
+  %p#last-warning{style: 'display:none;'}
+    %b Are You Sure?
+    This site and all of it's associated QRIDs, the QRIDs assignments, reports and time that has been tracked on those QRIDs will be lost.

@@ -1,0 +1,28 @@
+.box
+  .box-header{'data-original-title' => ''}
+    %h2
+      %i.fa.fa-book
+      = succeed "Latest Reports" do
+        %span.break
+    .box-icon
+      %a.btn-minimize{href: '#'}
+        %i.fa.fa-chevron-up
+  .box-content
+    %table.table.table-striped.table-bordered
+      %thead
+        %tr
+          %th Client
+          %th Site
+          %th QRID
+          %th Submitted
+          %th
+      %tbody.report-collection
+        - @reports.each do |resource|
+          %div{style: "font-weight: #{(((current_user.role?(:admin) || current_user.role?(:manager)) && resource.unread_by_manager) || (current_user.role?(:client) && resource.unread_by_client)) ? "bold" : "normal"};"}
+            %tr{data: {'resource-id' => resource.id}}
+              %td= resource.qrid.site.owner.try(:name)
+              %td= resource.qrid.site.name
+              %td= resource.qrid.name
+              %td= resource.submitted_at
+              %td.center
+                = tenant_button :show, tenant_my_report_url(resource)

@@ -1,0 +1,79 @@
+
+<% page_title = 'Import Clients' %>
+
+$('#myModal').html('<%= escape_javascript(render('modal_form', page_title: page_title, resource: @resource)) %>');
+$('#myModal').modal('show');
+
+
+//$('#upload-qrid-photo').prop('disabled', true);
+
+fd = <%= @s3_direct_post.fields.to_json.html_safe %>;
+
+var srctemp = [];
+
+$('#tenant_client_import_user_import_file').fileupload({
+  url: '<%= @s3_direct_post.url %>',
+  type: 'POST',
+  formData: <%= @s3_direct_post.fields.to_json.html_safe %>,
+  paramName: 'file', // S3 does not like nested name fields i.e. name="user[avatar_url]"
+  dataType: 'XML',
+  maxNumberOfFiles: 10,
+  maxFileSize: 1048576,
+  autoUpload: false,
+  add: function (e, data) {
+    //$('#upload-qrid-photo').prop('disabled', true);
+
+    types = /(\.|\/)(csv|xls|xlsx)$/i;
+    file = data.files[0];
+    if (types.test(file.type) || types.test(file.name)) {
+      fd["Content-Type"] = data.files[0].type;  
+      data.formData = fd;
+
+      data.context = $(tmpl("template-upload", file));
+      $('.clientimport-form .progress-container').append(data.context);
+      //$('#upload-qrid-photo').click(function(e) {
+      //  e.preventDefault();
+      data.submit();
+      //});
+      
+    }
+    else {
+      alert("#{file.name} is not a xls, xlsx or csv file");
+      //$('#upload-qrid-photo').prop('disabled', false);
+    }
+  },
+  progress: function (e, data) {
+    if (data.context) {
+      progress = parseInt(data.loaded / data.total * 100, 10);
+      data.context.find('.progress-bar').css('width', progress + '%');
+    }
+  },
+  done: function(e, data) {
+      //$('#upload-qrid-photo').prop('disabled', false);
+      data.context.find('.progress-bar').text("Uploading done");
+
+       if(!!(window.File && window.FileReader && window.FileList && window.Blob)){
+          reader = new FileReader();
+          reader.onload = function(e) {
+            srctemp.push(e.target.result);
+          }
+          reader.readAsDataURL(data.files[0]);
+      }
+
+      // extract key and generate URL from response
+      var key   = $(data.jqXHR.responseXML).find("Key").text();
+      var url   = '//<%= @s3_direct_post.url.host %>/' + key;
+
+      $('input.user_import_file').remove();
+      // create hidden field
+      var input = $("<input />", { type:'hidden', name: 'tenant_client_import[user_import_file]', value: url, class: 'user_import_file' });
+      $('.clientimport-form').append(input);
+      $('.clientimport-form').trigger('submit.rails');
+
+      //$('#upload-qrid-photo').prop('disabled', false);
+  },
+  fail: function (e, data) {
+    alert(data.files[data.index].error);
+  }
+});
+  

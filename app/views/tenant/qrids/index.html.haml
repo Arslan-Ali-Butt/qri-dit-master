@@ -1,0 +1,31 @@
+- page_title = 'QRIDs'
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+    %p The core functionality of QRIDit Homewatch Edition focuses upon QR Code technology. The QR Code is printed upon a special data card known as a Q. R. I. D. or QRID which when scanned with a mobile handset, will help you to keep track of all work activity at the location in which it has been installed. Provide your clients with hard evidence that their property is being monitored, log job time and remotely administer customized Checklists to your staff, which when completed, provide instant and accurate information regarding your clients’ properties.
+  .col-lg-8
+    = render 'filter'
+.row.text-right
+  = render 'control_buttons'
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable#qrid-table{data: {source: tenant_datatables_qrids_url(format: 'json', context: 'datatables') }}
+      %thead
+        %tr
+          / %th Status
+          %th QRID          
+          %th Site
+          %th Client
+          %th Client Type
+          %th City
+          %th Zone
+          %th Work Type
+          %th Repeat
+          %th Next Assigned
+          /%th Next Assigned Sorting
+          %th Overdue
+          %th.no-print Quick Actions
+      %tbody.qrid-collection
+        =# render partial: 'resource', collection: @resources

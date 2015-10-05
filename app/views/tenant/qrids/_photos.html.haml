@@ -1,0 +1,9 @@
+%div{style:"font-size: 75%;margin-bottom:10px;"}
+  Photos can be added to any QRID as a reference point to be used later on. You can attach photos at different times to show what the location looked like at that time (ie before you begin work for the client, or at the beginning of each year)
+.row
+  .qridphoto-collection.col-sm-12
+    = render partial: 'tenant/qrid_photos/resource', collection: @resource.photos.first(5)
+%div
+  = link_to 'Add photo', new_tenant_qrid_photo_url(qrid_id: @resource.id), remote: true, class: 'btn btn-primary no-print', role: 'button'
+  - if @resource.photos.count > 5
+    = link_to 'View All', tenant_qrid_photos_url(qrid_id: @resource.id), class: 'btn btn-primary no-print', role: 'button'

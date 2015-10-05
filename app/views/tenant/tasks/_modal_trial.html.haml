@@ -1,0 +1,21 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header
+      %div.close
+        %button{style: 'border: none; background: transparent; color: white;', 'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+      %h4.modal-title= "#{params[:work_type]} Checklist Preview"
+    .modal-body
+      .box
+        .box-header
+          %h2
+            %i.checklist-icon
+            %span.break
+              Checklist Preview
+          .box-icon
+            %a.btn-minimize
+              %i.fa.fa-chevron-up
+        .box-content.qrid-content
+          %p Preview and test your checklist to get a feel for exactly how a reporter in the field will see and use it.          
+          = render 'trial_report'          
+    .modal-footer
+      %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close

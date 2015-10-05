@@ -1,0 +1,24 @@
+= form_tag({}, remote: true, class: 'form-horizontal') do
+  = hidden_field_tag :preview, value: true  
+  - if @resource.permatasks.empty?
+    = hidden_field_tag :permatask, 0
+  - else
+    .radio
+      .label
+        = radio_button_tag :permatask, 0
+        = [@resource.name, @resource.work_type.name].join(" - ")
+    
+    - permatasks = []
+    - @resource.permatask_ids.each do |task_id|
+      - current_permatask = Tenant::Permatask.find(task_id)      
+      - if current_permatask
+        - if current_permatask.task_type == 'Group' && current_permatask.parent_id.nil?
+          - permatasks << current_permatask
+    - permatasks.sort!{ |a,b| a.position <=> b.position}
+    - permatasks.each do |pt|
+      .radio
+        .label
+          = radio_button_tag :permatask, pt.id
+          = pt.name
+  %br/
+  = button_tag 'Preview', name: nil, type: 'submit', class: 'btn btn-primary'

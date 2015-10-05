@@ -1,0 +1,14 @@
+%fieldset
+  %legend Notes
+  %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+    %thead
+      %tr
+        %th Created
+        %th Author
+        %th Subject
+        %th Quick Actions
+    %tbody.tenantnote-collection{id: "collection_#{@resource.id}"}
+      = render partial: 'admin/tenant_notes/resource', collection: @resource.notes
+
+  %br
+  = link_to 'Add New Note', new_admin_tenant_note_url(tenant_id: @resource.id), remote: true, class: 'btn btn-primary'

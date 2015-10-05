@@ -1,0 +1,92 @@
+
+- if current_user
+  %nav.navbar.navbar-default.clearfix
+    %form.search-form.navbar-form.navbar-right.dropdown{role: 'search'}
+      .form-group
+        .input-group
+          %span.input-group-addon
+            %i.fa.fa-search
+          = text_field_tag :q, params[:q], class: 'form-control', placeholder: 'Search', autocomplete: 'off'
+      %ul.dropdown-menu{'aria-labelledby' => 'dropdownMenu', role: 'menu'}
+    #bs-navbar-collapse.collapse.navbar-collapse.clearfix
+      - if current_user.role?(:admin) || current_user.role?(:manager)
+        %ul.nav.navbar-nav
+          = tenant_nav_link 'Dashboard', tenant_root_url
+          %li.dropdown
+            %a.main-menu-dropmenu{href: tenant_qrids_url}
+              QRIDs
+              %b.caret
+            %ul.secondary-menu
+              = tenant_nav_link 'All QRIDs', tenant_qrids_url
+              = tenant_nav_link 'Create a QRID', new_tenant_qrid_url
+              = tenant_nav_link 'Templates', tenant_tasks_url
+              = tenant_nav_link 'Permatasks', tenant_permatasks_url
+
+          - unread_reports_count = Tenant::Report.where(unread_by_manager: true).count + (Tenant::ReportNote.by_author_role('Client').select('tenant_report_notes.report_id').where(unread_by_manager: true).group('tenant_report_notes.report_id').order(report_id: :asc).first.nil? ? 0 : Tenant::ReportNote.by_author_role('Client').select('tenant_report_notes.report_id').where(unread_by_manager: true).group('tenant_report_notes.report_id').order(report_id: :asc).count.count)
+          - unread_my_reports_count = Tenant::Report.where(reporter_id: current_user.id, unread_by_manager: true).count
+          %li.dropdown
+            %a.main-menu-dropmenu.reports-menu{href: tenant_reports_url}
+              Reports
+              - if unread_reports_count > 0
+                %span.badge= unread_reports_count
+              %b.caret
+            %ul.secondary-menu.reports-menu
+              = tenant_nav_link 'All Reports', tenant_reports_url, unread_reports_count > 0 ? {num: unread_reports_count} : {}
+              = tenant_nav_link 'My Reports', tenant_my_reports_url, unread_my_reports_count > 0 ? {num: unread_my_reports_count} : {}
+          - if can?([:index, :show], :assignment)
+            %li.dropdown
+              %a.main-menu-dropmenu{href: tenant_assignments_url}
+                Schedule
+                %b.caret
+              %ul.secondary-menu
+                = tenant_nav_link 'All Schedules', tenant_assignments_url
+                = tenant_nav_link 'My Schedule', tenant_my_assignments_url
+          = tenant_nav_link 'Time', tenant_time_index_url
+          %li.dropdown
+            %a.main-menu-dropmenu{href: tenant_sites_url}
+              Sites
+              %b.caret
+            %ul.secondary-menu
+              = tenant_nav_link 'All Sites', tenant_sites_url
+              = tenant_nav_link 'Add a Site', new_tenant_site_url
+              = tenant_nav_link 'Zones', tenant_zones_url
+          %li.dropdown
+            %a.main-menu-dropmenu{href: tenant_clients_url}
+              Clients
+              %b.caret
+            %ul.secondary-menu
+              = tenant_nav_link 'All Clients', tenant_clients_url
+              = tenant_nav_link 'Add a Client', new_tenant_client_url
+              = tenant_nav_link 'Import Clients', tenant_client_imports_url
+          %li.dropdown
+            %a.main-menu-dropmenu{href: tenant_staff_index_url}
+              Team
+              %b.caret
+            %ul.secondary-menu
+              - if current_user.role?(:admin) || current_user.role?(:manager)
+                = tenant_nav_link 'All Team Members', tenant_staff_index_url
+                = tenant_nav_link 'Add a Team Member', new_tenant_staff_url
+
+      - elsif current_user.role?(:reporter)
+        %ul.nav.navbar-nav
+          = tenant_nav_link 'Dashboard', tenant_root_url
+          / = tenant_nav_link 'My QRIDs', tenant_my_qrids_url
+          - if Admin::Tenant.cached_find_by_host(request.host).allow_reporters_to_view_reports
+            = tenant_nav_link 'My Reports', tenant_my_reports_url
+          - unread_assignments = Tenant::Assignment.where(assignee_id: current_user.id, unread: true)
+          - assignment_notification_time = Admin::Tenant.cached_find_by_host(request.host).assignment_notification_time
+          - unread_assignments = unread_assignments.where('start_at < ?', Time.now.beginning_of_day + assignment_notification_time.day)  if (!assignment_notification_time.nil? and assignment_notification_time > 0)
+          - unread_assignments_count = unread_assignments.count
+          = tenant_nav_link 'My Schedule', tenant_my_assignments_url, unread_assignments_count > 0 ? {num: unread_assignments_count} : {}
+
+      - elsif current_user.role?(:client)
+        %ul.nav.navbar-nav
+          = tenant_nav_link 'Dashboard', tenant_root_url
+
+          - unread_reports_count = Tenant::Report.joins(qrid: [:site]).where(unread_by_client: true).where('tenant_sites.owner_id = ?', current_user.id).count
+          = tenant_nav_link 'My Reports', tenant_c_reports_url, unread_reports_count > 0 ? {num: unread_reports_count} : {}
+
+          = tenant_nav_link 'My Sites', tenant_my_sites_url
+  
+  .mobile-logo
+    = render 'layouts/tenant/logo'

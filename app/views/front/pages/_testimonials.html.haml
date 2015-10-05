@@ -1,0 +1,59 @@
+/ bottom slider start
+.bottom_slide
+  .container
+    / start Basic Jquery Slider
+    / Testimonials Start
+    %div
+      %ul.bxslider
+        %li
+          %blockquote
+            .btm_slide_1
+              %p Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sitamet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.
+              %p.span -   RandomUser6
+              .c_t &nbsp;
+              .c_b &nbsp;
+              .side_carn &nbsp;
+              .carn_slide 
+        %li
+          %blockquote
+            .btm_slide_1
+              %p Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sitamet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.
+              %p.span -   RandomUser6
+              .c_t &nbsp;
+              .c_b &nbsp;
+              .side_carn &nbsp;
+              .carn_slide
+        %li
+          %blockquote
+            .btm_slide_1
+              %p Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sitamet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore.
+              %p.span -   RandomUser6
+              .c_t &nbsp;
+              .c_b &nbsp;
+              .side_carn &nbsp;
+              .carn_slide   
+            / end rotating-testimonials span8
+    / end Basic jQuery Slider
+.btm_slide_bt
+  /bottom slider end
+  
+:css
+  blockquote
+  {
+      clear: both;
+      font-style: italic;
+      position: relative;
+      quotes: none;
+      border: 0px;
+      font-size: 120%;
+      line-height: 200%;
+  }
+
+:javascript
+  $(document).ready(function(){
+    $('.bxslider').bxSlider({
+                   mode: 'horizontal',
+                   slideMargin: 3,
+                   auto:true
+               });
+      });

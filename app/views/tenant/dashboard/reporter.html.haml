@@ -1,0 +1,19 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  - if Admin::Tenant.cached_find_by_host(request.host).allow_reporters_to_view_reports
+    .col-md-6
+      = render 'i_assignments'
+    .col-md-6
+      = render 'map'
+.row
+  .row
+    .col-md-8
+      = render 'i_reports'
+    .col-md-4
+      = render 'weather'    
+      
+
+- if @show_getting_started_popup
+  #getting_started_popup

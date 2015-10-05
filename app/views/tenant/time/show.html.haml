@@ -1,0 +1,16 @@
+- page_title = "#{@assignee.name}'s Timesheet"
+= tenant_page_title page_title
+
+.row
+  .col-lg-6
+    %h1= page_title
+    .row
+      = render 'control_buttons'
+  .col-lg-6
+    = render 'filter'
+.row
+  .col-lg-12
+    #calendar.hidden-xs{style: 'min-height: 400px', data: {events_url: "#{time_tenant_reports_url}", assignee_id: @assignee.id}}
+    #mobile_calendar.visible-xs{data: {url: time_tenant_reports_url+".json?assignee_id="+@assignee.id.to_s}}
+    %br
+    #timezone{style: 'color:#999;'}

@@ -1,0 +1,164 @@
+- page_title = 'Company Settings'
+= tenant_page_title page_title
+
+:coffeescript
+  $(document).ready ->
+    fd = #{@s3_direct_post.fields.to_json.html_safe}
+
+    $('#new_admin_logo').fileupload
+      url: '#{@s3_direct_post.url}'
+      type: 'POST'
+      formData: #{@s3_direct_post.fields.to_json.html_safe}
+      paramName: 'file' 
+      dataType: 'XML'
+      maxNumberOfFiles: 1
+      maxFileSize: 1048576
+      autoUpload: false
+      add: (e, data) ->
+        types = /(\.|\/)(gif|jpe?g|png|mov|mpeg|mpeg4|avi)$/i
+        file = data.files[0]
+        if types.test(file.type) || types.test(file.name)
+          fd["Content-Type"] = data.files[0].type
+          data.formData = fd
+
+          data.context = $(tmpl("template-upload", file))
+          $('.uploads .thumbnails').append(data.context)
+          data.submit()
+        else
+          alert("File is not a gif, jpg or png image file")
+      progress: (e, data) ->
+        if data.context
+          progress = parseInt(data.loaded / data.total * 100, 10);
+          data.context.find('.progress-bar').css('width', progress + '%');
+      done: (e, data) ->
+        # extract key and generate URL from response
+        key   = $(data.jqXHR.responseXML).find("Key").text();
+        url   = '//#{@s3_direct_post.url.host}/' + key;
+
+        # create hidden field
+        input = $("<input />", { type:'hidden', name: 'upload[photo_url]', value: url });
+
+        form = $('#new_admin_logo');
+        form.append(input);
+        form.trigger('submit.rails');
+        form.bind "ajax:success", (evt, ajaxData, status, xhr) -> 
+          reader = new FileReader();
+          reader.onload = (e) -> 
+            $('.header-logo').html($('<img width="125" height="125"/>').attr('src', e.target.result));
+            $('.image-effect-inner').html($('<img width="220" height="220" />').attr('src', e.target.result));
+            $('#target').attr('src', e.target.result);
+
+          reader.readAsDataURL(data.files[0]);
+        input.remove()
+      fail: (e, data) ->
+        alert(data.files[data.index].error)
+
+.row
+  .col-lg-12.col-offset-settings-10
+    %h1= page_title
+= render 'error_messages', resource: @tenant
+.col-xs-3.well.setting-logo-3.file-upload-inner
+  = form_for Admin::Logo.new, url: tenant_settings_create_logo_path, remote: true, html: {class: "fileinput-button col-xs-10", multipart: true} do |f|
+    = f.file_field :photo, name: "upload[photo]", multiple: false
+    %span.btn.btn-success.col-offset-logo Add / Change Logo
+  = render 'tenant/qrid_photos/upload_progress_template'
+
+  .uploads
+    .thumbnails{style: "margin-top:50px"}
+      - if @tenant.logo
+        .thumbnail-image
+          = image_tag(@tenant.logo.photo.expiring_url(300, :large), style: "max-width:340px;max-height:350px;")
+
+= form_for @tenant, url: tenant_settings_url, method: :post, html: {multipart: 'true', class: 'form-horizontal', role: 'form'} do |f|
+  .row
+    .col-xs-8
+      %fieldset
+        %legend.col-offset-settings-25 General Details and Settings
+        .form-group
+          = f.label :subdomain, 'Subdomain', class: 'col-sm-3 control-label'
+          .col-sm-8
+            =@tenant.subdomain
+        .form-group
+          = f.label :company_name, 'Company Name', class: 'col-sm-3 control-label'
+          .col-sm-8
+            = f.text_field :company_name, class: 'form-control'
+        .form-group
+          = f.label :company_website, 'Company Website', class: 'col-sm-3 control-label'
+          .col-sm-8
+            .input-group
+              %span.input-group-addon http://
+              = f.text_field :company_website, class: 'form-control'
+        .form-group
+          = f.label :admin_email, 'Administrative Email', class: 'col-sm-3 control-label'
+          .col-sm-8
+            = f.text_field :admin_email, class: 'form-control'
+          = tenant_tooltip_hint "This email address is used for billing purposes and will show as the company\'s email address on your client reports.  It is also OUR contact email for your company. It is not used to log into the system."
+        .form-group
+          = f.label :phone, 'Phone', class: 'col-sm-3 control-label'
+          .col-sm-3
+            .input-group
+              %span.input-group-addon
+                %i.fa.fa-phone
+              = f.text_field :phone, class: 'form-control'
+          = f.label :phone, 'ext.', class: 'col-sm-3 control-label'
+          .col-sm-2
+            = f.text_field :phone_ext, class: 'form-control'
+        .form-group
+          = f.label :metric, 'Units of Measurement', class: 'col-sm-3 control-label'
+          .col-sm-2
+            = f.select :metric, [['United States Customary', false],['Metric', true]], {}, {class: 'form-control'}
+        .form-group
+          = f.label :country_code, 'Default Country', class: 'col-sm-3 control-label'
+          .col-sm-2
+            = f.country_select :country_code, {priority: %w(US CA), prompt: 'Please select a default country'} , class: 'form-control'
+        .form-group
+          = f.label :timezone, 'Time Zone', class: 'col-sm-3 control-label'
+          .col-xs-8
+            = f.time_zone_select :timezone, nil, {}, {class: 'form-control'}
+        .form-group
+          = f.label :assignment_notification_time, 'Assignment Notification Time', class: 'col-sm-3 control-label'
+          .col-sm-8
+            = f.text_field :assignment_notification_time, class: 'form-control'
+          = tenant_tooltip_hint 'Set the default number of days before the actual assignment date to notify the staff member. If this is left blank staff members will be notified of assignments the moment they are assigned. If the assignment is assigned within a time period that is less than the number of days set here, they will be notified the moment the assignment is assigned (ie. if your Assignment Notification Time is set to 3 days and you assign an assignment that needs to be completed the next day, the staff member will be notified immediately)'
+        .form-group
+          .col-sm-4.col-sm-offset-3
+            .checkbox
+              %label
+                = f.check_box :allow_reporters_to_view_reports
+                Allow Reporters to View Reports
+          =tenant_tooltip_hint "Enable your reporters to view past reports they have submitted. Allow Report Comment Email Notifications - Enable email notifications to be sent to managers when your clients add a comment to a report."
+        .form-group
+          .col-sm-4.col-sm-offset-3
+            .checkbox
+              %label
+                = f.check_box :allow_comment_email_notifications
+                Allow Comment Email Notifications
+          = tenant_tooltip_hint "Choose whether you would like admins and managers to receive comment notifications when comments are submitted by clients. This will not effect client emails which are always sent to your clients when admins and managers send comments to a client from a specific report."
+        .form-group
+          .col-sm-4.col-sm-offset-3
+            .checkbox
+              %label
+                = f.check_box :allow_clients_view_comments
+                Allow Clients to View Comments of Reporters
+          = tenant_tooltip_hint "When ticked, comments made by reporters in the field on specific items in the QRID Checklist will appear on your client's reports. Some companies would rather hide these comments and communicate to the client through manager commenting only."
+        .form-group
+          .col-sm-4.col-sm-offset-3
+            .checkbox
+              %label
+                = f.check_box :invite_clients_on_create
+                Automatically invite new clients as soon as they are created
+          = tenant_tooltip_hint "When ticked, new clients are invited by email to set their password then log in as soon as they are created.  When this is not ticket, new clients are invited by email by clicking the invite action button in the profile of the Administrator's or Manager's interface."
+
+
+  %fieldset
+    %legend.col-offset-settings-25 Work Types
+    %p.col-sm-12
+      Work Types play a central role within QRIDit Home Watch. As well as being the foundation on which Templates are built upon they are useful for filtering assignments and reports into specific work-oriented categories. For your convenience and in order to allow you to get started as quickly as possible, QRIDit Home Watch comes ready-equipped with several universal default Work Types.
+      %br
+      =link_to 'Modify Work Types',tenant_work_types_url, class: 'btn btn-default btn-offset-settings-15', role: 'button'
+  %fieldset
+    %legend
+    .form-group.form-actions
+      .col-sm-offset-4.col-sm-10
+        = f.button 'Save', name: nil, type: 'submit', class: 'btn btn-primary'
+        = link_to 'Cancel', url_for(controller: controller_name), class: 'btn btn-default', role: 'button'

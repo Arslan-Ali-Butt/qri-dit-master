@@ -1,0 +1,6 @@
+.row
+  .qridphoto-collection.col-sm-12
+    = render partial: 'tenant/qrid_photos/resource', collection: @resource.photos.first(7)
+%div
+  - if @resource.photos.count > 7
+    = link_to 'View All', tenant_qrid_photos_url(qrid_id: @resource.id), class: 'btn btn-primary no-print', role: 'button'

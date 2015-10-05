@@ -1,0 +1,5 @@
+- if @resource.super_user
+  - @omitFooter = true
+  = render 'devise/mailer/invitation_super_user'
+- else
+  = render 'devise/mailer/invitation_team_member'

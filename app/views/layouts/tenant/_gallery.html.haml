@@ -1,0 +1,24 @@
+#blueimp-gallery.blueimp-gallery
+  .slides
+  %h3.title
+  %p.description
+  %a.prev ‹
+  %a.next ›
+  %a.close ×
+  %a.play-pause
+  %ol.indicator
+  .modal.fade
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          %button.close{'aria-hidden' => 'true', type: 'button'} &times;
+          %h4.modal-title
+        .modal-body.next
+        %h4.modal-description
+        .modal-footer
+          %button.btn.btn-default.pull-left.prev{type: 'button'}
+            %i.glyphicon.glyphicon-chevron-left
+            Previous
+          %button.btn.btn-primary.next{type: 'button'}
+            Next
+            %i.glyphicon.glyphicon-chevron-right

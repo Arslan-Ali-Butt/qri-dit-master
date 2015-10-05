@@ -1,0 +1,31 @@
+- page_title = 'View Tenant'
+= admin_page_title page_title
+
+.row
+  .col-lg-12
+    .box
+      .box-header{'data-original-title' => ''}
+        %h2
+          %i.fa.fa-user
+          = succeed page_title do
+            %span.break
+        .box-icon
+          %a.btn-minimize{href: '#'}
+            %i.fa.fa-chevron-up
+          %a.btn-close{href: '#'}
+            %i.fa.fa-times
+      .box-content
+        %ul.nav.nav-tabs
+          %li.active
+            %a{'data-toggle' => 'tab', href: '#details'} Client Details
+          %li
+            %a{'data-toggle' => 'tab', href: '#payments'} Payments
+          %li
+            %a{'data-toggle' => 'tab', href: '#notes'} Notes
+        %div.tab-content
+          .tab-pane.fade.in.active#details
+            = render 'details'
+          .tab-pane.fade#payments
+            = render 'payments'
+          .tab-pane.fade#notes
+            = render 'notes'

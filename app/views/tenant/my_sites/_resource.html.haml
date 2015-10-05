@@ -1,0 +1,14 @@
+%tr{data: {'resource-id' => resource.id}}
+  /
+    %td.center
+      %span{class: resource_status_class(resource.status)}= resource.status
+  %td= resource.name
+  %td= resource.address.try(:city)
+  %td= resource.zone.try(:name)
+  %td= simple_format resource.address.try(:to_s)
+  %td
+    %ul
+      - resource.qrids.active.each do |qrid|
+        %li= qrid.name
+  %td.center.no-print
+    = tenant_button :show, url_for(controller: controller_name, action: :show, id: resource)

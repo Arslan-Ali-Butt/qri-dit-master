@@ -1,0 +1,11 @@
+.modal-dialog.modal-lg
+	.modal-content
+		.modal-header
+			%button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+			%h4.modal-title= recurrence_action_title
+		.modal-body
+			%p= recurrence_action_message
+		.modal-footer
+			%button.btn.btn-default{'data-dismiss' => 'modal', name: nil, type: 'button'} Cancel
+			%button.recurrence-btn.btn.btn-primary{'data-dismiss' => 'modal', "data-action" => "#{action}", "data-action-type" => "this-only", name: nil, type: 'button'} Only This Instance
+			%button.recurrence-btn.btn.btn-danger{ 'data-dismiss' => 'modal', "data-action" => "#{action}", "data-action-type" => "this-all-following", name: nil, type: 'submit'} This And All Following

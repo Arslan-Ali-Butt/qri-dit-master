@@ -1,0 +1,66 @@
+%h1="Edit Affiliate"
+=form_for @resource, url: {controller:"affiliates",action:"update"} do |f|
+  =f.label :subdomain
+  =f.text_field :subdomain
+  -if @resource.errors.full_messages_for(:subdomain).any?
+    %ul
+      -@resource.errors.full_messages_for(:subdomain).each do |msg|
+        %li=msg
+  %br
+  =f.label :company_name
+  =f.text_field :company_name
+  -if @resource.errors.full_messages_for(:company_name).any?
+    %ul
+      -@resource.errors.full_messages_for(:company_name).each do |msg|
+        %li=msg
+  %br
+  =f.label :company_website
+  =f.text_field :company_website
+  -if @resource.errors.full_messages_for(:company_website).any?
+    %ul
+      -@resource.errors.full_messages_for(:company_website).each do |msg|
+        %li=msg
+  %br
+  =f.label :name
+  =f.text_field :name
+  -if @resource.errors.full_messages_for(:name).any?
+    %ul
+      -@resource.errors.full_messages_for(:name).each do |msg|
+        %li=msg
+  %br
+  =f.label :phone
+  =f.text_field :phone
+  -if @resource.errors.full_messages_for(:phone).any?
+    %ul
+      -@resource.errors.full_messages_for(:phone).each do |msg|
+        %li=msg
+  %br
+  =f.label :phone_ext
+  =f.text_field :phone_ext
+  -if @resource.errors.full_messages_for(:phone_ext).any?
+    %ul
+      -@resource.errors.full_messages_for(:phone_ext).each do |msg|
+        %li=msg
+  %br
+  =f.label :admin_email
+  =f.text_field :admin_email
+  -if @resource.errors.full_messages_for(:admin_email).any?
+    %ul
+      -@resource.errors.full_messages_for(:admin_email).each do |msg|
+        %li=msg
+  %br
+  =f.label :timezone
+  =f.time_zone_select :timezone
+  -if @resource.errors.full_messages_for(:timezone).any?
+    %ul
+      -@resource.errors.full_messages_for(:timezone).each do |msg|
+        %li=msg
+  %br
+  =f.label :country_code
+  =f.country_select :country_code,  {priority: %w(US CA)}
+  -if @resource.errors.full_messages_for(:country_code).any?
+    %ul
+      -@resource.errors.full_messages_for(:country_code).each do |msg|
+        %li=msg
+  %br
+  =f.submit "Save Affiliate Request"

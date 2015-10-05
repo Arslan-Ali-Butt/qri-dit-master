@@ -1,0 +1,13 @@
+.box
+  .box-header{'data-original-title' => ''}
+    %h2
+      %i.fa.fa-sun-o
+      = succeed "Weather" do
+        %span.break
+    .box-icon
+      %a.btn-minimize{href: '#'}
+        %i.fa.fa-chevron-up
+  .box-content
+    .row
+      .col-lg-12
+        #weather_div

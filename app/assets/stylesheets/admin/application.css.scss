@@ -1,0 +1,65 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+
+ *= require simpliq
+
+ *= require jquery.ui.core
+ * require jquery.ui.theme
+ *= require jquery.ui.resizable
+ *= require jquery.ui.selectable
+ *= require jquery.ui.accordion
+ *= require jquery.ui.autocomplete
+ *= require jquery.ui.button
+ *= require jquery.ui.datepicker
+ *= require jquery.ui.dialog
+ *= require jquery.ui.menu
+ *= require jquery.ui.progressbar
+ *= require jquery.ui.slider
+ *= require jquery.ui.spinner
+ *= require jquery.ui.tabs
+ * require jquery.ui.tooltip
+
+ *= require dataTables/jquery.dataTables.bootstrap3
+ *= require font-awesome
+ *= require_self
+ *= require_tree .
+ */
+
+html, body {
+  height: 100%;
+}
+
+#wrap {
+  min-height: 100%;
+  height: auto;
+  margin: 0 auto -50px;
+  padding: 0 0 50px;
+}
+
+footer {
+  padding-top: 19px;
+}
+
+.btn + .btn {
+  margin-left: 20px;
+}
+
+#flash {
+  position: fixed;
+  top: 30px;
+  margin: 0 auto;
+  z-index: 10;
+  margin-left: 50%;
+
+  .alert {
+    margin-left: -50%;
+    margin-right: 50%;
+  }
+}

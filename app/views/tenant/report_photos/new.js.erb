@@ -1,0 +1,4 @@
+$('<%= escape_javascript(render(partial: 'layouts/tenant/flash_message', locals: {alert: 'Incorrect image file'})) %>').appendTo('#flash').hide().fadeIn().delay(3000).fadeOut();
+
+$('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %> [data-resource-id="new"]').first().remove();
+$('button[type=submit]').prop('disabled', false);

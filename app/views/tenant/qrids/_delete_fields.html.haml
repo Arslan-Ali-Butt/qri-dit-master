@@ -1,0 +1,24 @@
+- if @resource.assignments.empty?
+  %p Are you sure you wish to delete the QRID?
+  = hidden_field_tag 'opt', 'destroy'
+  - if params[:on_resource].present? and params[:on_resource] == "true"
+    = hidden_field_tag 'on_resource', true
+- else
+  %p
+    %b WARNING:
+    This QRID has associated content.
+  %p Would you like to delete this QRID and all of it's associated assignments, reports and time that has been tracked on it or just the QRID itself?
+  %p
+    - unless @resource.status == 'Deleted'
+      .radio
+        %label
+          = radio_button_tag 'opt', 'disable'
+          Just the QRID
+    .radio
+      %label
+        = radio_button_tag 'opt', 'destroy'
+        The QRID and all of it's associated content
+
+  %p#last-warning{style: 'display:none;'}
+    %b Are You Sure?
+    This QRID and all of it's associated assignments, reports and time that has been tracked on it will be lost.

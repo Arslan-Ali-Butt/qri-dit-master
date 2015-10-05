@@ -1,0 +1,13 @@
+.loading-big {
+  background-image: asset-data-url('tenant/loader2.gif');
+  width: 287px;
+  height: 141px;
+  margin: 0 auto;
+}
+
+a.thumbnail.loading {
+  background-image: asset-data-url('tenant/loader.gif');
+  width: 42px;
+  height: 42px;
+  margin: 29px;
+}

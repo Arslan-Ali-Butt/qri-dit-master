@@ -1,0 +1,20 @@
+%fieldset
+  %legend Payments
+  %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+    %thead
+      %tr
+        %th Created
+        %th Paid
+        %th Refunded
+        %th Amount
+        %th Card Type
+        %th Last 4
+    %tbody
+      - @resource.payments.data.each do |payment|
+        %tr
+          %td= Time.at(payment.created).to_s
+          %td= payment.paid.to_s
+          %td= payment.refunded.to_s
+          %td= number_to_currency Admin::Tenant.format_stripe_amount payment.amount
+          %td= payment.card.type
+          %td= payment.card.last4

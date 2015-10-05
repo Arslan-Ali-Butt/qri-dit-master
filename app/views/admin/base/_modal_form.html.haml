@@ -1,0 +1,30 @@
+- method = resource.new_record? ? 'post' : (action_name == 'delete' ? 'delete' : 'patch')
+- case method
+  - when 'post'
+    - url = { controller: controller_name, action: 'index' }
+    - button = 'Create'
+  - when 'delete'
+    - url = { controller: controller_name, action: 'destroy', id: resource.id }
+    - button = 'Confirm'
+  - else
+    - url = { controller: controller_name, action: 'update', id: resource.id }
+    - button = 'Save changes'
+
+.modal-dialog.modal-lg
+  .modal-content
+    = form_for resource, url: url, method: method, remote: true, html: {class: "form-horizontal #{resource.class.name.demodulize.downcase}-form", role: 'form'} do |f|
+      .modal-header
+        %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+        %h4.modal-title= page_title
+      .modal-body
+        = render 'error_messages', resource: resource
+        - if method == 'delete'
+          = render 'delete_fields', f: f
+        - else
+          = render 'form_fields', f: f
+      .modal-footer
+        %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close
+        - if method == 'delete'
+          %button.btn.btn-danger{type: 'submit'}= button
+        - else
+          %button.btn.btn-primary{type: 'submit'}= button

@@ -1,0 +1,9 @@
+- unless controller_name == 'permatasks'
+  - page_title = case controller_name
+    - when 'users'      then 'Add a Team Member'
+    - when 'clients'    then 'Add a Client'
+    - when 'qrids'      then 'Create a QRID'
+    - else "Add a New #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}"
+
+  = tenant_page_title page_title
+  = render 'form', page_title: page_title, resource: @resource

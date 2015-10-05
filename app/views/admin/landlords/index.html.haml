@@ -1,0 +1,29 @@
+- page_title = controller_name.titlecase
+= admin_page_title page_title
+
+.row
+  .col-lg-12
+    .box
+      .box-header{'data-original-title' => ''}
+        %h2
+          %i.fa.fa-sun-o
+          = succeed page_title do
+            %span.break
+        .box-icon
+          %a.btn-minimize{href: '#'}
+            %i.fa.fa-chevron-up
+          %a.btn-close{href: '#'}
+            %i.fa.fa-times
+      .box-content
+        %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+          %thead
+            %tr
+              %th Name
+              %th Last login at
+              %th Status
+              %th Quick Actions
+          %tbody.landlord-collection
+            = render partial: 'resource', collection: @resources
+
+        %br
+        = link_to 'Add new landlord', new_admin_landlord_url, remote: true, class: 'btn btn-primary'

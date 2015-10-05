@@ -1,0 +1,26 @@
+.modal-dialog.modal-lg
+  .modal-content
+    .modal-header
+      %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+      %h4.modal-title Meta Data for QRID '#{@resource.name}'
+    .modal-body
+      %table
+        %th
+          %td
+            Field
+          %td
+            Data
+        - unless @resource.try(:created_at).blank?
+          %tr
+            %td
+              Created At
+            %td
+              = @resource.created_at.to_time.strftime("%FT%T%:z")
+        - unless @resource.try(:staff).try(:name).blank?
+          %tr
+            %td
+              Created By
+            %td
+              = @resource.staff.name
+    .modal-footer
+      %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close

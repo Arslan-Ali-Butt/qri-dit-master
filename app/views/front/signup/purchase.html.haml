@@ -1,0 +1,99 @@
+:javascript
+  $(document).ready(function(){
+      $("#side_nav").css('margin-right', '-350px');
+    $("#hide").click(function(){
+      $("#side_nav").css('margin-right', '-350px');
+    });
+    $("#men_icn").click(function(){
+      $("#side_nav").css('margin-right', '0px');
+    });
+  });
+  $(document).ready(function(){
+    $('#main-slider').liquidSlider({
+      autoSlide:true
+    });
+  });
+- content_for :title, "QRIDit Home Watch Edition- Pricing"
+.pricing
+  .header_2
+    .navbar-wrapper
+      / <img id="logo" src="img/logo.png" alt="Unslider logo" width="34" height="27">
+      .navbar.navbar-inverse.navbar-static-top{:role => "navigation"}
+        .container
+          .navbar-header
+            %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+              %span.sr-only Toggle navigation
+              %span.icon-bar
+              %span.icon-bar
+              %span.icon-bar
+            %a.navbar-brand.logo{:href => "index"}
+              = image_tag "front/logo.png"
+          .navbar-collapse.collapse
+            %ul.nav.navbar-nav
+              %li.active
+                = link_to("Home","index",:title=>"Home")
+              %li
+                = link_to("Contact","contact",:title=>"Contact")
+              %li
+                %a#men_icn Menu
+      .bannerli.bannerli_2
+        .container
+          .inner
+            %h1 Pricing
+            %h2 All Plans Include:
+            .divr_2
+              = image_tag "front/div_3.jpg"
+            .pricing_inner
+              %ul
+                %li
+                  %p
+                    %span Unlimited
+                    Users
+                %li
+                  %p
+                    %span Unlimited
+                    Reports
+                %li
+                  %p
+                    %span Unlimited
+                    Time Tracking
+                %li
+                  %p
+                    %span Unlimited
+                    Work Types
+                %li
+                  %p
+                    %span Unlimited
+                    Storage
+                %li
+                  %p
+                    %span Unlimited
+                    Clients
+                %li
+                  %p
+                    %span Unlimited
+                    Email Support
+                %li
+                  %p
+                    %span Free
+                    30 Day Trial
+
+                %li
+                  %p
+                    %span 3 Free
+                    QRIDs
+
+  / bottom content start
+  .bottom_content{:style => "border:0px"}
+    .container.cont_main{:style => "margin-top:0px;"}
+      = render partial: 'purchase_pricing'
+
+  / bottom content end
+  / business start
+  = render 'front/pages/never_stop'
+  / business end
+  / Qridit start
+  .main_qri
+  / Qridit end
+  / bottom logo start
+  = render "front/pages/bottom"

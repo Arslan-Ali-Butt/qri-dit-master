@@ -1,0 +1,10 @@
+$('#myModal').modal('hide');
+$('<%= escape_javascript(render('layouts/tenant/flash_message')) %>').appendTo('#flash').hide().fadeIn().delay(3000).fadeOut();
+
+// $('#calendar').fullCalendar('refetchEvents');
+
+if ($('.qrid-collection')) {
+    window.oTable.fnDestroy();
+    $('.qrid-collection [data-resource-id=<%= @resource.qrid_id %>]').replaceWith('<%= escape_javascript(render('tenant/qrids/resource', resource: @resource.qrid)) %>');
+    initDatatable(true);
+}

@@ -1,0 +1,33 @@
+.well
+  %form{method: :get, class: 'form-horizontal report-filter-form no-print', role: 'form'}
+    .form-group
+      = label_tag :site_id, 'Site', class: 'col-sm-2 control-label'
+      .col-sm-10
+        = select_tag :site_id, options_from_collection_for_select(Tenant::Site.active.where(owner_id: @owner_id).order(:name), :id, :name, @site_id), prompt: 'All', class: 'form-control selectize'
+    .form-group
+      = label_tag :qrid_id, 'QRID', class: 'col-sm-2 control-label'
+      .col-sm-10
+        = select_tag :qrid_id, options_from_collection_for_select(Tenant::Qrid.active.joins(:site).where('tenant_sites.owner_id = ?', @owner_id), :id, :name, @qrid_id), prompt: 'All', class: 'form-control selectize'
+    .form-group
+      = label_tag :qrid_id, 'Status', class: 'col-sm-2 control-label'
+      .col-sm-10
+        = select_tag :status, options_for_select(Tenant::Report::STATUSES, @status), prompt: 'All', class: 'form-control selectize'
+    .form-group.row#wrapper_start_at
+      = label_tag :start_at, 'From', class: 'col-sm-2 control-label'
+      = hidden_field_tag :start_at, @start_at.try(:to_datetime).try(:to_i)
+      .col-sm-10
+        .input-group.date
+          %span.input-group-addon
+            %i.fa.fa-calendar
+          %input.form-control.date-picker{type: 'text', data: {'date-format' => 'dd/mm/yyyy'}}
+    .form-group.row#wrapper_end_at
+      = label_tag :end_at, 'Till', class: 'col-sm-2 control-label'
+      = hidden_field_tag :end_at, @end_at.try(:to_datetime).try(:to_i)
+      .col-sm-10
+        .input-group.date
+          %span.input-group-addon
+            %i.fa.fa-calendar
+          %input.form-control.date-picker{type: 'text', data: {'date-format' => 'dd/mm/yyyy'}}
+    .form-group.form-actions
+      .col-sm-offset-9.col-sm-3
+        = button_tag 'Filter', name: nil, type: 'submit', class: 'btn btn-primary pull-right'

@@ -1,0 +1,74 @@
+- page_title = 'My account'
+= tenant_page_title page_title
+
+%h1= page_title
+
+.row
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Personal info
+      .panel-body
+        %p
+          %b Name:
+          %br
+          = resource.name
+        %p
+          %b Email:
+          %br
+          = resource.email
+        - if resource.pending_reconfirmation?
+          %p.help-block
+            = "Currently waiting confirmation for: #{resource.unconfirmed_email}"
+
+        - unless resource.try(:staff_work_types).nil? or resource.try(:staff_zones).nil?
+          %p
+            %b Work type:
+            %br
+            %ul
+              - resource.try(:staff_work_types).order(:name).each do |work_type|
+                %li= link_to work_type.name, tenant_work_types_url
+          %p
+            %b Base zone:
+            %br
+            %ul
+              - resource.staff_zones.order(:name).each do |zone|
+                %li= link_to zone.name, tenant_zones_url
+          %p
+            %b Preferred working time:
+            %br
+            = resource.staff_daily_hours
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Contact info
+      .panel-body
+        %p
+          %b Cell phone:
+          %br
+          = resource.phone_cell
+        %p
+          %b Landline phone:
+          %br
+          = resource.phone_landline
+        %p
+          %b Emergency phone:
+          %br
+          = resource.phone_emergency
+        %p
+          %b Emergency phone 2:
+          %br
+          = resource.phone_emergency_2
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title
+        =(current_user.role?(:client)?"Billing":"")+" Address"
+      .panel-body
+        = simple_format(resource.address.try(:to_s))
+
+.row
+  .col-lg-12
+    = link_to "Change my Email Address or Password", edit_user_account_url, class: 'btn btn-primary', role: 'button'

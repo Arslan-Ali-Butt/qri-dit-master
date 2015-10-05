@@ -1,0 +1,8 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td.center= staff_status(resource)
+  %td= resource.id
+  %td= link_to resource.name, url_for(controller: controller_name, action: :show, id: resource)
+  %td= resource.roles.first.name
+  %td= staff_zones(resource)
+  %td= time_from_sec(@worked_this_week ? @worked_this_week[resource.id] : 0)
+  %td.center.no-print= staff_buttons(resource, current_user)

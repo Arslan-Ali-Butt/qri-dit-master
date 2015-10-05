@@ -1,0 +1,20 @@
+%noscript
+  .alert.alert-danger
+    JavaScript is not enabled and is required for this form. First enable it in your web browser settings.
+
+- if @tenant && @tenant.errors && @tenant.errors.any?
+  .alert.alert-danger
+    %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'alert', type: 'button'} &times;
+    = pluralize(@tenant.errors.count, 'error')
+    prohibited this record from being saved:
+    %ul
+      - @tenant.errors.full_messages.each do |msg|
+        %li= msg  
+:javascript
+  $(document).ready(function() {
+    $('#stripe_alert').hide();
+  });
+
+.alert.alert-dismissable.alert-danger#stripe_alert
+  %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'alert', type: 'button'} &times;
+  #stripe_error_response

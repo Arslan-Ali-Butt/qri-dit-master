@@ -1,0 +1,61 @@
+%header.navbar
+  .desktop-logo
+    = render 'layouts/tenant/logo'
+  .header-user-info
+    #header_clock.hidden-sm.hidden-xs
+    %h3.company-brand.client_phone_info
+      -if current_user.role?(:client)
+        %div=number_to_phone(Admin::Tenant.cached_find_by_host(request.host).phone,area_code: true, extension: Admin::Tenant.cached_find_by_host(request.host).phone_ext)
+        %div="|"
+      %div
+        =@tenant.company_name
+        -if @tenant.is_affiliate?
+          %br
+          %span{style: "font-size: 50%"}
+            ="An Afiliate of #{@tenant.affiliate_owner.company_name}"
+    %button.btn.btn-primary.navbar-toggle{name: nil, type: 'button', data:{'toggle' => 'collapse', 'target' => '#bs-navbar-collapse'}}
+    - if current_user
+      .nav-no-collapse.header-nav.pull-right.account
+        %ul.nav.navbar-nav.pull-right
+          %li.dropdown
+            %a.account.dropdown-toggle{'data-toggle' => 'dropdown', href: '#'}
+              %span.settings-icon.hidden-md.hidden-lg.hidden-xl.pull-right
+              .avatar
+              .user.pull-right
+                %span.hello.hidden-sm.hidden-xs Welcome,
+                %span.name.hidden-sm.hidden-xs= current_user.name
+                %span.caret.hidden-sm.hidden-xs
+            %ul.dropdown-menu
+              %li
+                %a{href: user_account_url}
+                  %i.fa.fa-user
+                  Profile
+              - if can?(:index, :setting)
+                %li
+                  %a{href: tenant_settings_url}
+                    %i.fa.fa-gear
+                    Settings
+              - if can?(:billing, :setting) && Admin::Tenant.cached_find_by_host(request.host).parent_id.nil?
+                %li
+                  %a{href: tenant_settings_billing_url}
+                    %i.fa.fa-money
+                    Billing
+              -if current_user.role?(:admin)  
+                %li
+                  %a{href: tenant_toolsandresources_path}
+                    %i.fa.fa-question
+                    Resources
+                    -unless @tenant.is_affiliate?
+                      and Support
+              -unless current_user.role?(:client)  
+                %li
+                  %a{href: tenant_help_url}
+                    %i.fa.fa-question
+                    Getting Started
+              -if @tenant.is_affiliate_owner? && current_user.role?(:admin)
+                %li
+                  =link_to "My Affiliates", tenant_affiliates_path
+              %li
+                %a{href: destroy_user_session_url}
+                  %i.fa.fa-power-off
+                  Logout

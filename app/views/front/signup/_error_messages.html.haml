@@ -1,0 +1,15 @@
+%noscript
+  .alert.alert-danger
+    JavaScript is not enabled and is required for this form. First enable it in your web browser settings.
+:javascript
+  $(document).ready(function() {
+    $('#stripe_alert').hide();
+  });
+
+- if flash.alert
+  .alert.alert-danger
+    %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'alert', type: 'button'} &times;
+    = flash.alert.html_safe
+.alert.alert-dismissable.alert-danger#stripe_alert
+  %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'alert', type: 'button'} &times;
+  #stripe_error_response

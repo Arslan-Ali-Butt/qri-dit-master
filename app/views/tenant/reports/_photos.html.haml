@@ -1,0 +1,10 @@
+.row.reportphoto-collection
+  - case @resource.photos.count
+    - when 0
+      %h2{style: 'font-size: 17px; opacity: 0.640; font-color: #000; font-weight: bolder;'} No Photos Attached To This Report
+    - else
+      = render partial: 'tenant/report_photos/resource', collection: @resource.photos.limit(8)
+.row
+  .col-sm-12
+    - if @resource.photos.count > 8
+      = link_to 'View All', tenant_report_photos_url(report_id: @resource.id)

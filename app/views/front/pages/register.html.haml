@@ -1,0 +1,131 @@
+:javascript
+  $(document).ready(function(){
+
+    $("input[name='checkmark']").change(function(){
+      if($(this).is(":checked")){
+          $(this).next("label").addClass('checked');  
+          $("input[name='checkmark']").not(this).next("label").removeClass('checked');   
+          var chosenPackage = $(this).attr("data-url"); //Get radio name
+      }
+    });
+
+    $("input[name='checkmark']").click(function(){
+      $("input[name='checkmark-yearly']").next("label").removeClass('checked');
+      $("input[name='checkmark-yearly']").prop('checked', false)
+    });
+
+
+    $("input[name='checkmark-yearly']").change(function(){
+      if($(this).is(":checked")){
+          $(this).next("label").addClass('checked');  
+          $("input[name='checkmark-yearly']").not(this).next("label").removeClass('checked');
+          var chosenPackage = $(this).attr("data-url"); //Get radio name
+      }
+    });   
+
+    $("input[name='checkmark-yearly']").click(function(){
+      $("input[name='checkmark']").next("label").removeClass('checked');          
+      $("input[name='checkmark']").prop('checked', false); 
+    });
+
+  
+    if($('input:checked').length == 0){
+      // $("[action='continue']").addClass('disabled');
+    }   
+
+    $("[action='continue']").click(function(e){  
+      thepackage = $('input:checked').attr("data-url");    
+      if(thepackage !== 'undefined' && thepackage){
+        window.location.href = thepackage;
+      } 
+      else{
+        alert('Please choose a package before continuing.');
+      }
+      
+    });
+  });
+
+.masthead
+  %h1 Pricing
+  %h2 All Plans Include:
+  %ul
+    %li 
+      %strong Unlimited 
+      Users
+    %li 
+      %strong Unlimited 
+      Reports
+    %li 
+      %strong Unlimited 
+      Time Tracking
+    %li 
+      %strong Unlimited 
+      Work Types
+    %li 
+      %strong Unlimited 
+      Storage
+    %li 
+      %strong Unlimited 
+      Clients
+    %li 
+      %strong Unlimited 
+      Email Support
+.jumbotron
+- @priceplans.in_groups_of(5, false) do |group|
+  .row
+    %h2 Pay Monthly
+    %p 
+      Pay monthly with no commitment and enjoy all the benefits QRIDit has to offer your business. Please select the plan that is right for you.
+    - group.each do |priceplan|
+      .col-sm-5.fivecol
+        .sale-plan
+          %h3= (priceplan.title).gsub(/\n/,'<br>').html_safe
+          %h4
+            %span.glyphicon.glyphicon-qrcode
+            %big
+              = "x #{priceplan.qrid_num}"
+          %p
+            %big
+              = number_to_currency(priceplan.price_per_month)
+            \/ month
+        .bottom-aligned
+          %input.form-control{'data-url' => signup_url(plan: priceplan.name), type: 'radio', name: 'checkmark', id:'choose-'+priceplan.name}
+          %label.checkmark{'for' => 'choose-'+priceplan.name}
+            %span.border
+    %h2 Pay Yearly
+    %p
+      Save 10% when commiting to a year with us. That's more than one free month!
+    - group.each do |priceplan|
+      .col-sm-5.fivecol
+        .sale-plan
+          %h3= (priceplan.title).gsub(/\n/,'<br>').html_safe
+          %h4
+            %span.glyphicon.glyphicon-qrcode
+            %big
+              = "x #{priceplan.qrid_num}"
+          %p
+            %big
+              = number_to_currency(priceplan.price_per_year)
+            \/ year
+        .bottom-aligned
+          %input.form-control{'data-url' => signup_url(plan: priceplan.name), type: 'radio', name: 'checkmark-yearly', id:'choose-'+priceplan.name+'yearly'}
+          %label.checkmark{'for' => 'choose-'+priceplan.name+'yearly'}
+            %span.border
+    %span.savings
+      %h5
+        %big You Save 
+        an equivalent of
+    .row.gray    
+      - group.each do |priceplan|            
+        .col-sm-5.fivecol
+          %p
+            %big
+              %strong
+                = number_to_currency(priceplan.price_per_month - (priceplan.price_per_year / 12), :precision => 0)
+              \/ month
+    .row              
+      %p.bottom-aligned.pull-right
+        * For higher numbers of QRIDs, custom plans are available
+    .row
+      .btn.btn-primary.pull-right{action: 'continue'} Continue
+    

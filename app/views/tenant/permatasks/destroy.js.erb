@@ -1,0 +1,12 @@
+$('#myModal').modal('hide');
+<% if @resource.destroyed? %>
+if($('[data-resource-id=<%= @resource.id %>]').parent().children('.dd3-item:visible').length === 1) {
+  $('[data-resource-id=<%= @resource.id %>]').parent('.dd-list').parent('.dd3-item').hide();
+  $('[data-resource-id=<%= @resource.id %>]').parent('.dd-list').parent('.dd3-item').children('.dd3-content.answer').parent('.dd3-item').parent('.dd-list').parent('.dd3-item').children('.dd3-content.question').children('i.glyphicon.glyphicon-circle-arrow-up, i.glyphicon.glyphicon-circle-arrow-down').remove();
+  $('[data-resource-id=<%= @resource.id %>]').parent('.dd-list').parent('.dd3-item').children('.dd3-content.group, .dd3-content.instructions').children('i.glyphicon.glyphicon-circle-arrow-up, i.glyphicon.glyphicon-circle-arrow-down').remove();
+  $('[data-resource-id=<%= @resource.id %>]').parent('.dd-list').parent('.dd3-item').children('.dd3-content.answer').parent('.dd3-item').parent('.dd-list').parent('.dd3-item').children('.dd3-content.question').children('.controls').children('.toggle.active').removeClass('active');
+}
+$('[data-resource-id=<%= @resource.id %>]').fadeOut();
+<% else %>
+$('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %> [data-resource-id=<%= @resource.id %>]').replaceWith('<%= escape_javascript(render('resource', resource: @resource)) %>');
+<% end %>

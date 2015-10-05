@@ -1,0 +1,25 @@
+!!!
+%html{lang: 'en'}
+  %head
+    %title= content_for?(:title) ? content_for(:title) : 'QRIDit Admin panel'
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    = render 'layouts/favicon'
+    = stylesheet_link_tag 'admin/application', media: 'all', 'data-turbolinks-track' => true
+    / [if lt IE 9]
+      %script{src: '//html5shim.googlecode.com/svn/trunk/html5.js'}
+    = javascript_include_tag 'admin/application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    #wrap
+      = render 'layouts/admin/header'
+      .container
+        #flash
+          = render 'layouts/admin/flash_message'
+        .row
+          = render 'layouts/admin/sidebar'
+          #content.col-lg-10.col-sm-11
+            = yield
+
+      #myModal.modal.fade
+      .clearfix
+    = render 'layouts/admin/footer'

@@ -1,0 +1,13 @@
+$('#myModal').modal('hide');
+$('<%= escape_javascript(render('layouts/tenant/flash_message')) %>').appendTo('#flash').hide().fadeIn().delay(3000).fadeOut();
+
+<% reception_note = (params[:confirmation] == "true" ? @resource : nil) %>
+<% submission_note = (params[:submission] == "true" ? @resource : nil) %>
+$('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %> [data-resource-id=<%= @resource.id %>]').replaceWith('<%= escape_javascript(render('resource', resource: @resource, submission_note: submission_note)) %>');
+$('.mark-all-as-read').button('reset');
+
+$('.reports-menu .badge').text("<%= Tenant::Report.where(unread_by_manager: true).count + (Tenant::ReportNote.by_author_role('Client').select('tenant_report_notes.report_id').where(unread_by_manager: true).group('tenant_report_notes.report_id').order(report_id: :asc).first.nil? ? 0 : Tenant::ReportNote.by_author_role('Client').select('tenant_report_notes.report_id').where(unread_by_manager: true).group('tenant_report_notes.report_id').order(report_id: :asc).count.count) %>");
+
+<% if Tenant::ReportNote.by_author_role('Client').where(report_id: @resource.id).where(unread_by_manager: true).count == 0 %>
+	$('.mark-all-as-read-container').hide();
+<% end %>

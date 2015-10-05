@@ -1,0 +1,7 @@
+#sidebar-left.col-lg-2.col-sm-1
+  .nav-collapse.sidebar-nav.collapse.navbar-collapse.bs-navbar-collapse
+    %ul.nav.nav-tabs.nav-stacked.main-menu
+      = admin_nav_link 'Dashboard', admin_root_url, 'fa-bar-chart-o'
+      = admin_nav_link 'Landlords', admin_landlords_url, 'fa-sun-o'
+      = admin_nav_link 'Tenants', admin_tenants_url, 'fa-user'
+      = admin_nav_link 'Background Jobs', admin_sidekiq_web_path, 'fa-clock-o'

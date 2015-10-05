@@ -1,0 +1,9 @@
+.thumbnail{data: {'resource-id' => resource.id}, style: 'float:left;'}
+  %a.thumbnail{'data-gallery' => '', href: resource.photo.expiring_url(300, :medium), title: resource.title, description: resource.description, style: 'height: 100px'}
+    %img{alt: "Photo ##{resource.id}", src: resource.photo.expiring_url(300, :thumb)}
+  - if current_user.role?(:admin) || current_user.role?(:manager)
+    %p{style: 'margin-top: -30px; text-align: center'}
+      = tenant_button :edit, edit_tenant_qrid_photo_url(qrid_id: resource.qrid_id, id: resource.id), remote: true
+      = tenant_button :print_photo, print_tenant_qrid_photo_url(qrid_id: resource.qrid_id, id: resource.id), target: '_blank', style: 'margin-left: 0'
+      = tenant_button :download, download_tenant_qrid_photo_url(qrid_id: resource.qrid_id, id: resource.id), target: '_blank', style: 'margin-left: 0'
+      = tenant_button :delete, tenant_qrid_photo_url(qrid_id: resource.qrid_id, id: resource.id), method: :delete, remote: true, data: { confirm: 'Are you sure?' }, style: 'margin-left: 0'

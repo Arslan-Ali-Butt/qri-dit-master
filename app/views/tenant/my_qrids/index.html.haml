@@ -1,0 +1,23 @@
+- page_title = 'My QRIDs'
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+  .col-lg-8
+    = render 'filter'
+.row.text-right
+  = render 'control_buttons'
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+      %thead
+        %tr
+          %th Name
+          %th Site
+          %th City
+          %th Zone
+          %th Work Type
+          %th.no-print Quick Actions
+      %tbody.qrid-collection
+        = render partial: 'resource', collection: @resources

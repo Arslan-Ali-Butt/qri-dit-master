@@ -1,0 +1,176 @@
+.alert.alert-info Pricing effective May 15th 2015.
+:javascript
+  function formatDollar(num) {
+    var p = num.toFixed(2).split(".");
+    return "$" + p[0].split("").reverse().reduce(function(acc, num, i, orig) {
+        return  num + (i && !(i % 3) ? "," : "") + acc;
+    }, "") + "." + p[1];
+  }
+
+  $(document).ready(function(){
+
+    $("#qrid-slider").slider({
+      formatter: function(value) {
+        
+        return value + ( value == 1 ? "QRID" : " QRIDs");
+      }
+    });
+    $("#qrid-slider").on("change", function(slideEvt) {
+      //$("#ex6SliderVal").text(slideEvt.value);
+      //console.log(slideEvt.value);
+
+      quantity = slideEvt.value.newValue;
+
+      basePrice = 4000;
+      actualPrice = basePrice;
+
+      priceTiers = [0, 250, 199, 175, 150]; // in cents
+      priceThresholds = [3, 50, 250, 350, 9999];
+
+      //console.log("price thresholds is " + priceThresholds.length)
+      for (i = 0; i < priceThresholds.length; i++) {
+        if (quantity <= priceThresholds[i]) {
+
+          if (i == 0) {
+            quantityAtTier = quantity;
+          }
+          else {
+            quantityAtTier = quantity - priceThresholds[i - 1];
+          }
+
+          actualPrice = actualPrice + (priceTiers[i] * quantityAtTier)
+
+          break;
+        }
+        else {
+
+          if (i == 0) {
+            quantityAtTier = priceThresholds[i];
+          }
+          else {
+            quantityAtTier = priceThresholds[i] - priceThresholds[i - 1];
+          }
+
+          actualPrice = actualPrice + (priceTiers[i] * quantityAtTier)
+        }
+      }
+
+      $('#calculated-price').text(formatDollar(actualPrice / 100.0 ) + "/month" + " (" + quantity + " QRIDs)");
+    });
+  });
+  //   var action_form_url$ = $('#signup[role="form"]');
+
+  //   $("input[name='checkmark']").change(function(){
+  //     if($(this).is(":checked")){
+  //         $(this).next("label").addClass('checked');
+  //         $("input[name='checkmark']").not(this).next("label").removeClass('checked');
+  //         var action_url = $(this).attr("data-url");
+  //         action_form_url$.attr('action',action_url);
+  //     }
+  //   });
+
+  //   $("input[name='checkmark']").click(function(){
+  //     $("input[name='checkmark-year']").next("label").removeClass('checked');
+  //     $("input[name='checkmark-year']").prop('checked', false)
+  //   });
+
+
+  //   $("input[name='checkmark-year']").change(function(){
+  //     if($(this).is(":checked")){
+  //         $(this).next("label").addClass('checked');
+  //         $("input[name='checkmark-year']").not(this).next("label").removeClass('checked');
+  //         var action_url = $(this).attr("data-url");
+  //         action_form_url$.attr('action',action_url);
+  //     }
+  //   });
+
+  //   $("input[name='checkmark-year']").click(function(){
+  //     $("input[name='checkmark']").next("label").removeClass('checked');
+  //     $("input[name='checkmark']").prop('checked', false);
+  //   });
+
+  //   $("#choose-startup[data-url$='month']").click();
+  // });
+
+%div
+  %h1 Refreshingly Simple Pricing
+  %form{:action => "#"}
+    %div{style: "font:18px/64px Verdana, Arial, Helvetica, sans-serif;color:#00abba;letter-spacing: -1px;"} Pay Monthly
+    .pricing_content
+      %p Pay monthly with no commitment and only for what you use.  Enjoy the benefits of increasingly cheaper QRIDs as you grow your business!
+
+      %br
+      -num = @priceplan.price_per_month
+      %p= "Our simple pricing starts with a fixed admin fee of " + number_to_currency(@priceplan.price_per_month, precision: (num.round == num) ? 0 : 0) + "\/Month plus a usage based amount for the number of QRIDs you use"
+    .row
+      - @priceplan.addons.order(starting_number: :asc).each do |addon|
+        .price
+          %p= (addon.name).gsub(/\n/,'<br>').html_safe
+          .clearfix
+            .ic
+              = image_tag "front/ic.jpg"
+            .ic_con= "#{addon.starting_number} - #{addon.ending_number}"
+          .con_icn
+            %h2
+              - if addon.unit_price == 0.0
+                %span Free
+              - else
+                %span>= number_to_currency(addon.unit_price, precision: 2)
+                \/QRID/Month
+
+    %br
+    %br
+
+    %h1 Pricing Calculator
+    .row
+      .col-md-12
+        %input{id: 'qrid-slider', data: {"slider-min" => 1, "slider-max" => 1000, "slider-step" => 1, "slider-value" => 3}}
+    .row
+      .col-md-offset-4.col-md-4
+        %span{id: 'calculated-price'} $40.00/month (3 QRIDs)
+    %br
+    %br
+    .c_plans
+      %p{:style => "float:right;"}
+        * For higher numbers of QRIDs,
+        %span custom plans
+        are available.
+      %br
+      %p.pull-right 
+        * Members of the National Home Watch Association receive a 10% discount
+        %span{rel: "tooltip",title: "Members of the National Home Watch Association automatically receive a 10% discount on signup."} ?
+  = render partial: 'error_messages'
+  = form_for @tenant, as: :signup, method: :post, url: signup_details_url(plan: @priceplan.name, recurrence: 'month'), html: { name: 'signup', id: 'signup', role: 'form' } do |f|
+    = render 'purchase_review_params', f: f
+    .jumbotron{style: 'padding-top: 12px; padding-bottom: 12px;'}
+      .row
+        .col-lg-12
+          %h1 Provide Your Details
+          %h5{style: 'text-align: left;'} All plans come with a free 30 day trial period.  Your credit card will not be billed until your trial period has expired.
+          %fieldset#user-details
+            = f.text_field :first_name, placeholder: 'First Name'
+            = f.text_field :last_name, placeholder: 'Last Name'
+            = f.text_field :company_name, {:placeholder => 'Company Name'}
+            %div{:style => 'display: block; width: auto; height: auto;'}
+              %span{:style => 'display: inline-block; width: 18%; margin: 4px 0 10px 0; padding: 8px; border: 1px solid #C0C0C0;', :class => 'pull-left'} http://
+              = f.text_field :company_website, {:placeholder => 'Company Website', :class => 'pull-right', :style => 'width: 80%;'}
+          %fieldset#user-message
+            .row
+              .col-lg-8
+                = f.text_field :phone, {:placeholder => 'Contact Phone Number'}
+              .col-lg-4.padding_l_n
+                = f.text_field :phone_ext, {:placeholder => 'ext.'}
+            = f.text_field :admin_email, {:placeholder => 'Admin Email'}
+            %span{rel: "tooltip",title: "Admin Email - This is the email address you will use to log into your account and will be the primary communication email for billing and support account notifications."} ?
+            %div{:style => 'display: block; width: 100%; height: auto; float: left; padding: 0px; margin: 0px; border: 0px;'}
+              %span{:style => 'display: inline-block; width: 15%; margin: 4px 0 10px 0; padding: 8px 6px; border: 1px solid #C0C0C0;'} http://
+              = f.text_field :subdomain, {:placeholder => 'Sub Domain', style: 'float: none; display: inline-block; margin: 4px 0 10px 0; width: 31.25%;'}
+              %span{:style => 'display: inline-block; width: 50%; margin: 4px 0 10px 0; padding: 8px 4px; border: 1px solid #C0C0C0;'} .qridithomewatch.com
+              %span{rel: "tooltip",title: "Subdomain - The subdomain will act as the link to your account.  Your team and your customers will both use this link to log into your new management system.  Try and keep it short and related to your company name. If your company name is 'Toronto Cottage Watch Services' for example you could do one of the following: torontocottagewatch.qridithomewatch.com, torontocws.qridithomewatch.com, tcws.qridithomewatch.com"} ?
+            %div{style: 'clear: both;'}
+            = f.label 'What country are you in?', class: 'pull-left control-label'            
+            = f.country_select :country_code, {priority: %w(US CA), prompt: 'What country are you in ?'}, {class: 'form-control', style: 'margin-bottom: 8px;'}
+      .row
+        .col-lg-12
+          %br/
+          = f.submit name: 'submit', type: 'submit', value: 'Submit', style: 'float: none !important;', disable_with: 'Please wait...'

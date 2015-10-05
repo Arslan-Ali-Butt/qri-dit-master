@@ -1,0 +1,24 @@
+<% width = params[:width] || 800 %>
+<% height = params[:height] || 600 %>
+<% unit = params[:unit] || '' %>
+<?xml version="1.0"?>
+<svg width="<%= width %><%= unit %>" height="<%= height %><%= unit %>" viewPort="0 0 <%= width %> <%= height %>" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <rect x="<%= (height.to_f * 0.0125) %><%= unit %>" y="<%= (height.to_f * 0.0125) %><%= unit %>" width="<%= width.to_f - (height.to_f * 0.0125) * 2 %><%= unit %>" height="<%= (height.to_f * 0.2000) %><%= unit %>" />
+  <text x="<%= (width.to_f * 0.0125) * 4 %><%= unit %>" y="<%= (height.to_f * 0.1416) %><%= unit %>" font-family="Helvetica" font-weight="bold" font-size="<%= [(((width.to_f - (height.to_f * 0.0125) * 2) / (Admin::Tenant.cached_find_by_host(request.host).company_name.length.to_f * height.to_f * 0.059)) * (height.to_f * 0.075)), (height.to_f * 0.075)].min %><%= unit %>" fill="white">
+    <%= Admin::Tenant.cached_find_by_host(request.host).company_name %> QRID Card
+  </text>
+  <image xlink:href="data:image/png;base64,<%= Base64.encode64(@qr.as_png(border_modules: 0).to_s) %>" x="<%= (width.to_f * 0.0125) %><%= unit %>" y="<%= (height.to_f * 0.3000) %><%= unit %>" height="<%= [width.to_f * 0.3333, height.to_f * 0.4444].min %><%= unit %>" width="<%= [width.to_f * 0.3333, height.to_f * 0.4444].min %><%= unit %>" />
+  <text x="<%= (width.to_f * 0.0125) * 3 + (width.to_f * 0.3333) %><%= unit %>" y="<%= (height.to_f * 0.1600) + (height.to_f * 0.0800) + (height.to_f * 0.1) %><%= unit %>" font-family="Helvetica" font-size="<%= (height.to_f * 0.04375) %><%= unit %>" fill="black">
+    Customer ID: <%= @resource.site.owner_id %>
+  </text>
+  <text x="<%= (width.to_f * 0.0125) * 3 + (width.to_f * 0.3333) %><%= unit %>" y="<%= (height.to_f * 0.1600) + (height.to_f * 0.0800) * 2 + (height.to_f * 0.1) %><%= unit %>" font-family="Helvetica" font-size="<%= (height.to_f * 0.04375)*([1.0,28.0/@resource.site.name.length.to_f].min) %><%= unit %>" fill="black">
+    Site Name: <%= @resource.site.name %>
+  </text>
+  <text x="<%= (width.to_f * 0.0125) * 3 + (width.to_f * 0.3333) %><%= unit %>" y="<%= (height.to_f * 0.1600) + (height.to_f * 0.0800) * 3 + (height.to_f * 0.1) %><%= unit %>" font-family="Helvetica" font-size="<%= (height.to_f * 0.04375)*([1.0,28.0/@resource.name.length.to_f].min) %><%= unit %>" fill="black">
+    QRID Name: <%= @resource.name %>
+  </text>
+  <text x="<%= (width.to_f * 0.0125) %><%= unit %>" y="<%= (height.to_f * 0.8550) %><%= unit %>" font-family="Helvetica" font-size="<%= (height.to_f * 0.0875)*([1.0,28.0/start_tenant_my_qrid_url(id: @resource.id).length.to_f].min) %><%= unit %>" fill="black">
+    <%= start_tenant_my_qrid_url(id: @resource.id) %>
+  </text>
+  <image xlink:href="<%= path_to_image('tenant/QRIDit_logo.svg') %>" x="<%= (width.to_f * 0.6400) %><%= unit %>" y="<%= (height.to_f * 0.5800) %><%= unit %>" height="<%= (height.to_f * 0.1665) %><%= unit %>" width="<%= (width.to_f * 0.33333) %><%= unit %>" />
+</svg>

@@ -1,0 +1,9 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td= resource.name
+  %td= resource.site.name
+  %td= resource.site.address.try(:city)
+  %td= resource.site.zone.try(:name)
+  %td= resource.work_type.name
+  %td.center.no-print
+    = tenant_button :start, start_tenant_my_qrid_url(id: resource.id)
+    = tenant_button :map, resource.site.direction_url, target: '_blank'

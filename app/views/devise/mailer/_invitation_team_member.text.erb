@@ -1,0 +1,22 @@
+<% tenant = Admin::Tenant.find(Apartment::Database.current_tenant.match(/\d+/).to_s.to_i) %>
+<% company_name = tenant.company_name %>
+Greetings <%=@resource.name%>,
+<% if tenant.is_affiliate? %>
+You have been invited to use <%=tenant.affiliate_owner.company_name%>, Home Watch Reporting Software by #{company_name}.
+<% else %>
+You have been invited to use QRIDit Home Watch Edition by #{company_name}.
+<%end%>
+Please click the link below to accept your invitation and start using the software.
+<%=accept_user_invitation_url(invitation_token: @token, subdomain: Admin::Tenant.find(Apartment::Database.current_tenant.scan( /\d+$/ ).first).subdomain)%>
+If you don't want to accept the invitation, please ignore this email.
+Your account won't be created until you access the link above and set your password.
+You will login using your email address and a password you create.
+In the future you will log into the system using this url:
+<%=new_user_session_url(subdomain: tenant.subdomain)%>
+Welcome aboard!
+<% if tenant.is_affiliate? %>
+- The <%=tenant.affiliate_owner.company_name%> Team
+<% else %>
+- The Quick Report Systems Team
+<% end %>
+<%= render partial: 'devise/mailer/invitation_footer'%>

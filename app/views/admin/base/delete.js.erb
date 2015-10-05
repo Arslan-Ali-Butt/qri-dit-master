@@ -1,0 +1,18 @@
+<% page_title = "Delete #{@resource.respond_to?(:display_name) ? @resource.display_name : 'resource'}" %>
+
+$('#myModal').html('<%= escape_javascript(render('modal_form', page_title: page_title, resource: @resource)) %>');
+$('#myModal').modal('show');
+
+if ($('#myModal [type="radio"]').length > 0) {
+    $('#myModal [type="submit"]').prop('disabled', true);
+}
+
+$(document).on('change', '#myModal [type="radio"]', function(e) {
+    $('#myModal [type="submit"]').prop('disabled', false);
+    target = $(e.target);
+    if (target.val() == 'destroy') {
+        $('#myModal #last-warning').show();
+    } else {
+        $('#myModal #last-warning').hide();
+    }
+});

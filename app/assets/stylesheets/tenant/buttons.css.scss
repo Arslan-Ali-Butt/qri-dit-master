@@ -1,0 +1,62 @@
+.control-btn {
+  padding: 0 15px;
+  margin-bottom: 10px;
+
+  .btn {
+    margin: 1px 1px;
+  }
+}
+
+.btn-primary {
+  color: #ffffff;
+  background: #000000;
+  &:hover, &.disabled, &[disabled] {
+    background-color: #474747;
+  }
+  &:active, &.active {
+    background-color: #606060;
+  }
+}
+.btn-print {
+  color: #000000;
+  background: #c2c2c2;//#f6f536;
+  &:hover, &.disabled, &[disabled] {
+    background-color: #f6e42e;
+  }
+  &:active, &.active {
+    background-color: #f6d727;
+  }
+}
+.btn-download {
+  color: #000000;
+  background: #c2c2c2;
+  &:hover, &.disabled, &[disabled] {
+    background-color: #b6b6b6;
+  }
+  &:active, &.active {
+    background-color: #9f9f9f;
+  }
+}
+.btn-qrcode {
+  color: #000000;
+  background: #ffffff;
+  border: 1px solid #b4b4b4;
+  &:hover, &.disabled, &[disabled] {
+    background-color: #f1f1f1;
+  }
+  &:active, &.active {
+    background-color: #dbdbdb;
+  }
+}
+.btn-time {
+  color: #ffffff;
+  background: purple;
+  &:hover, &.disabled, &[disabled] {
+    color: #ffffff;
+    background-color: #ba00ba;
+  }
+  &:active, &.active {
+    color: #ffffff;
+    background-color: #ae00ae;
+  }
+}

@@ -1,0 +1,35 @@
+:javascript
+  g_gogogadgetqridbuilder = true;     
+
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-12
+    %h1
+      = page_title
+      %a{href:"#youtube",role:"button",data:{toggle:"modal"}}
+        =image_tag "tenant/film.svg",{style: "height: 40px;",rel:"tooltip",title:"Watch Video"}
+    %div{style:"display: none;"}
+      #youtube.modal.fade
+        .modal-dialog.modal-lg
+          .modal-content
+            .modal-header
+              %button.close{data:{dismiss:"modal"}} &times;
+              .modal-title Using Permatasks in QRIDit Home Watch
+            .modal-body
+              %iframe{width:"100%",height:"480",src:"https://www.youtube.com/embed/quXrCENfWE4?rel=0",frameborder:"0",allowfullscreen:"true"}
+    %p Permatasks are useful for allowing authorized access to a property which has not been scheduled for an assigned visit. We have included some default Permatasks to get you started but you may create custom Permatasks to suit your own circumstances and requirements. A Permatask once activated and applied to a Checklist, will appear as an option alongside or independent of other access options after a QRID has been scanned. As with a regularly assigned visit, the time between scanning in and scanning out will be recorded on the administrator's account.
+    - if @resources.empty?
+      %p There are no tasks yet.
+    - else
+      .form-group.form-group-permatasks
+        = render 'nestable_menu', on_top: true
+
+    .form-group.form-group-permatasks
+      .loading-big
+      %ol.dd-list.sortable-tree.permatask-collection.maticulating{data: {rebuild_url: rebuild_tenant_permatasks_url, default_url: tenant_permatasks_url, max_levels: 8}}
+        = render_sortable_tree @resources, controller_name, false, true
+
+    .form-group.form-group-permatasks
+      = render 'nestable_menu', on_top: false

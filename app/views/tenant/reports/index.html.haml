@@ -1,0 +1,31 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+    %p A report is remotely sent from an assigned team member's smartphone or tablet to your account from any QRID location using 3g or WiFi technology. Upon receipt, look through the contents of the report and make any necessary actions before approving it and sending it off to the client.
+  .col-lg-8
+    = render partial: 'filter'
+.row.text-right
+  = render partial: 'control_buttons', locals: { meta_button: true }
+.row
+  .col-lg-12
+    %table#reports-table.table.table-striped.table-bordered.bootstrap-datatable.datatable{data: {source: tenant_reports_url(format: 'json') }}
+      %thead
+        %tr
+          %th Status
+          %th Flagged
+          %th ID
+          %th QRID
+          %th Reporter
+          %th Site
+          %th Client
+          %th Work Type
+          %th Submitted
+          %th EST.
+          %th Logged
+          %th Latest Unread Client Comment
+          %th.no-print Quick Actions
+      %tbody.report-collection
+        =# render partial: 'resource', collection: @resources

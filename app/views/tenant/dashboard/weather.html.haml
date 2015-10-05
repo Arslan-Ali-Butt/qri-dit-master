@@ -1,0 +1,23 @@
+#weather_wrapper{style: 'background-color: #00b2c0; color: White;'}
+  - if @weather.present?
+    .row
+      .col-lg-10.col-lg-offset-1
+        %h1{style: 'font-size: 30pt;'}= @weather['currently']['summary']
+    .row
+      .col-lg-3.col-lg-offset-1
+        = image_tag "tenant/weather/icons/#{@weather['currently']['icon']}.png"
+      .col-lg-8
+        %span{style: 'font-size: 35pt;'}
+          = @weather['currently']['temperature'].round
+          %sup &deg;
+          = "#{Admin::Tenant.cached_find_by_host(request.host).metric ? "C" : "F"}"
+    .row
+      .col-lg-10.col-lg-offset-1
+        %a{href: "http://forecast.io/#/f/#{@latitude},#{@longitude}", style: 'color: #FFF !important; text-decoration: underline;', target: '_blank'}
+          View full forecast
+        %br
+    .row
+      .col-lg-10.col-lg-offset-1
+        %br
+  - else
+    %h3 An error occurred during the process of retrieving the current weather forecast.

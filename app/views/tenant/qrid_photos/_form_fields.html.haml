@@ -1,0 +1,11 @@
+%fieldset
+  .form-group
+    - unless f.object.new_record?
+      = f.label :title, 'Title', class: 'col-sm-2 control-label'
+      .col-sm-10
+        = f.text_field :title, class: 'form-control'
+      = f.label :description, 'Detail', class: 'col-sm-2 control-label'
+      .col-sm-10
+        = f.text_area :description, class: 'form-control', rows: 5
+
+    .progress-container.col-sm-10

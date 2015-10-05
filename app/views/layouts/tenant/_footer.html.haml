@@ -1,0 +1,37 @@
+%footer
+  :javascript
+    $(document).ready(function(){
+      $('#myModal').modal('hide');
+    });   
+
+  %section
+    %section
+      .clearfix
+      -unless @tenant.is_affiliate?
+        %a.footer-brand.col-lg-2.col-sm-1.col-xs-12.pull-left{href: tenant_root_url}
+          %span QRIDit
+        -unless current_user.role?(:reporter) || current_user.role?(:client)
+          .footer-right-col
+            =link_to 'Report a Bug', tenant_support_report_path, remote: true, id: 'support-button'
+            .mobile-footer-wrapper
+              =link_to 'Request a Feature', tenant_support_request_path, remote: true, class: 'hidden-sm hidden-xs', id: 'help-button'
+      -else
+        %a.col-lg-2.col-sm-1.col-xs-12.pull-left{href: tenant_root_url}
+          -current_tenant=Apartment::Tenant.current_tenant
+          -Apartment::Tenant.switch("tenant#{@tenant.parent_id}")
+          -unless @tenant.affiliate_owner.logo.nil?
+            =image_tag(@tenant.affiliate_owner.logo.photo.expiring_url(9999999, :thumbnail)) #TODO find way to show logo without timeout
+          -Apartment::Tenant.switch(current_tenant)
+      -if current_user.role?(:client)
+        .footer-right-col.client_phone_info
+          %div=number_to_phone(Admin::Tenant.cached_find_by_host(request.host).phone,area_code: true, extension: Admin::Tenant.cached_find_by_host(request.host).phone_ext)
+          %div="|"
+          %div=Admin::Tenant.cached_find_by_host(request.host).company_name
+      %span.company
+        Creative Innovation at Work &trade;
+      %span.copyright
+        Copyright &copy;
+        =Time.zone.now.year
+        %a{href: 'http://quickreportsystems.com'} Quick Report Systems &trade;
+      %span.brand
+        QR Code is a registered trademark of DENSO WAVE INCOPORATED.

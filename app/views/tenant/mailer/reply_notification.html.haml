@@ -1,0 +1,14 @@
+- content_for(:header, "New Report Comment Submitted")
+- callToActionUrl = tenant_report_url(id: @report, subdomain: Admin::Tenant.find(Apartment::Tenant.current_tenant.scan( /\d+$/ ).first).subdomain)
+
+%p
+  Hello #{@recipient.name},
+%p
+  #{@author.name} has just left a comment on their #{@report.submitted_at} report.
+%p
+  %i= @note.note
+
+%p
+  You can use the following link to respond to their comment.
+
+= render "layouts/emailbrand/call_to_action_button", :line1 => "Click here to", :line2 => "Respond", :line3 => "", :linkUrl => callToActionUrl

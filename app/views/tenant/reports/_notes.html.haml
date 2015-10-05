@@ -1,0 +1,31 @@
+.row#report_comments{style: 'page-break-before: always; page-break-inside: avoid;'}
+  .col-lg-12
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title General Comments
+      .panel-body
+      - if @resource.sent_at.nil? || (!@resource.replied_at.nil? && @resource.sent_at > @resource.replied_at)
+        %ul.media-list.no-comments
+          %li.media
+            .media-body
+              %p{style: "opacity: 0.8; text-indent: 24px;"} There are currently no comments for this report.
+        = link_to 'Submit to Client', new_tenant_report_note_url(report_id: @resource.id, send_to: 'c', submission: true), remote: true, class: 'btn btn-success no-print new-report-comment', id: 'submit_button'
+      - else
+        = link_to 'Add New Comment', new_tenant_report_note_url(report_id: @resource.id, send_to: 'c'), remote: true, class: 'btn btn-success no-print new-report-comment'
+
+        - if Tenant::ReportNote.by_author_role('Client').where(report_id: @resource.id).where(unread_by_manager: true).count > 0
+          %span.pull-right.mark-all-as-read-container{style: 'padding-right: 10px'}
+            %button.btn.btn-success.no-print.mark-all-as-read{data: {'loading-text' => 'Please wait...'}} Mark all comments as read
+            = tenant_tooltip_hint 'This will remove the report indicator in the main menu and set the status of this report in the reports table to \'Opened Report\'. It will not send a notification to this client.'
+        %br
+
+      %table.table.table-striped.table-bordered.report-comments{data: { comments_url: tenant_report_notes_url(@resource.id)}}
+        /
+          %thead
+            %tr
+              %th Author
+              %th Comment
+              %th Sent
+              %th Quick Actions
+        %tbody.reportnote-collection{id: "collection_#{@resource.id}"}
+          = render partial: 'tenant/report_notes/resource', collection: @resource.notes.order(created_at: :desc), locals: {submission_note: @resource.notes.order(created_at: :desc).last, reception_note: @resource.notes.where(author_id: @resource.qrid.site.owner.id).order(created_at: :desc).last}

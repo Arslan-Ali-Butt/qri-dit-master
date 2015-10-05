@@ -1,0 +1,25 @@
+- page_title = 'Team'
+= tenant_page_title page_title
+
+.row
+  .col-lg-4
+    %h1= page_title
+    %p Use QRIDit to keep vital information on all of your team members such as access levels, contracted hours, emergency contact information as well as establishing the roles of all staff throughout your Home Watch business.
+  .col-lg-8
+    = render 'filter'
+.row.text-right
+  = render 'control_buttons'
+.row
+  .col-lg-12
+    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable#staff-table{data: {source: tenant_datatables_staff_index_url(format: 'json', context: 'datatables') }}
+      %thead
+        %tr
+          %th Status
+          %th Id
+          %th Name
+          %th Role
+          %th Base zone
+          %th Worked This Week
+          %th.no-print Quick Actions
+      %tbody.user-collection
+        =# render partial: 'resource', collection: @resources

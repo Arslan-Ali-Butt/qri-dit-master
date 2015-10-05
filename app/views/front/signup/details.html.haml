@@ -1,0 +1,126 @@
+- month_name = %W(January February March April May June July August September October November December)
+:javascript
+  $(document).ready(function() {
+    Stripe.setPublishableKey("#{ENV['STRIPE_PUBLISHABLE_KEY']}");
+
+    var g_stripe_alert$ = $('#stripe_alert');
+    var g_stripe_error_response$ = $('#stripe_error_response');
+
+    var g_billingaddress_country$ = $('[name="signup[billingaddress_country]"]');    
+    var g_billingaddress_state_form_group$ = $('#billing_address_state_form_group');
+
+    var g_new_signup$ = $('#new_signup');
+
+    var g_signup_state_code_wrapper$ = $('#signup_state_code_wrapper');
+
+    var billingaddress_country_param = '#{params[:signup][:billingaddress_country]}';
+    var billingaddress_state_param = '#{params[:signup][:billingaddress_state]}';
+
+    if(billingaddress_country_param) {
+      $.get('/signup/subregion_select/' + billingaddress_country_param + '.html', function(html) {
+        $(g_signup_state_code_wrapper$).html(html);
+        if(billingaddress_state_param) {
+          var g_billingaddress_state$ = $('[name="signup[billingaddress_state]"]');
+          $(g_billingaddress_state$).val(billingaddress_state_param);
+        }                
+      });      
+    } else {
+      $.get('/signup/subregion_select/CA.html', function(html) {
+        $(g_signup_state_code_wrapper$).html(html);
+      });
+    }
+
+    g_billingaddress_country$.change(function() {      
+      var country_code = $(this).val();
+      if(country_code.length > 0) {
+        $.get('/signup/subregion_select/' + country_code + '.html', function(html) {
+          g_signup_state_code_wrapper$.html(html);          
+        });
+      }
+    });
+    
+    g_new_signup$.submit(function(evt) {
+      $form = $(this);
+
+      $('.continue-btn').button('loading');
+
+      evt.preventDefault();
+
+      Stripe.card.createToken($form, function(status, response) {
+        if(response.error) {
+          g_stripe_error_response$.html($('<p><span><b>Oh snap!</b> An error occurred while processing this request.</span></p><p>' + response.error.message + '</p>'));
+          g_stripe_alert$.show();
+          $('.continue-btn').button('reset');
+        } else {
+          g_new_signup$.append('<input type=\'hidden\' name=\'signup[card_token]\' value=\'' + response['id'] + '\'>');
+          g_new_signup$.append('<input type=\'hidden\' name=\'signup[card_brand]\' value=\'' + response['card']['brand'] + '\'>');
+          g_new_signup$.append('<input type=\'hidden\' name=\'signup[card_last4]\' value=\'' + response['card']['last4'] + '\'>');
+          g_new_signup$.get(0).submit();
+        }
+      });
+
+      return(false);
+    });
+  });
+= page_title 'Sign up'
+.bottom_content{:style => "border:0px"}
+  .container.cont_main{:style => "margin-top:0px;"}
+    .row
+      .col-lg-12
+        = form_for @tenant, as: :signup, url: signup_confirmation_url, method: :post, html: {class: 'form-horizontal', role: 'form'} do |f|
+          = render partial: 'purchase_params', locals: {f: f}
+          %legend Billing Information
+          = render partial: 'error_messages', locals: {f: f}
+          %div.bg-info{style: 'padding: 18px;border-radius:  6px; display: block; width: 100%;'}
+            %p Please enter your credit card billing information below.  This will be used for billing purposes only.
+          %br
+          .form-group
+            = f.label :name_on_card, 'Name on Card', class: 'col-sm-3 control-label'
+            .col-sm-3
+              = text_field_tag nil, nil, class: 'form-control', data: { stripe: 'name'}
+          .form-group
+            = f.label :card_number, 'Credit Card Number', class: 'col-sm-3 control-label'
+            .col-sm-9
+              = text_field_tag nil, nil, class: 'form-control', data: { stripe: 'number'}
+          .form-group
+            = f.label :card_cvc, 'CVC', class: 'col-sm-3 control-label'
+            .col-sm-1
+              = text_field_tag nil, nil, class: 'form-control', data: { stripe: 'cvc'}
+              %span{rel: "tooltip",title: "CVC - http://www.cvvnumber.com/cvv.html"} ?
+            = f.label :card_exp_month, 'Exp. Month', class: 'col-sm-2 control-label'
+            .col-sm-2
+              = select_tag nil, options_for_select((1..12).to_a.map{ |m| ['%02d - %s' % [m,month_name[m - 1]],m] }), prompt: 'Select', class: 'form-control', data: { stripe: 'exp-month'}
+            = f.label :card_exp_year, 'Exp. Year', class: 'col-sm-2 control-label'
+            .col-sm-2
+              = select_tag nil, options_for_select((0..7).to_a.map{ |y| [Time.now.year + y, Time.now.year + y]}, {prompt: 'Select'}), prompt: 'Select', class: 'form-control', data: { stripe: 'exp-year'}
+          .form-group
+            = f.label :billingaddress_country, 'Country', class: 'col-sm-3 control-label'
+            .col-sm-9
+              = f.country_select :billingaddress_country, {priority: %w(US CA), prompt: 'Please select a country'}, class: 'form-control'
+          .form-group
+            = f.label :billingaddress_line1,'Address Line 1', class: 'col-sm-3 control-label'
+            .col-sm-9
+              = f.text_field :billingaddress_line1, class: 'form-control'
+          .form-group
+            = f.label :billingaddress_line2, 'Address Line 2', class: 'col-sm-3 control-label'
+            .col-sm-9
+              = f.text_field :billingaddress_line2, class: 'form-control'
+          .form-group
+            = f.label :billingaddress_city, 'City', class: 'col-sm-3 control-label'
+            .col-sm-2
+              = f.text_field :billingaddress_city, class: 'form-control'
+            #billing_address_state_form_group
+              = f.label :billingaddress_state, 'State/Province', class: 'col-sm-2 control-label'
+              .col-sm-2
+                #signup_state_code_wrapper
+            = f.label :billingaddress_zip, 'Postal/Zip', class: 'col-sm-1 control-label'
+            .col-sm-2
+              = f.text_field :billingaddress_zip, class: 'form-control'
+          .form-group
+            = f.label :billing_coupon, 'Coupon Code', class: 'col-sm-3 control-label'
+            .col-sm-2
+              = f.text_field :billing_coupon, class: 'form-control'
+              %span{rel: "tooltip",title: "If you have a coupon code you can enter it here"} ?
+          .form-group
+            .col-sm-12
+              = f.button 'Continue', name: 'button', type: 'submit', class: 'btn btn-primary pull-right continue-btn', data: {'loading-text' => 'Please Wait...'}

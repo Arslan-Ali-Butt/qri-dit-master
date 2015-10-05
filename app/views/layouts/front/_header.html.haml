@@ -1,0 +1,28 @@
+.navbar-wrapper
+  .navbar.navbar-inverse.navbar-static-top{:role => "navigation"}
+    .container
+      .navbar-header
+        %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+        %a.navbar-brand.logo{:href => "index"}
+          = image_tag "front/logo.png"
+          /
+      = render 'front/pages/navigation'
+.header_home
+  .container.cont_main
+    .carousel-caption_1
+      .row
+        .col-lg-7
+          .sub_h_r
+            %h1{:style => "color:#00acba"} This is QRIDit Home Watch
+            %h2{:style =>"font-style:italic"}It's What Your Clients Want
+            .divr
+              = image_tag "front/div.png"
+              /
+            %p Your clients are more than an integral part of your business, they are your business. The condition and security of their properties are your prime concern year in, year out. Clients look to you and your team to ensure that their investments are maintained and kept in full working order. From the roof to the plumbing you are hired to understand it all.
+        .col-lg-5
+          / <img src="images/video.jpg" alt="" title="" />
+          %iframe{:height => "192", :src => "//www.youtube.com/embed/#{ENV['FRONT_VIDEO_CODE']}?rel=0", :width => "344",:allowfullscreen => "",:frameborder => "0"}

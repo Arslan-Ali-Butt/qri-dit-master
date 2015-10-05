@@ -1,0 +1,67 @@
+%fieldset
+  .form-group.row#wrapper_start_at
+    = f.label :start_at, 'Start', class: 'col-sm-2 control-label'
+    = f.hidden_field :start_at, value: @resource.start_at.try(:to_i)
+    .col-sm-4
+      .input-group.date
+        %span.input-group-addon
+          %i.fa.fa-calendar
+        %input.form-control.date-picker{type: 'text', data: {'date-format' => 'dd/mm/yyyy'}}
+    .col-sm-4.col-sm-offset-1
+      .input-group.bootstrap-timepicker
+        %span.input-group-addon
+          %i.fa.fa-clock-o
+        %input.form-control.time-picker{type: 'text'}
+  .form-group#wrapper_end_at{style: 'display:none;'}
+    = f.label :end_at, 'Duration', class: 'col-sm-2 control-label'
+    = f.hidden_field :end_at, value: @resource.end_at.try(:to_i)
+    .col-sm-4
+      %input.form-control#duration{type: 'text'}
+    = tenant_tooltip_hint 'The number of hours it should take to complete QRID. You can use decimals (ie. 2.75 would = 2 hours and 45 minutes)'
+  .form-group
+    = f.label :recurrence, 'Repeat', class: 'col-sm-2 control-label'
+    .col-sm-4
+      = f.select :recurrence, options_for_select(Tenant::Assignment::RECURRENCE, @resource.recurrence), {include_blank: 'Do not repeat'}, {class: 'form-control'}
+    .col-sm-6
+      .row#recurring_until_at{style: 'display:none'}
+        = f.label :recurring_until_at, 'Until', class: 'control-label col-sm-2'
+        = f.hidden_field :recurring_until_at, value: @resource.recurring_until_at.try(:to_i)
+        .col-sm-8
+          .input-group.date
+            %span.input-group-addon
+              %i.fa.fa-calendar
+            %input.form-control.date-picker{type: 'text', data: {'date-format' => 'dd/mm/yyyy'}}
+
+  - unless @assignee_id
+    .form-group
+      = f.label :assignee_id, 'Reporter', class: 'col-sm-2 control-label'
+      .col-sm-10
+        = f.collection_select :assignee_id, Tenant::Staff.active.by_role(['Reporter','Admin','Manager']).order(:name), :id, :name, {prompt: true}, {class: 'form-control'}
+  .form-group
+    = label_tag :owner_id, 'Client', class: 'col-sm-2 control-label'
+    .col-sm-8
+      = select_tag :owner_id, options_from_collection_for_select(Tenant::Client.by_role('Client').active.order(:name), :id, :name, f.object.try(:qrid).try(:site).try(:owner_id)), prompt: 'Filter by Client', class: 'form-control selectize-client-id funnel'
+  .form-group
+    = label_tag :site_id, 'Site', class: 'col-sm-2 control-label'
+    .col-sm-8
+      = select_tag :site_id, options_from_collection_for_select(Tenant::Site.active.order(:name), :id, :name, f.object.try(:qrid).try(:site_id)), prompt: 'Filter by Site', class: 'form-control selectize-site-id funnel'
+  .form-group
+    = f.label :qrid_id, 'QRID', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.select :qrid_id, options_for_select(Tenant::Qrid.active.joins(:site).map{ |c| ["#{c.qrid_name} (#{c.estimated_duration} hours)", c.id, {'data-duration' => c.estimated_duration}] }, @resource.qrid_id), {prompt: true}, {class: 'form-control selectize-qrid-id', disabled: @assignee_id.present? }
+  .form-group
+    = f.label :comment, 'Quick Note', class: 'col-sm-2 control-label'
+    .col-sm-9
+      -unless f.object.try(:qrid).try(:site).try(:instruction).blank?
+        %b Site Instruction:
+        =f.object.try(:qrid).try(:site).try(:instruction)
+        %br
+      -unless f.object.try(:qrid).try(:instruction).blank?
+        %b QRID Instruction:
+        =f.object.try(:qrid).try(:instruction)
+        %br
+      = f.text_area :comment, class: 'form-control', rows: 3
+    = tenant_tooltip_hint 'A short note for the reporter carrying out this assignment. (ie. Grab me a coffee on the way back!)'
+
+  
+  =  f.hidden_field :overrided_start_at, value: @resource.overrided_start_at

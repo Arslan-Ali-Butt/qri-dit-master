@@ -1,0 +1,41 @@
+= tenant_page_title "Account management"
+
+= render 'devise/shared/error_messages'
+
+.row
+  .col-xs-12
+    .box
+      .page-header
+        %h2
+          Edit my account
+        .box-icon
+      .box-content
+        = form_for(resource, as: resource_name, url: user_account_path, html: { class: 'form-horizontal', role: 'form' }) do |f|
+          %fieldset
+            .form-group
+              = f.label :email, 'Email', class: 'col-sm-2 control-label'
+              .col-sm-10
+                = f.email_field :email, autofocus: true, class: 'form-control'
+                - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+                  %p.help-block
+                    = "Currently waiting confirmation for: #{resource.unconfirmed_email}"
+            .form-group
+              = f.label :password, 'New password', class: 'col-sm-2 control-label'
+              .col-sm-10
+                = f.password_field :password, autocomplete: 'off', class: 'form-control'
+                %p.help-block
+                  (leave blank if you don't want to change it)
+            .form-group
+              = f.label :password_confirmation, 'Confirm new password', class: 'col-sm-2 control-label'
+              .col-sm-10
+                = f.password_field :password_confirmation, class: 'form-control'
+            .form-group
+              = f.label :current_password, 'Current password', class: 'col-sm-2 control-label'
+              .col-sm-10
+                = f.password_field :current_password, class: 'form-control', required: ''
+                %p.help-block
+                  (we need your current password to confirm your changes)
+            .form-group.form-actions
+              .col-sm-offset-2.col-sm-10
+                = f.button 'Save changes', name: nil, type: 'submit', class: 'btn btn-primary'
+                = link_to 'Cancel', tenant_root_url, class: 'btn btn-default', role: 'button'

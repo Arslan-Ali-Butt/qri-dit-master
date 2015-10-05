@@ -1,0 +1,21 @@
+.box
+  .box-header{'data-original-title' => ''}
+    %h2
+      %i.fa.fa-book
+      = succeed "Inbox" do
+        %span.break
+    .box-icon
+      %a.btn-minimize{href: '#'}
+        %i.fa.fa-chevron-up
+  .box-content
+    %table.table.table-striped.table-bordered#inbox
+      %thead
+        %tr
+          %th Client
+          %th Message
+      %tbody.report-collection
+        - inbox = Tenant::ReportNote.joins(:report, author: [:roles]).includes(:author).includes(:report).where('tenant_roles.name = ?', 'Client').where('tenant_report_notes.unread_by_manager=? or tenant_reports.unread_by_manager=?',true,true).order(created_at: :desc)
+        - inbox.each do |resource|
+          %tr{data: {'resource-id' => resource.id}}
+            %td= link_to resource.author.name, tenant_client_url(resource.author)
+            %td=link_to resource.note, tenant_report_url(resource.report)

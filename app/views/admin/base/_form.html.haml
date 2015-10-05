@@ -1,0 +1,36 @@
+- method = resource.new_record? ? 'post' : (action_name == 'delete' ? 'delete' : 'patch')
+- case method
+  - when 'post'
+    - url = { controller: controller_name, action: 'index' }
+    - button = 'Create'
+  - when 'delete'
+    - url = { controller: controller_name, action: 'destroy', id: resource.id }
+    - button = 'Confirm'
+  - else
+    - url = { controller: controller_name, action: 'update', id: resource.id }
+    - button = 'Save changes'
+
+= render 'error_messages', resource: resource
+.row
+  .col-lg-12
+    .box
+      .box-header
+        %h2
+          %i.fa.fa-edit
+          = page_title
+        .box-icon
+          %a.btn-minimize{href: '#'}
+            %i.fa.fa-chevron-up
+          %a.btn-close{href: '#'}
+            %i.fa.fa-times
+      .box-content
+        = form_for resource, url: url, method: method, html: {class: "form-horizontal #{resource.class.name.demodulize.downcase}-form", role: 'form'} do |f|
+          - if method == 'delete'
+            = render 'delete_fields', f: f
+          - else
+            = render 'form_fields', f: f
+          %fieldset
+            .form-group.form-actions
+              .col-sm-offset-2.col-sm-10
+                = f.button button, name: nil, type: 'submit', class: "btn #{method == 'delete' ? 'btn-danger' : 'btn-primary'}"
+                = link_to 'Cancel', url_for(controller: controller_name), class: 'btn btn-default', role: 'button'

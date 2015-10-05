@@ -1,0 +1,39 @@
+%form{method: :get, class: 'form-horizontal well report-filter-form no-print', role: 'form'}
+  .row
+    .col-sm-6
+      .form-group
+        = label_tag :site_id, 'Site', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :site_id, options_from_collection_for_select(Tenant::Site.active.order(:name), :id, :name, @site_id), prompt: 'All', class: 'form-control selectize'
+      .form-group
+        = label_tag :qrid_id, 'QRID', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :qrid_id, options_from_collection_for_select(Tenant::Qrid.active.order(:name), :id, :name, @qrid_id), prompt: 'All', class: 'form-control selectize'
+      .form-group
+        = label_tag :work_type_id, 'Work type', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :work_type_id, options_from_collection_for_select(Tenant::WorkType.order(:name), :id, :name, @work_type_id), prompt: 'All', class: 'form-control selectize'
+    .col-sm-6
+      .form-group
+        = label_tag :zone_id, 'Zone', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :zone_id, options_from_collection_for_select(Tenant::Zone.order(:name), :id, :name, @zone_id), prompt: 'All', class: 'form-control selectize'
+      .form-group#wrapper_start_at
+        = label_tag :start_at, 'From', class: 'col-sm-4 control-label'
+        = hidden_field_tag :start_at, @start_at.try(:to_datetime).try(:to_i)
+        .col-sm-8
+          .input-group.date
+            %span.input-group-addon
+              %i.fa.fa-calendar
+            %input.form-control.date-picker{type: 'text', data: {'date-format' => 'dd/mm/yyyy'}}
+      .form-group#wrapper_end_at
+        = label_tag :end_at, 'Until', class: 'col-sm-4 control-label'
+        = hidden_field_tag :end_at, @end_at.try(:to_datetime).try(:to_i)
+        .col-sm-8
+          .input-group.date
+            %span.input-group-addon
+              %i.fa.fa-calendar
+            %input.form-control.date-picker{type: 'text', data: {'date-format' => 'dd/mm/yyyy'}}
+      .form-group.row.form-actions
+        .col-sm-offset-9.col-sm-3
+          = button_tag 'Filter', name: nil, type: 'submit', class: 'btn btn-primary pull-right'

@@ -1,0 +1,78 @@
+%script{type: 'text/javascript'}
+  = render partial: 'change_card_details', formats: [:js]
+- month_names = %W(January February March April May June July August September October November December)
+#stripe_alert.alert.alert-danger{style: 'display: none'}
+  #stripe_error_response
+= form_for @tenant, url: tenant_process_change_card_details_url(format: :js), method: :post, as: :change_card_details, html: {multipart: 'true', class: 'form-horizontal', role: 'form', name: 'change_card_details'} do |f|
+  %h1 Billing Info
+  %fieldset
+    %legend.col-offset-settings-25  Change Card Details
+    .row
+      .col-sm-8.col-sm-offset-1
+        .form-group
+          = f.label :name_on_card, 'Name on Card', class: 'col-sm-2 control-label text-right'
+          .col-sm-4
+            = text_field_tag nil, nil, class: 'form-control', data: { stripe: 'name'}
+        .form-group
+          = f.label :card_number, 'Card Number', class: 'col-sm-2 control-label text-right'
+          .col-sm-4
+            = text_field_tag nil, nil, class: 'form-control', data: { stripe: 'number'}
+          = f.label :card_cvc, 'Card CVC Number', class: 'col-sm-2 control-label text-right'
+          .col-sm-2
+            = text_field_tag nil, nil, class: 'form-control', data: { stripe: 'cvc'}
+        .form-group
+          = f.label :card_exp_month, 'Card Expiration Month', class: 'col-sm-2 control-label text-right'
+          .col-sm-4
+            = select_tag nil, options_for_select((1..12).to_a.map{ |m| ['%02d - %s' % [m,month_names[m - 1]],m] }), prompt: 'Select', class: 'form-control', data: { stripe: 'exp-month'}
+          = f.label :card_exp_year, 'Card Expiration Year', class: 'col-sm-2 control-label text-right'
+          .col-sm-4
+            = select_tag nil, options_for_select((0..7).to_a.map{ |y| [Time.now.year + y, Time.now.year + y]}, {prompt: 'Select'}), prompt: 'Select', class: 'form-control', data: { stripe: 'exp-year'}
+        .form-group
+          .col-sm-1.pull-right
+            = f.submit "Update", { class: 'btn btn-success', id: 'update_button' }
+= form_for @tenant, html: {class: 'form-horizontal', role: 'form'} do |f|
+  - if @subscription
+    %fieldset
+      %legend.col-offset-settings-25 Change Plan Details
+      - if @subscription.activated_at.nil?
+        - next_charge = Time.at(@subscription.current_period_ends_at).to_i
+        .alert.alert-info
+          = "You free trial will expire in #{distance_of_time_in_words(Time.now, Time.at(@subscription.current_period_ends_at))} on "
+          %span.datetime{data: {datetime: Time.at(@subscription.current_period_ends_at).to_i }}
+      - else
+        - next_charge = Time.at(@subscription.current_period_ends_at).try(:to_i)
+      .form-group
+        = f.label :priceplan_id, 'Priceplan', class: 'col-sm-2 control-label'
+        .col-sm-10
+          %p.form-control-static{style: 'display: inline; vertical-align: top;'}= "#{@tenant.priceplan.title} (#{Admin::Tenant::PAYMENT_RECURRENCE[@tenant.billing_recurrence.to_i] == 'month' ? 'Monthly' : 'Yearly'})"
+          / .row{style: 'margin-top: 14px;'}
+          /   .col-sm-12
+          /     = link_to 'Upgrade', tenant_change_plan_details_url(id: @tenant.id, format: :js), remote: true, class: 'btn btn-success', style: 'display: inline; vertical-align: top;'
+      .form-group.row{style: 'margin-top: 14px;'}
+        = f.label :priceplan_id, 'QRIDs used', class: 'col-sm-2 control-label'
+        .col-sm-10
+          %p.form-control-static{style: 'display: inline; vertical-align: top;'}= "#{Tenant::Qrid.active.count}"
+      
+      .form-group.row{style: 'margin-top: 14px;'}
+        %label.col-sm-2.control-label &nbsp;
+        %p.col-sm-10 
+          Next Charge: 
+          %span.datetime{data: {datetime: next_charge }}
+  
+  %fieldset
+    %legend.col-offset-settings-25  Statements
+
+    .row
+      .col-lg-12
+        %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+          %thead
+            %tr
+              %th Statement Number
+              %th Description
+              %th Billing Period
+              / %th Method
+              %th Status
+              %th Amount
+              %th.no-print Quick Actions
+          %tbody.report-collection
+            = render partial: 'statements', locals: { statement_list_items: @statement_list_items}

@@ -1,0 +1,5 @@
+$('#myModal').modal('hide');
+$('<%= escape_javascript(render('layouts/tenant/flash_message')) %>').appendTo('#flash').hide().fadeIn().delay(3000).fadeOut();
+$('#import-clients-button').addClass('disabled');
+
+$('<%= escape_javascript(render('importing_clients')) %>').appendTo('.status-container');

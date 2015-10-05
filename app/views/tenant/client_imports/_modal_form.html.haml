@@ -1,0 +1,31 @@
+- method = resource.new_record? ? 'post' : (action_name == 'delete' ? 'delete' : 'patch')
+
+
+.modal-dialog{style: (%w(clients sites).include?(controller_name) && action_name != 'delete') ? 'width: 960px' : ''}
+  .modal-content
+
+    - form_classes = "form-horizontal #{resource.class.name.demodulize.downcase}-form"
+    - form_classes = "#{form_classes} fileinput-button"
+
+    - url = resource.new_record? ? tenant_client_imports_url : tenant_client_import_url(resource)
+
+    = form_for resource, url: url, method: method, remote: true, html: {class: form_classes, role: 'form', multipart: true } do |f|
+      .modal-header
+        %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+        %h4.modal-title= page_title
+      .modal-body
+        = render 'error_messages', resource: resource
+
+        %fieldset
+          .form-group
+            .progress-container.col-sm-10
+
+        = hidden_field_tag(:return_path, params[:return_path])  if params[:return_path].present?
+      .modal-footer
+        
+        #qrid_photo_upload_button
+          = f.file_field :user_import_file, class: 'form-control qrid_photo_input', autofocus: true, multiple: true
+          %span.btn.btn-success
+            %i.fa.fa-upload
+            Upload Spreadsheet
+        %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} Close

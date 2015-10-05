@@ -1,0 +1,55 @@
+!!!
+%html
+  %head
+    %title= content_for?(:title) ? content_for(:title) : 'QRIDit Home Watch Edition'
+    //%meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+    = render 'layouts/favicon'
+    = stylesheet_link_tag    'front/application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'front/application', 'data-turbolinks-track' => true
+    %script{type: 'text/javascript', src: 'https://js.stripe.com/v2/stripe-dss3.js'}
+    = csrf_meta_tags
+    /Start Jumplead Code
+    :javascript
+      window.Jumplead||function(b,d){function k(){return["<",l,' onload="var d=',c,";d."+m+"('head')[0].",n,"(d.",p,"('script')).",e,"='",q,"'\"></",l,">"].join("")}var c="document",f=b[c],l="body",p="createElement",m="getElementsByTagName",r=f[m]("head")[0],n="appendChild",a=f[p]("iframe"),e="src",g,q="//cdn.jumplead.com/tracking_code.js";b.jump=b.jump||function(){(b.jump.q=b.jump.q||[]).push(arguments)};d.events=b.jump;a.style.display="none";r[n](a);try{a.contentWindow[c].open()}catch(s){d.domain=f.domain,
+          g="javascript:var d="+c+".open();d.domain='"+f.domain+"';",a[e]=g+"void(0);"}try{var h=a.contentWindow[c];h.write(k());h.close();h.params=d}catch(t){a[e]=g+'d.write("'+k().replace(/"/g,'\"')+'");d.close();',a[e].contentDocument.params=d}}
+          (window,{account:"JL-1398880117-1263",version:4});
+    /End Jumplead Code
+  %body
+    -if current_page?(url_for(:controller => 'pages', :action => 'features'))
+      = yield
+    -elsif current_page?("/index")
+      = render 'layouts/front/header'
+      = yield
+    -elsif current_page?(url_for(:controller => 'pages', :action => 'index'))
+      = render 'layouts/front/header'
+      = yield
+    -elsif current_page?(url_for(:controller => 'pages', :action => 'contact'))
+      = yield
+    -elsif current_page?(url_for(:controller => 'pages', :action => 'technology'))
+      = yield
+    -elsif current_page?('/purchase') || current_page?(url_for(:controller => 'signup', :action => 'purchase'))
+      = yield
+    -else
+      = render '/front/signup/purchase_header'
+      = yield
+    / footer start
+    = render 'layouts/front/footer' if (controller.controller_name != "signup")
+    / footer end
+:javascript
+  $(function(){
+    $('#side_nav') .css({'height': (($(window).height()))+'px'});
+    $(window).resize(function(){
+     $('#side_nav') .css({'height': (($(window).height()))+'px'});
+    });
+  });
+:javascript
+  $(document).ready(function(){
+      $("#side_nav").css('margin-right', '-350px');
+    $("#hide").click(function(){
+      $("#side_nav").css('margin-right', '-350px');
+    });
+    $("#men_icn").click(function(){
+      $("#side_nav").css('margin-right', '0px');
+      // $("#side_nav").css('margin-right', '0px');
+    });
+  });

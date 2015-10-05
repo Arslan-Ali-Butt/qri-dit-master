@@ -1,0 +1,5 @@
+Paperclip::Attachment.default_options.update(
+  hash_secret: 'aRbdDwbkBhTXQspopIyQLB7P2BhOkuSJ2wAAtslO69ZwK6Iz0j4morGS62pErg85CmPqjRs+KU2MeCZjOhaQS2LFxX5bx7dK/kiuodUI4/s2jKEqVUREP8Trngj6WPU7XvxK9Gb5Z0907c1SQEuioyhgIcnjjzBvd73T3soQAVM='
+)
+
+

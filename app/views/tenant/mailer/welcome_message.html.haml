@@ -1,0 +1,52 @@
+- callToActionUrl = tenant_root_url
+- tenant=Admin::Tenant.find(Apartment::Database.current_tenant.match(/\d+/).to_s.to_i)
+-if tenant.is_affiliate?
+  - content_for(:header, "Welcome to #{tenant.affiliate_owner.company_name}, Home Watch Reporting Software, #{@recipient.name}!")
+-else
+  - content_for(:header, "Welcome to QRIDit Home Watch Edition, #{@recipient.name}!")
+
+
+%p
+  Hello #{@recipient.name},
+-if tenant.is_affiliate?
+  %p="Thank you for purchasing #{tenant.affiliate_owner.company_name}, Home Watch Reporting Software. You have made a great decision. Managing your home watch business has now become a lot easier!"
+-else
+  %p Thank you for purchasing the QRIDit Home Watch Edition software. You have made a great decision. Managing your home watch business has now become a lot easier!
+%p Here is your account information:
+%p
+  Your custom link:
+  = link_to tenant_root_url, tenant_root_url
+  %br
+  Email: #{@recipient.email}
+  %br
+  Password:
+  %i
+    &lt;Not exposed for security purposes.&gt;
+%p
+
+  If you find yourself in need of assistance, or would like to suggest new features for the product, please do not hesitate to email
+  -if tenant.is_affiliate?
+    = link_to tenant.affiliate_owner.admin_email, "mailto:#{tenant.affiliate_owner.admin_email}"
+  -else
+    = link_to 'support@qridithomewatch.com', 'mailto:support@qridithomewatch.com'
+    or click support inside the QRIDit Home Watch Edition software.
+%p
+  In the future you will log into the system using this link:
+  = link_to new_user_session_url, new_user_session_url
+-if tenant.is_affiliate?
+  %p
+    You can provide this link to your reporters and customers or use it to add a 'Login' button to your website that directs to this page. Your webmaster can easily take care of this for you.
+-else
+  %p
+    You can provide this link to your reporters and customers or use it to add a 'QRIDit Login' button to your website that directs to this page. Your webmaster can easily take care of this for you.
+
+-unless tenant.is_affiliate?
+  %p
+    Please do not hesitate to contact our friendly and responsive email support team by visiting our
+    = link_to('help desk', 'http://qridit.freshdesk.com') + '.'
+-if tenant.is_affiliate?
+  %p="The #{tenant.affiliate_owner.company_name} Team "
+-else
+  %p
+    The Quick Report Systems Team
+

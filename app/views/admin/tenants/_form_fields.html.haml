@@ -1,0 +1,112 @@
+%fieldset
+  .form-group
+    = f.label :subdomain, 'Subdomain', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :subdomain, class: 'form-control'
+  .form-group
+    = f.label :company_name, 'Company Name', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :company_name, class: 'form-control'
+  .form-group
+    = f.label :company_website, 'Company Website', class: 'col-sm-2 control-label'
+    .col-sm-10
+      .input-group
+        %span.input-group-addon http://
+        = f.text_field :company_website, class: 'form-control'
+  .form-group
+    = f.label :name, 'Name', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :name, class: 'form-control'
+  .form-group.row
+    = f.label :phone, 'Phone', class: 'col-sm-2 control-label'
+    .col-xs-4
+      .input-group
+        %span.input-group-addon
+          %i.fa.fa-phone
+        = f.text_field :phone, class: 'form-control'
+    = f.label :phone, 'ext.', class: 'col-sm-1 control-label'
+    .col-xs-2
+      = f.text_field :phone_ext, class: 'form-control'
+  .form-group
+    = f.label :admin_email, 'Admin Email', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.email_field :admin_email, class: 'form-control'
+
+%script{src: 'https://js.stripe.com/v2/'}
+:coffeescript
+  Stripe.setPublishableKey "#{ENV['STRIPE_PUBLISHABLE_KEY']}"
+
+  $(document).ready ->
+    $('form.tenant-form').submit (event) ->
+      if $('[data-stripe="number"]').length
+        $form = $(this)
+        $form.find("button").prop "disabled", true
+        Stripe.card.createToken $form, stripeResponseHandler
+        false
+      else
+        true
+
+    return
+
+  stripeResponseHandler = (status, response) ->
+    $form = $('form.tenant-form')
+    if response.error
+      $('.alert').hide()
+      $("<div class=\"alert alert-danger\"><button aria-hidden=\"true\" class=\"close\" data-dismiss=\"alert\" type=\"button\">&times;</button>" + response.error.message + "</div>").insertBefore("form").hide().fadeIn()
+      $form.find("button").prop "disabled", false
+    else
+      $form.append $("<input type=\"hidden\" name=\"admin_tenant[card_token]\" />").val(response.id)
+      $form.append $("<input type=\"hidden\" name=\"admin_tenant[card_brand]\" />").val(response.card.brand)
+      $form.append $("<input type=\"hidden\" name=\"admin_tenant[card_last4]\" />").val(response.card.last4)
+      $form.get(0).submit()
+    return
+
+%fieldset
+  %legend Billing info
+
+  - if @resource.card_token.present?
+    = f.hidden_field :card_token
+    = f.hidden_field :card_brand
+    = f.hidden_field :card_last4
+    .form-group
+      %label.col-sm-2.control-label Payment info
+      .col-sm-6
+        %p.form-control-static
+          Credit card
+          %strong= @resource.card_brand
+          ends in
+          %strong= @resource.card_last4
+  - else
+    .form-group
+      %label.col-sm-2.control-label Card Number
+      .col-sm-6
+        %input.form-control{type: 'text', size: 20, data: {stripe: 'number'}}
+    .form-group
+      %label.col-sm-2.control-label CVC
+      .col-sm-3
+        %input.form-control{type: 'text', size: 4, data: {stripe: 'cvc'}}
+    .form-group.row
+      %label.col-sm-2.control-label Expiration
+      .col-xs-2
+        %select.form-control{placeholder: 'MM', data: {stripe: 'exp-month'}}
+          %option month
+          - (1..12).each do |m|
+            %option= '%02d' % m
+      %label.col-sm-1.control-label /
+      .col-xs-3
+        %select.form-control{placeholder: 'YYYY', data: {stripe: 'exp-year'}}
+          %option year
+          - 6.times.each do |y|
+            %option= Time.now.year + y
+  .form-group
+    = f.label :priceplan_id, 'Priceplan', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.collection_select :priceplan_id, Admin::Priceplan.order(:position), :id, :title, {prompt: true}, {class: 'form-control'}
+  .form-group
+    = f.label :billing_recurrence, 'Pay every', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.select :billing_recurrence, Admin::Tenant::PAYMENT_RECURRENCE, {prompt: true}, {class: 'form-control'}
+  .form-group
+    = f.label :billing_coupon, 'Coupon', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :billing_coupon, class: 'form-control'

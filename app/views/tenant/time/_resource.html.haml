@@ -1,0 +1,9 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td= link_to resource.name, tenant_time_url(id: resource.id)
+  %td= time_base_zone(resource)
+  %td= time_last_report(resource)
+  %td= time_this_week(resource)
+  %td= time_this_month(resource)
+
+  %td.center.no-print
+    = time_buttons(resource)

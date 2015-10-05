@@ -1,0 +1,518 @@
+/*Qrid Show*/
+.tasks_index #myModal,.permatasks_index #myModak,.qrids_trial #myModal,.my_qrids_trial #myModal,.my_qrids_start{
+  .report-instructions label{
+    float: none;
+    &~input{
+      float: left;
+      margin-right: 5px;
+    }
+  }
+  .qrid-checklist{
+   max-width:648px;
+   margin-left: auto;
+   margin-right: auto;
+  }
+  .qrid-options{
+    min-width:0;
+  } 
+  .report-photo input{
+    float: left;
+    clear: left
+  }
+  .control-label{
+    width: 80% !important;
+    text-align: left;
+  }
+  .radio-no ~ .qrid-options .question, .radio-na ~ .qrid-options .question, .radio-yes ~ .qrid-options .question{
+    padding-left: 20px;
+  }
+  .question .qrid-options{
+    padding-left: 10px !important;
+  }
+  .radio-yes~.qrid-options{
+    margin-right: -150px;
+  }
+  //no
+  .radio-yes,.radio-na,.question {
+    .radio-no ~ .qrid-options{//2
+      margin-left: -212px;
+      .radio-no ~ .qrid-options{//3
+        margin-left: -207px;
+        .radio-no ~ .qrid-options{//4
+          margin-left: -202px;
+          .radio-no ~ .qrid-options{//5
+            margin-left: -197px;
+            .radio-no ~ .qrid-options{//6
+              margin-left: -192px;
+              .radio-no ~ .qrid-options{//7
+                margin-left: -187px;
+                .radio-no ~ .qrid-options{//8
+                  margin-left: -182px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  //na
+  .radio-yes,.radio-no,.question{
+    .radio-na ~ .qrid-options{//2
+      margin-left: -409px;
+      .radio-na ~ .qrid-options{//3
+        margin-left: -399px;
+        .radio-na ~ .qrid-options{//4
+          margin-left: -389px;
+          .radio-na ~ .qrid-options{//5
+            margin-left: -379px;
+            .radio-na ~ .qrid-options{//6
+              margin-left: -369px;
+              .radio-na ~ .qrid-options{//7
+                margin-left: -359px;
+                .radio-na ~ .qrid-options{//8
+                  margin-left: -349px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .question{
+    width: 100%;
+    & .qrid-options{//2
+      //width: 627px !important;
+      & .qrid-options{//3
+        //width: 612px !important;
+        & .qrid-options{//4
+          //width: 597px !important;
+          & .qrid-options{//5
+            //width: 581px !important;
+            & .qrid-options{//6
+              //width: 536px !important;
+              & .qrid-options{//7
+                //width: 521px !important;
+                & .qrid-options{//8
+                  //width: 506px !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }           
+  }
+  .qrid-options textarea{
+    width: 100%;
+  }
+  @media only screen and (max-width: 768px){
+    .radio-no ~ .qrid-options, .radio-na ~ .qrid-options, .radio-yes ~ .qrid-options .question {padding-left: 0}
+    .btn-minimize{
+      display:none;
+     }
+    .question,.qrid-options{
+      width: 100% !important;
+    }
+    .qrid-content{
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    .modal-body{
+      padding: 0 !important;
+    }
+    .radio-yes ~ .qrid-options{
+      width: 100%;
+      margin-left: 0 !important;
+    }
+    .qrid-options .action{
+      width: 100% !important;
+    }
+  }
+  @media only screen and (max-width: 768px){
+    .modal-dialog{
+     max-width: 768px; 
+    }
+    .question{
+      width: 100%;
+      & .qrid-options{//2
+        //width: 635px !important;
+        & .qrid-options{//3
+          //width: 625px !important;
+          & .qrid-options{//4
+            //width: 615px !important;
+            & .qrid-options{//5
+              //width: 605px !important;
+              & .qrid-options{//6
+                //width: 595px !important;
+                & .qrid-options{//7
+                  //width: 585px !important;
+                  & .qrid-options{//8
+                    //width: 575px !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }           
+    }
+    //no
+    .radio-yes,.radio-na,.question {
+      .radio-no ~ .qrid-options{//2
+        margin-left: -229px;
+        .radio-no ~ .qrid-options{//3
+          margin-left: -224px;
+          .radio-no ~ .qrid-options{//4
+            margin-left: -219px;
+            .radio-no ~ .qrid-options{//5
+              margin-left: -214px;
+              .radio-no ~ .qrid-options{//6
+                margin-left: -209px;
+                .radio-no ~ .qrid-options{//7
+                  margin-left: -204px;
+                  .radio-no ~ .qrid-options{//8
+                    margin-left: -199px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    //na
+    .radio-yes,.radio-no,.question{
+      .radio-na ~ .qrid-options{//2
+        margin-left: -459px;
+        .radio-na ~ .qrid-options{//3
+          margin-left: -454px;
+          .radio-na ~ .qrid-options{//4
+            margin-left: -449px;
+            .radio-na ~ .qrid-options{//5
+              margin-left: -444px;
+              .radio-na ~ .qrid-options{//6
+                margin-left: -439px;
+                .radio-na ~ .qrid-options{//7
+                  margin-left: -434px;
+                  .radio-na ~ .qrid-options{//8
+                    margin-left: -429px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 640px){
+    .question{
+      //width: 100%;
+      & .qrid-options{//2
+        //width: 580px !important;
+        & .qrid-options{//3
+          //width: 570px !important;
+          & .qrid-options{//4
+            //width: 560px !important;
+            & .qrid-options{//5
+              //width: 550px !important;
+              & .qrid-options{//6
+                //width: 540px !important;
+                & .qrid-options{//7
+                  //width: 530px !important;
+                  & .qrid-options{//8
+                    //width: 520px !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }           
+    }
+    //no
+    .radio-yes,.radio-na,.question {
+      .radio-no ~ .qrid-options{//2
+        margin-left: -188px;
+        .radio-no ~ .qrid-options{//3
+          margin-left: -183px;
+          .rado-no ~ .qrid-options{//4
+            margin-left: -178px;
+            .radio-no ~ .qrid-options{//5
+              margin-left: -173px;
+              .radio-no ~ .qrid-options{//6
+                margin-left: -168px;
+                .radio-no ~ .qrid-options{//7
+                  margin-left: -163px;
+                  .radio-no ~ .qrid-options{//8
+                    margin-left: -158px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    //na
+    .radio-yes,.radio-no,.question{
+      .radio-na ~ .qrid-options{//2
+        margin-left: -378px;
+        .radio-na ~ .qrid-options{//3
+          margin-left: -368px;
+          .radio-na ~ .qrid-options{//4
+            margin-left: -358px;
+            .radio-na ~ .qrid-options{//5
+              margin-left: -348px;
+              .radio-na ~ .qrid-options{//6
+                margin-left: -338px;
+                .radio-na ~ .qrid-options{//7
+                  margin-left: -328px;
+                  .radio-na ~ .qrid-options{//8
+                    margin-left: -318px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 480px){
+    .modal-dialog{
+     max-width: 480px; 
+    }
+    .question{
+      width: 100%;
+      & .qrid-options{//2
+        //width: 460px !important;
+        & .qrid-options{//3
+          //width: 450px !important;
+          & .qrid-options{//4
+            //width: 440px !important;
+            & .qrid-options{//5
+              //width: 430px !important;
+              & .qrid-options{//6
+                //width: 420px !important;
+                & .qrid-options{//7
+                  //width: 410px !important;
+                  & .qrid-options{//8
+                    //width: 400px !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }           
+    }
+    //no
+    .radio-yes,.radio-na,.question {
+      .radio-no ~ .qrid-options{//2
+        margin-left: -138px;
+        .radio-no ~ .qrid-options{//3
+          margin-left: -133px;
+          .radio-no ~ .qrid-options{//4
+            margin-left: -128px;
+            .radio-no ~ .qrid-options{//5
+              margin-left: -123px;
+              .radio-no ~ .qrid-options{//6
+                margin-left: -118px;
+                .radio-no ~ .qrid-options{//7
+                  margin-left: -113px;
+                  .radio-no ~ .qrid-options{//8
+                    margin-left: -108px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    //na
+    .radio-yes,.radio-no,.question{
+      .radio-na ~ .qrid-options{//2
+        margin-left: -271px;
+        .radio-na ~ .qrid-options{//3
+          margin-left: -261px;
+          .radio-na ~ .qrid-options{//4
+            margin-left: -251px;
+            .radio-na ~ .qrid-options{//5
+              margin-left: -241px;
+              .radio-na ~ .qrid-options{//6
+                margin-left: -231px;
+                .radio-na ~ .qrid-options{//7
+                  margin-left: -221px;
+                  .radio-na ~ .qrid-options{//8
+                    margin-left: -211px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 360px){
+    .question{
+      width: 100%;
+      & .qrid-options{//2
+        //width: 275px !important;
+        & .qrid-options{//3
+          //width: 265px !important;
+          & .qrid-options{//4
+            //width: 255px !important;
+            & .qrid-options{//5
+              //width: 245px !important;
+              & .qrid-options{//6
+                //width: 235px !important;
+                & .qrid-options{//7
+                  //width: 225px !important;
+                  & .qrid-options{//8
+                    //width: 215px !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }           
+    }
+    //no
+    .radio-yes,.radio-na,.question {
+      .radio-no ~ .qrid-options{//2
+        margin-left: -97px;
+        .radio-no ~ .qrid-options{//3
+          margin-left: -92px;
+          .radio-no ~ .qrid-options{//4
+            margin-left: -87px;
+            .radio-no ~ .qrid-options{//5
+              margin-left: -82px;
+              .radio-no ~ .qrid-options{//6
+                margin-left: -77px;
+                .radio-no ~ .qrid-options{//7
+                  margin-left: -72px;
+                  .radio-no ~ .qrid-options{//8
+                    margin-left: -67px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    //na
+    .radio-yes,.radio-no,.question{
+      .radio-na ~ .qrid-options{//2
+        margin-left: -194px;
+        .radio-na ~ .qrid-options{//3
+          margin-left: -184px;
+          .radio-na ~ .qrid-options{//4
+            margin-left: -174px;
+            .radio-na ~ .qrid-options{//5
+              margin-left: -164px;
+              .radio-na ~ .qrid-options{//6
+                margin-left: -154px;
+                .radio-na ~ .qrid-options{//7
+                  margin-left: -144px;
+                  .radio-na ~ .qrid-options{//8
+                    margin-left: -134px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 320px){
+    .question{
+      width: 100%;
+      & .qrid-options{//2
+        //width: 235px !important;
+        & .qrid-options{//3
+          //width: 225px !important;
+          & .qrid-options{//4
+            //width: 215px !important;
+            & .qrid-options{//5
+              //width: 205px !important;
+              & .radio{
+                padding: 0 !important;
+              }
+              & .qrid-options{//6
+                //width: 195px !important;
+                & .qrid-options{//7
+                  //width: 185px !important;
+                  & .qrid-options{//8
+                    //width: 175px !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }           
+    }
+    //no
+    .radio-yes,.radio-na,.question {
+      .radio-no ~ .qrid-options{//2
+        margin-left: -84px;
+        .radio-no ~ .qrid-options{//3
+          margin-left: -79px;
+          .radio-no ~ .qrid-options{//4
+            margin-left: -74px;
+            .radio-no ~ .qrid-options{//5
+              margin-left: -69px;
+              .radio-no ~ .qrid-options{//6
+                margin-left: -64px;
+                .radio-no ~ .qrid-options{//7
+                  margin-left: -59px;
+                  .radio-no ~ .qrid-options{//8
+                    margin-left: -54px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    //na
+    .radio-yes,.radio-no,.question{
+      .radio-na ~ .qrid-options{//2
+        margin-left: -170px;
+        .radio-na ~ .qrid-options{//3
+          margin-left: -160px;
+          .radio-na ~ .qrid-options{//4
+            margin-left: -150px;
+            .radio-na ~ .qrid-options{//5
+              margin-left: -140px;
+              .radio-na ~ .qrid-options{//6
+                margin-left: -130px;
+                .radio-na ~ .qrid-options{//7
+                  margin-left: -120px;
+                  .radio-na ~ .qrid-options{//8
+                    margin-left: -110px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.report_photo_progress{
+  clear: both;
+  &:empty {
+    display: none;
+  }
+}

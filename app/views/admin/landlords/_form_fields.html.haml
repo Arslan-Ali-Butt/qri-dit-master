@@ -1,0 +1,13 @@
+%fieldset
+  .form-group
+    = f.label :name, 'Username', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :name, class: 'form-control'
+  .form-group
+    = f.label :password, (@resource.new_record? ? 'Password' : 'New Password'), class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.password_field :password, class: 'form-control'
+  .form-group
+    = f.label :password_confirmation, 'Confirm Password', class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.password_field :password_confirmation, class: 'form-control'

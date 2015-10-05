@@ -1,0 +1,6 @@
+!!!
+%html{lang: 'en'}
+  %head
+    %title QR-code for QRID '#{@resource.name}'
+  %body
+    %embed{src: url_for(format: :svg, width: params[:width], height: params[:height], unit: params[:unit]), onload: params[:print].present? ? 'window.print(); window.close();' : ''}

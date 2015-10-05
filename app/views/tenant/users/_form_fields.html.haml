@@ -1,0 +1,134 @@
+-if params[:action] == 'edit' && @resource.id > 0
+  -if current_user.id == @resource.id
+    :javascript
+      $(document).ready(function() {
+        $('[name="tenant_staff[role_ids][]"]').each(function(){
+          $(this).nextAll('.switch-label, .switch-handle').click(function() {
+            if ($('#current_user_id').val() == $('#subject_id').val()) {
+              alert('You must have another Admin log-in to limit your account access');
+              return false;
+            }
+          });
+        });
+      });
+:javascript
+  $(document).ready(function() {
+    $('[name="tenant_staff[role_ids][]"]').change(function(){
+      $('[name="tenant_staff[role_ids][]"]').not(this).attr('checked', false);
+    });
+  });
+
+.row
+  .col-lg-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Personal info
+      .panel-body
+        .form-group
+          = hidden_field_tag :current_user_id, current_user.id
+          = hidden_field_tag :subject_id, @resource.id
+
+          = f.label :name, 'Name', class: 'col-sm-4 control-label'
+          .col-sm-8
+            = f.text_field :name, class: 'form-control', autofocus: true
+        .form-group
+          = f.label :email, 'Email', class: 'col-sm-4 control-label'
+          .col-sm-8
+            = f.email_field :email, class: 'form-control'
+            - if !@resource.accepted_or_not_invited?
+              %p.help-block
+                = "Invitation hasn't been accepted yet"
+            - if @resource.pending_reconfirmation?
+              %p.help-block
+                = "Currently waiting confirmation for: #{@resource.unconfirmed_email}"
+        - if controller_name == 'users' or controller_name == 'staff'
+          .form-group
+            = f.label :roles, 'Role', class: 'col-sm-4 control-label'
+            .col-sm-8
+              = f.collection_check_boxes(:role_ids, Tenant::Role.where.not(name: 'Client').order(:position), :id, :name) do |b|
+                - content_tag(:div, b.label(class: role_switcher_class(b.text)) { b.check_box(class: 'switch-input') + content_tag(:span, '', class: 'switch-label', data: {on: 'On', off: 'Off'}) + content_tag(:span, '', class: 'switch-handle') } + content_tag(:span, b.text, class: 'switch-title'))
+        .form-group
+          = f.label :staff_zone_ids, 'Base Zone',class: 'col-sm-4 control-label'
+          .col-sm-7
+            = f.collection_select :staff_zone_ids, Tenant::Zone.order(:name) + [Tenant::WorkType.new(name: 'Select All', id: 'all')], :id, :name, {}, {multiple: true, class: 'form-control selectize'}
+          =tenant_tooltip_hint "Choose the zone(s) this reporter works in.  You don't have to choose a zone, but it can make it easier to find this team member if you have a large team."
+        .form-group
+          = f.label :staff_work_type_ids, 'Work Type', class: 'col-sm-4 control-label'
+          .col-sm-7
+            = f.collection_select :staff_work_type_ids, Tenant::WorkType.order(:name) + [Tenant::WorkType.new(name: 'Select All', id: 'all')], :id, :name, {}, {multiple: true, class: 'form-control selectize'}
+          =tenant_tooltip_hint "Choose the work type(s) that describe the tasks this team member will be responsible for."
+        .form-group
+          = f.label :staff_daily_hours, 'Preferred working time', class: 'col-sm-4 control-label'
+          .col-sm-7
+            = f.text_area :staff_daily_hours, class: 'form-control', rows: 3
+          = tenant_tooltip_hint 'Specify the preferred working hours for this employee (ie. 9-5 Wednesdays and Fridays)'
+
+  .col-lg-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Contact info
+      .panel-body
+        .form-group
+          = f.label :phone_cell, 'Cell phone', class: 'col-sm-4 control-label'
+          .col-sm-8
+            .input-group
+              %span.input-group-addon
+                %i.fa.fa-phone
+              = f.text_field :phone_cell, class: 'form-control'
+        .form-group
+          = f.label :phone_landline, 'Landline phone', class: 'col-sm-4 control-label'
+          .col-sm-8
+            .input-group
+              %span.input-group-addon
+                %i.fa.fa-phone
+              = f.text_field :phone_landline, class: 'form-control'
+        .form-group
+          = f.label :phone_emergency, 'Emergency phone', class: 'col-sm-4 control-label'
+          .col-sm-8
+            .input-group
+              %span.input-group-addon
+                %i.fa.fa-phone
+              = f.text_field :phone_emergency, class: 'form-control'
+        .form-group
+          = f.label :phone_emergency_2, 'Emergency phone 2', class: 'col-sm-4 control-label'
+          .col-sm-8
+            .input-group
+              %span.input-group-addon
+                %i.fa.fa-phone
+              = f.text_field :phone_emergency_2, class: 'form-control'
+        .form-group
+          = f.label :notes, 'Notes', class: 'col-sm-4 control-label'
+          .col-sm-7
+            = f.text_area :notes, class: 'form-control', rows: 5
+          = tenant_tooltip_hint 'Things you don\'t want to forget about this team member (ie. I\'d only trust his beat up pickup to go to assignments within 10 miles of his house)'
+
+        = f.fields_for :settings do |ff|
+          - unless @resource.settings.new_record?
+            = ff.hidden_field :id
+          .form-group#disable_assignment_notifications
+            .col-sm-8.col-sm-offset-3
+              .checkbox
+                %label
+                  = ff.check_box :disable_assignment_notifications
+                  Disable Assignment Notifications
+            = tenant_tooltip_hint "By default an assignment notification is sent to the team member when an assignment has been created for them. Tick this to disable those emails. Disable Report Notifications - Tick if this manager does not want to receive an email notification each time a report is submitted."
+          .form-group#disable_report_notifications
+            .col-sm-8.col-sm-offset-3
+              .checkbox
+                %label
+                  = ff.check_box :disable_report_notifications
+                  Disable Report Notifications  
+            = tenant_tooltip_hint "Choose whether you would like admins and managers to receive email notifications of reports when reports are submitted by reporters. This will not effect client emails which are always sent to your clients when admins and managers click the 'submit to client' button on a report."          
+          .form-group#allow_reporting_with_no_assignment
+            .col-sm-8.col-sm-offset-3
+              .checkbox                
+                %label
+                  = ff.check_box :allow_reporting_with_no_assignment
+                  Allow Reporting With No Corresponding Assignment
+            = tenant_tooltip_hint "Allow this team member to scan ANY QRID at ANY time with or without a corresponding assignment. If this is not ticked the team member will only be able to scan a QRID the day it was assigned to them."
+  .col-sm-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Address
+      .panel-body
+        = render 'tenant/address/form_fields', f: f

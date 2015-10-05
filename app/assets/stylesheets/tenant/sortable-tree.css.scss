@@ -1,0 +1,145 @@
+/* 8037808 */
+.maticulating {
+  visibility: hidden !important;
+}
+
+.sortable-tree, .static-tree {
+  ol {
+    border-left: 1px dashed gray;	
+  }
+  .placeholder {
+    background-color: #EEF;
+    border: 1px dashed blue;
+  }
+  .ui-nestedSortable-error {
+    background: #FAA;
+    color: #8a1f11;
+  }
+  .dd-handle {
+    height: 27px;
+    background: #4cae4c;
+    float:left;
+  }
+  .dd3-content.collapse-children .glyphicon-circle-arrow-up {
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Safari and Chrome */
+  }
+  .dd3-content {
+    height: auto;
+    line-height: 29px;
+    padding-right: 85px;
+    &.question {
+      background-color: #f8f08c;
+    }
+    &.answer {
+      background-color: #d5fdd0;
+    }
+    &.comment {
+      background-color: #bce8f1;
+    }
+    &.photo {
+      background-color: #d0d5fd;
+    }
+    &.instructions {
+      background-color: #fcc073;
+    }
+    > span {
+      &.active {
+        font-weight: bold;
+      }
+      &.blocked {
+        font-weight: normal;
+        color: grey;
+      }
+    }
+    .controls {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+
+      .btn {
+        margin: 1px;
+      }
+    }
+  }
+}
+.last-change > .dd3-content {
+  border-color: green;
+}
+
+menu.nestable-menu {
+  padding: 0;
+  margin: 10px 0;
+}
+.dd-
+/* Nested tree */
+.dd-checkbox {
+  display: block;
+  height: 30px;
+  padding: 5px 8px;
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  cursor: pointer;
+  overflow: hidden;
+  border: 1px solid #c7cbd5;
+  background: #c7cbd5;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+
+  &:hover {
+    color: #36a9e1;
+    background: #383e4b;
+  }
+}
+.collapse-children + ol.dd-list {
+  display: none!important;
+}
+
+ol.sortable-tree li.dd3-item div.dd3-content.group {
+  background-color: #000;
+  color: #FEF1F0;
+}
+
+ol.sortable-tree li.dd3-item ol.dd-list li.dd3-item div.dd3-content.group {
+  background-color: #635c5c;
+  color: #FEF1F0;
+}
+
+ol.sortable-tree li.dd3-item ol.dd-list li.dd3-item ol.dd-list li.dd3-item div.dd3-content.group {
+  background-color: #908686;
+  color: #FEF1F0;
+}
+
+.form-group-template-tasks .dd3-item  > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd3-content.question .controls > .add-node[data-resource-type="Group"]{
+  display: none;
+}
+
+.form-group-template-tasks .dd3-item  > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd3-content.group .controls > .add-node[data-resource-type="Group"] {
+  display: none;
+}
+
+.form-group-template-tasks .dd3-item  > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd3-content.instructions .controls > .add-node[data-resource-type="Group"] {
+  display: none;
+}
+
+.form-group-tasks .dd3-item  > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd3-content.question.controls > .add-node[data-resource-type="Group"]{
+  display: none;
+}
+
+.form-group-tasks .dd3-item  > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd3-content.group .controls > .add-node[data-resource-type="Group"] {
+  display: none;
+}
+
+.form-group-tasks .dd3-item  > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd-list > .dd3-item > .dd3-content.instructions .controls > .add-node[data-resource-type="Group"] {
+  display: none;
+}

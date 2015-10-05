@@ -1,0 +1,80 @@
+$('#myModal').html("<%= escape_javascript(render 'report' ) %>");
+$('#myModal').modal('show');
+$(document).ready(function() {
+  $('[type="submit"]').click(function(evt) {
+    try {
+      var msg = $('[name="tenant_support_report[message]"]').val(), bug = $('[name="tenant_support_report[bug]"]').val();
+      var err = '';
+      
+      switch(msg.length) {
+        case 0:
+          err += 'Please enter a description of the bug to continue. ';
+          break;
+        default:
+          break;
+        }
+      
+      switch(bug.length) {
+        case 0:
+          err += 'Please enter brief label for this issue. ';
+          break;
+        default:
+          break;
+      }
+    } catch(ex) {
+      err += 'Regrettably, the information entered was not valid. ';
+    }
+    if(err.length>0){
+      $(".modal-body").prepend('<div class="alert alert-danger">' + err + '</div>');
+      evt.preventDefault();
+    }
+      
+    return(true);
+  });
+
+  var fd = <%= @s3_direct_post.fields.to_json.html_safe %>;
+
+  $('#tenant_support_report_screenshot').fileupload({
+      url: '<%= @s3_direct_post.url %>',
+      type: 'POST',
+      formData: <%= @s3_direct_post.fields.to_json.html_safe %>,
+      paramName: 'file',
+      dataType: 'XML',
+      maxNumberOfFiles: 1,
+      maxFileSize: 1048576,
+      autoUpload: false,
+      add: function(e, data) {
+        $('input#report_bug[type=submit]').prop('disabled', true);
+        file = data.files[0]
+
+        fd["Content-Type"] = data.files[0].type;
+        data.formData = fd;
+
+        data.context = $(tmpl("template-upload", file));
+        $('.upload-screenshot .progress-container').append(data.context);
+        data.submit();
+      },
+      progress: function(e, data) {
+        if (data.context) {
+          progress = parseInt(data.loaded / data.total * 100, 10);
+          data.context.find('.progress-bar').css('width', progress + '%');
+          data.context.find('.progress-bar').text("Uploading done");
+        }
+      },
+      done: function(e, data) {
+        // extract key and generate URL from response
+        key   = $(data.jqXHR.responseXML).find("Key").text();
+        url   = '//<%= @s3_direct_post.url.host %>/' + key;
+
+        // create hidden field
+        input = $("<input />", { type:'hidden', name: 'tenant_support_report[screenshot]', value: url });
+
+        form = $('#new_tenant_support_report');
+        form.append(input);
+        $('input#report_bug[type=submit]').prop('disabled', false);
+      },
+      fail: function(e, data) {
+        alert(data.files[data.index].error);
+      }
+  });
+});

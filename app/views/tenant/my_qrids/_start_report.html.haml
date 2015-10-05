@@ -1,0 +1,62 @@
+:javascript
+  $(document).ready(function(){
+    elementOffset = $('.qrid-info-wrapper').offset().top;
+    elementHeight = $('.qrid-info-wrapper').height();
+    elementWidth = ($('#qrid').width()) - 50;
+  
+    $('.qrid-options').each(function() {
+      $(this).css({width: elementWidth});  
+    });
+    //$('.radio').on('click', function() {
+      //$(this).find('.qrid-radio').value('true')
+    //});
+
+    $('.btn-primary').on('click', function() {
+      $('input, select, textarea').each(function() {
+        if($(this).is(':hidden')) {
+          $(this).removeAttr('required');  
+        }
+        
+      });
+    });
+  });
+  
+  //Scrolling function, puts timer at top when scrolling past timer
+  // $(window).on('scroll', function(){
+  //   if($(window).width() <= 400){
+  //     if($(window).scrollTop() >= elementOffset){
+  //       $('.qrid-info-wrapper').css({position: 'fixed', top: '0', width: '110%', background: 'white', 'z-index': '99'});
+  //       $('.qrid-info-wrapper').next('div').css({'margin-top': elementHeight});
+  //     } else {
+  //       $('.qrid-info-wrapper').removeAttr('style');
+  //       $('.qrid-info-wrapper').next('div').removeAttr('style');
+  //     }
+  //   } else {
+  //       $('.qrid-info-wrapper').removeAttr('style');
+  //       $('.qrid-info-wrapper').next('div').removeAttr('style');
+  //   }
+  // });
+  
+= form_tag(submit_tenant_my_report_url(@report_id), method: :patch, class: 'form-horizontal', id: 'assignment-checklist-form') do
+  %fieldset.qrid-checklist
+    = hidden_field_tag 'tenant_report[questions][0]'
+    %ol.dd-list
+      - if @permatask > 0
+        = render_report Tenant::Permatask.find(@permatask).self_and_descendants, @resource.permatask_ids
+        = hidden_field_tag 'tenant_report[is_permatask_report]', true
+      - else
+        = render_report Tenant::Task.join_recursive {|query| query.start_with(parent_id: nil).connect_by(id: :parent_id).order_siblings(position: :asc)}.where(active: true).where(checked: true).where(qrid_id: @resource.id)
+    .additional-comments   
+      %label= 'Please add additional comments here:'
+      %textarea.form-control{rows: '3', name: 'tenant_report[general_comments]'}
+    .additional-photos
+      %label.control-label= 'Additional Photos'
+      .report-photo
+        %input{type: 'file', name: 'tenant_report_photo[photo]', placeholder: 'please upload additoinal photos as needed'}
+        %input{type: 'hidden', name: 'tenant_report_photo[task_id]', value: '0'}
+        .reportphoto-collection#collection_0
+      #progress_0.report_photo_progress
+
+  = button_tag 'Send Report', id: 'send-report', name: nil, type: 'button', class: 'btn btn-primary', style:'width:100%;', data: {'loading-text' => 'Sending...'}
+
+= form_tag(tenant_report_photos_url(report_id: @report_id), id: 'report-photo-upload', remote: true, multipart: true)

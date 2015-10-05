@@ -1,0 +1,16 @@
+.control-btn.no-print
+  - if defined? qrcard_button
+    = tenant_button :qrcode, url_for(controller: controller_name, action: :qrcard, id: @resource), {remote: true, rel:"tooltip",title:"QRID Card"}
+  - if defined? assign_button
+    = tenant_button :assign, url_for(controller: controller_name, action: :show, id: @resource),{rel:"tooltip",title:"Assign QRID"}
+  - if defined? trial_button
+    = tenant_button :show, url_for(controller: controller_name, action: :trial, id: @resource),{rel:"tooltip",title:"View QRID"}
+  - if defined? edit_button
+    = tenant_button :edit, url_for(controller: controller_name, action: :edit, id: @resource),{rel:"tooltip",title:"Edit"}
+  - if defined? meta_button
+    = html_meta_button unless html_meta_button.blank?
+  = tenant_button :print,"",{rel:"tooltip",title:"Print this page"}  
+  
+
+  - if defined? duplicate_button
+    = tenant_button :duplicate, url_for(controller: controller_name, action: :duplicate, id: @resource),{rel:"tooltip",title:"Duplicate this Checklist and attach it to another site where you can customize it for that site"}

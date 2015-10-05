@@ -1,0 +1,22 @@
+= tenant_page_title 'Unlock account'
+.row
+  .login-box
+    = render 'layouts/tenant/flash_message'
+    = render 'devise/shared/error_messages'
+    = render 'devise/shared/logo'    
+
+    %h2 Resend unlock instructions
+    = form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post, class: 'form-horizontal' }) do |f|
+      %fieldset
+        = f.email_field :email, class: 'input-large col-xs-12', autofocus: true, placeholder: 'Email', required: ''
+        .clearfix
+
+        = f.button 'Resend unlock instructions', name: nil, type: 'submit', class: 'btn btn-primary col-xs-12'
+
+    %hr
+    = render 'devise/shared/links'
+    %br
+    %br
+    %br
+    %div.text-center
+      = image_tag 'tenant/QRIDit_logo.svg',style: "width:176px;"

@@ -1,0 +1,96 @@
+- page_title = 'Staff Detail'
+= tenant_page_title page_title
+
+%h1= page_title
+.row
+  = render partial: 'control_buttons', locals: {edit_button: true}
+
+.row
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Personal info
+      .panel-body
+        %p
+          %b Name:
+          %br
+          = @resource.name
+        %p
+          %b Email:
+          %br
+          = @resource.email
+        - if !@resource.invitation_accepted?
+          %p.help-block
+            Invitation hasn't been accepted yet
+            = link_to "#{@resource.invited_to_sign_up? ? 'Resend Invite' : 'Invite User'}", url_for(controller: controller_name, action: :invite, id: @resource), method: :post, class: 'btn btn-warning no-print', role: 'button'  if !@resource.invitation_accepted? && can?(:invite, Tenant::User)
+        - if @resource.pending_reconfirmation?
+          %p.help-block
+            = "Currently waiting confirmation for: #{@resource.unconfirmed_email}"
+        - if controller_name == 'users'
+          %p
+            %b Role:
+            %br
+            %ul
+              - @resource.roles.each do |role|
+                %li= role.name
+        %p
+          %b Work type:
+          %br
+          %ul
+            - @resource.staff_work_types.order(:name).each do |work_type|
+              %li= link_to work_type.name, tenant_work_types_url
+        %p
+          %b Base zone:
+          %br
+          %ul
+            - @resource.staff_zones.order(:name).each do |zone|
+              %li= link_to zone.name, tenant_zones_url
+        %p
+          %b Preferred working time:
+          %br
+          = @resource.staff_daily_hours
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Contact info
+      .panel-body
+        %p
+          %b Cell phone:
+          %br
+          = @resource.phone_cell
+        %p
+          %b Landline phone:
+          %br
+          = @resource.phone_landline
+        %p
+          %b Emergency phone:
+          %br
+          = @resource.phone_emergency
+        %p
+          %b Emergency phone 2:
+          %br
+          = @resource.phone_emergency_2
+        %p
+          %b Notes:
+          %br
+          = simple_format(@resource.notes)
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Address
+      .panel-body
+        = simple_format(@resource.address.try(:to_s))
+
+- if @resource.role?(:reporter)
+  .row
+    .col-md-12
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title Schedule
+        .panel-body
+          #calendar.hidden-sm.hidden-xs{style: 'min-height: 400px', data: {events_url: tenant_assignments_url, assignee_id: @resource.id}}
+          #mobile_calendar.visible-sm.visible-xs{data: {url: tenant_assignments_url+".json?assignee_id="+@resource.id.to_s}}
+          %br
+          #timezone{style: 'color:#999;'}

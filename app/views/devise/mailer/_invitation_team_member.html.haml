@@ -1,0 +1,26 @@
+- callToActionUrl = accept_user_invitation_url(invitation_token: @token, subdomain: Admin::Tenant.find(Apartment::Tenant.current_tenant.scan( /\d+$/ ).first).subdomain)
+- tenant = Admin::Tenant.find(Apartment::Database.current_tenant.match(/\d+/).to_s.to_i)
+
+- company_name = ''
+- if m = Apartment::Database.current_tenant.match(/\d+/)
+  - company_name = Admin::Tenant.find(m[0]).try(:company_name)
+
+- content_for(:header, "You Have Been Invited by #{company_name} to Access Your Homewatch Reports")
+
+
+%p Hello #{@resource.name},
+
+%p You have been invited by #{company_name} to access your homewatch reports. Please click the link below to accept your invitation.
+
+= render "layouts/emailbrand/call_to_action_button", :line1 => "Click here to", :line2 => "Activate Your Account", :line3 => "", :linkUrl => callToActionUrl
+
+%p In the future you will log into the system using this url:
+%p= link_to new_user_session_url(subdomain: Admin::Tenant.find(Apartment::Tenant.current_tenant.scan( /\d+$/ ).first).subdomain), new_user_session_url(subdomain: Admin::Tenant.find(Apartment::Tenant.current_tenant.scan( /\d+$/ ).first).subdomain)
+%p
+  Welcome aboard!
+  %br
+  -if tenant.is_affiliate?
+    =" The #{tenant.affiliate_owner.company_name} Team"
+  -else
+    \- The Quick Report Systems Team
+= render partial: 'devise/mailer/invitation_footer'

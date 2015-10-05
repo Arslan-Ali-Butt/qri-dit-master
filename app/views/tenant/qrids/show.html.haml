@@ -1,0 +1,86 @@
+- page_title = "Assign QRID - #{@resource.name}"
+= tenant_page_title page_title
+
+%h1= page_title
+.row
+  = render partial: 'control_buttons', locals: {edit_button: true, trial_button: true, qrcard_button: true, meta_button: true}
+
+.row
+  .col-sm-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Details
+      .panel-body
+        %p
+          %b QRID:
+          = @resource.name
+        %p
+          %b Work Type:
+          = @resource.work_type.name
+        %p
+          %b Client Site:
+          = @resource.site.name
+        %p
+          %b Client:
+          = @resource.site.owner.name
+        %p
+          %b Client Type:
+          = @resource.site.owner.client_type
+        %p
+          %b Estimated Duration:
+          = @resource.estimated_duration
+  .col-sm-4
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Select an Assignee
+      .panel-body
+        %form{class: 'form-horizontal', role: 'form'}
+          - staff_work_type_id = @resource.work_type_id
+          .form-group
+            = label_tag :staff_work_type_id, 'Work Type', class: 'col-sm-3 control-label'
+            .col-sm-9
+              = select_tag :staff_work_type_id, options_from_collection_for_select(Tenant::WorkType.order(:name), :id, :name, staff_work_type_id), prompt: 'All work types', class: 'form-control selectize funnel'
+
+          - staff_zone_id = @resource.site.try(:zone_id)
+          .form-group
+            = label_tag :staff_zone_id, 'Zone', class: 'col-sm-3 control-label'
+            .col-sm-9
+              = select_tag :staff_zone_id, options_from_collection_for_select(Tenant::Zone.order(:name), :id, :name, staff_zone_id), prompt: 'All zones', class: 'form-control selectize funnel'
+
+          - reporters = Tenant::Staff.active.order(:name)
+          - reporters = reporters.includes(:staff_work_types).where(tenant_work_types: {id: staff_work_type_id}) if staff_work_type_id
+          - reporters = reporters.includes(:staff_zones).where(tenant_zones: {id: staff_zone_id}) if staff_zone_id
+          .form-group
+            = label_tag :assignee_id, 'Reporter', class: 'col-sm-3 control-label'
+            .col-sm-9
+              = select_tag :assignee_id, options_from_collection_for_select(reporters, :id, :name), prompt: 'Please select a reporter', class: 'form-control selectize-reporter-id'
+
+        .well#assignee_badge{style: 'display:none; background: #F8F8F8 !important;'}
+          %p.help-block.small{style: 'font-weight: bolder; font-size: 14px;'} Drag and drop this badge into calendar to make an assignment
+          .external-event{style: 'margin: 0px auto;text-align: center;', data: {duration: (@resource.estimated_duration || 0) * 60}}
+            .fc-event-container
+              .fc-event.fc-event-hori{style: "margin: 2px; padding: 2px; border-radius: 3px; background-color: rgb(0,150,89); cursor: move"}
+                .fc-event-inner
+                  .fc-event-time
+                    = "(est. duration: #{@resource.estimated_duration || 0} hrs.)"
+                  .fc-event-title= @resource.name
+
+          %br
+          %p#assignee_daily_hours
+
+  .col-sm-4
+    = render 'filter_small'
+
+.row
+  .col-lg-12
+
+    %ul.nav.nav-tabs.nav-left
+      %li#qrid_calendar_view.active
+        %a= "Schedule for (#{@resource.name})"
+      %li#reporter_calendar_view.disabled
+        %a Reporter's Schedule
+    %br
+
+    #calendar{style: 'min-height: 400px', data: {events_url: tenant_assignments_url, qrid_id: @resource.id}}
+    %br
+    #timezone{style: 'color:#999;'}

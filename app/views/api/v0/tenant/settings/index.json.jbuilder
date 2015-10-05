@@ -1,0 +1,8 @@
+json.tenant_id @tenant.id
+json.allow_reporters_to_view_reports @tenant.allow_reporters_to_view_reports
+json.allow_comment_email_notifications @tenant.allow_comment_email_notifications
+json.allow_clients_view_comments @tenant.allow_clients_view_comments
+json.invite_clients_on_create @tenant.invite_clients_on_create
+json.user_disable_assignment_notifications @current_user.settings.disable_assignment_notifications.present? ? @current_user.settings.disable_assignment_notifications : false
+json.user_allow_reporting_with_no_assignment @current_user.settings.allow_reporting_with_no_assignment.present? ? @current_user.settings.allow_reporting_with_no_assignment : false
+json.user_id @current_user.id

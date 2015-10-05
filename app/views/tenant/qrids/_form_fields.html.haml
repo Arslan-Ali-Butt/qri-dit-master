@@ -1,0 +1,160 @@
+.row
+  - unless @resource.new_record?
+    .data-storage{data: {'site-id' => @resource.site.id, 'owner-id' => @resource.site.try(:owner_id), 'client-type' => @resource.site.try(:owner).try(:client_type), 'work-type-id' => @resource.work_type_id, 'qrid-id' => @resource.id}}
+  - main_class= @resource.new_record? ? 'col-sm-12' : 'col-sm-6'
+  %div{class: main_class}
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Details
+      .panel-body
+        - if @resource.new_record?
+          .col-sm-6
+            .form-group.col-sm-12
+              = f.label :work_type_id, 'Work Type', class: 'col-sm-2 control-label'
+              .col-sm-10
+                - if action_name == 'duplicate'
+                  = f.hidden_field :work_type_id
+                = f.collection_select :work_type_id, Tenant::WorkType.order(:name), :id, :name, {prompt: true}, {class: 'form-control selectize', disabled: action_name == 'duplicate'}
+            .form-group.col-sm-12
+              = label_tag :client_type, 'Client Type', class: 'col-sm-2 control-label'
+              .col-sm-10
+                - if params[:site_id].present?
+                  %p.form-control-static{style: 'padding-top: 0px;'}= @resource.site.owner.client_type
+                  = hidden_field_tag :client_type
+                - else
+                  = select_tag :client_type, options_for_select(Tenant::Client::CLIENT_TYPES, @resource.site.try(:owner).try(:client_type)), prompt: 'Please select',  class: 'form-control selectize funnel', disabled: action_name == 'duplicate'
+            .form-group.col-sm-12
+              = label_tag :owner_id, 'Client', class: 'col-sm-2 control-label'
+              .col-sm-10
+                - if params[:site_id].present?
+                  %p.form-control-static{style: 'padding-top: 0px;'}= @resource.site.owner.name
+                  = hidden_field_tag :owner_id
+                - else
+                  = select_tag :owner_id, options_from_collection_for_select(Tenant::Client.by_role('Client').active.where(client_type: @resource.site.try(:owner).try(:client_type)), :id, :name, @resource.site.try(:owner_id)), prompt: 'Please select', class: 'form-control selectize-client-id funnel', disabled: @resource.site.try(:owner).try(:client_type).nil?
+          .col-sm-6
+            .form-group.col-sm-12
+              = f.label :site_id, 'Site', class: 'col-sm-2 control-label'
+              .col-sm-10
+                - if params[:site_id].present?
+                  %p.form-control-static{style: 'padding-top: 0px;'}= @resource.site.name
+                  = f.hidden_field :site_id
+                - else
+                  = f.collection_select :site_id, Tenant::Site.active.where(owner_id: @resource.site.try(:owner_id)), :id, :name, {prompt: true}, {class: 'form-control selectize-site-id', disabled: @resource.site.try(:owner_id).nil?}
+            .form-group.col-sm-12
+              = f.label :name, 'QRID', class: 'col-sm-2 control-label'
+              .col-sm-9
+                = f.text_field :name, class: 'form-control'
+              = tenant_tooltip_hint 'Give your QRID an identifying name. You can have multiple QRIDs per site that would represent separate task lists at that specific address. Common QRID name prefixes would identify the site\'s common name. Common QRID name suffixes would be "main house", "yard", "boat house" etc...'
+            .form-group.col-sm-12
+              = f.label :estimated_duration, 'Estimated Duration', class: 'col-sm-2 control-label'
+              .col-sm-9
+                = f.text_field :estimated_duration, class: 'form-control', placeholder: 'Duration in hours'
+              = tenant_tooltip_hint 'The number of hours it should take to complete this QRID. You can use decimals (ie. 2.75 would = 2 hours and 45 minutes)'
+        - else
+          .form-group
+            = label_tag :work_type_id, 'Work Type', class: 'col-sm-2 control-label'
+            .col-sm-10
+              = label_tag :work_type_id, @resource.work_type.name, class: 'form-control-static'
+          .form-group
+            = label_tag :client_type, 'Client Type', class: 'col-sm-2 control-label'
+            .col-sm-10
+              %p.form-control-static= @resource.site.try(:owner).try(:client_type)
+          .form-group
+            = label_tag :owner_id, 'Client', class: 'col-sm-2 control-label'
+            .col-sm-10
+              = select_tag :owner_id, options_from_collection_for_select(Tenant::Client.by_role('Client').active.where(client_type: @resource.site.try(:owner).try(:client_type)), :id, :name, @resource.site.try(:owner_id)), prompt: 'Please select', class: 'form-control', disabled: true
+          .form-group
+            = f.label :site_id, 'Site', class: 'col-sm-2 control-label'
+            .col-sm-10
+              - if params[:site_id].present?
+                %p.form-control-static= @resource.site.name
+                = f.hidden_field :site_id
+              - else
+                = f.collection_select :site_id, Tenant::Site.active.where(owner_id: @resource.site.try(:owner_id)), :id, :name, {prompt: true}, {class: 'form-control selectize-site-id'}
+          .form-group
+            = f.label :name, 'QRID', class: 'col-sm-2 control-label'
+            .col-sm-9
+              = f.text_field :name, class: 'form-control', disabled: true
+            = tenant_tooltip_hint 'Give your QRID an identifying name. You can have multiple QRIDs per site that would represent separate task lists at that specific address. Common QRID name prefixes would identify the site\'s common name.  Common QRID name suffixes would be "main house", "yard", "boat house" etc...'
+          .form-group
+            = f.label :estimated_duration, 'Estimated Duration', class: 'col-sm-2 control-label'
+            .col-sm-9
+              = f.text_field :estimated_duration, class: 'form-control', placeholder: 'Duration in hours'
+            = tenant_tooltip_hint 'The number of hours it should take to complete this QRID. You can use decimals (ie. 2.75 would = 2 hours and 45 minutes)'
+          .from-group
+            = f.hidden_field :work_type_id
+            = f.submit 'Save', class: 'btn btn-success pull-right'
+  - unless @resource.new_record?
+    .col-sm-6
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title Photos
+        .panel-body
+          = render 'photos'
+.row
+  .col-sm-12
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title Instructions
+    .panel-body
+      -if !@resource.site.nil? && !@resource.site.instruction.blank?
+        %b Site:
+        =@resource.site.instruction
+      =f.text_area :instruction, style: "width:100%"
+
+- unless @resource.new_record?
+  .row
+    .col-sm-12
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title Checklists
+        .panel-body.visible-lg.visible-md
+          .form-group.form-group-tasks
+            = f.label :task_ids, 'Checklists', class: 'col-sm-2 control-label'
+            .col-sm-10
+              - tasks = Tenant::Task.join_recursive {|query| query.start_with(parent_id: nil).connect_by(id: :parent_id).order_siblings(position: :asc) }.where(active: true).where(qrid_id: @resource.id)
+              - unless tasks.empty?
+                = render 'nestable_menu', client_type: @resource.site.try(:owner).try(:client_type), on_top: true
+              .loading-big
+              %ol.dd-list.sortable-tree.task-collection.maticulating{data: {rebuild_url: rebuild_tenant_tasks_url, default_url: url_for('#'), max_levels: 8}}
+                = render_sortable_tree tasks, 'tenant/tasks', false, false
+
+              = render 'nestable_menu', client_type: @resource.site.try(:owner).try(:client_type), on_top: false
+          .form-group.form-group-permatasks
+            = f.label :permatask_ids, 'Permatasks', class: 'col-sm-2 control-label'
+            .col-sm-10
+              - permatasks = Tenant::Permatask.roots
+              %ol.dd-list.static-tree.maticulating
+                = render_static_tree permatasks, @resource.permatask_ids
+        .panel-body.hidden-lg.hidden-md Please use a tablet or a desktop computer to edit checklists.  Editing checklists is not compatible with small devices.
+- unless @resource.new_record?
+  .row
+    .col-sm-12
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title Alarm Settings
+        .panel-body
+          .col-md-6
+            .form-group
+              = f.label :alarm_code, 'Alarm Code', class: 'col-sm-4 control-label'
+              .col-sm-8
+                = f.text_field :alarm_code, class: 'form-control'
+                #site_alarm_code{style:"display: none"}= "#{@resource.site ? @resource.site.alarm_code : ""}"
+            .form-group
+              = f.label :alarm_safeword, 'Alarm Safeword', class: 'col-sm-4 control-label'
+              .col-sm-8
+                = f.text_field :alarm_safeword, class: 'form-control'
+                #site_alarm_safeword{style:"display: none"}= "#{@resource.site ? @resource.site.alarm_safeword : ""}"
+          .col-md-6
+            .form-group
+              = f.label :alarm_company, 'Alarm Company', class: 'col-sm-4 control-label'
+              .col-sm-8
+                = f.text_field :alarm_company, class: 'form-control'
+                #site_alarm_company{style:"display: none"}= "#{@resource.site ? @resource.site.alarm_company : ""}"
+            .form-group
+              = f.label :key_box_code, 'Key Box Code', class: 'col-sm-4 control-label'
+              .col-sm-8
+                = f.text_field :key_box_code , class: 'form-control'
+          .pull-right
+            =label_tag("use_site_alarm_label","Use Site's Alarm information")
+            =check_box_tag("use_site_alarm",1,false,onchange:"qrid_alarm_change(this)")

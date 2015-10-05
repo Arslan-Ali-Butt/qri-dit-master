@@ -1,0 +1,3 @@
+Date::DATE_FORMATS[:default] = lambda { |time| Time.now.year == time.year ? time.strftime("%b %e") : time.strftime("%b %e, %Y") }
+Time::DATE_FORMATS[:default] = lambda { |time| Time.now.year == time.year ? time.strftime("%b %e - %H:%M") : time.strftime("%b %e, %Y - %H:%M") }
+DateTime::DATE_FORMATS[:default] = lambda { |time| Time.now.year == time.year ? time.strftime("%b %e - %H:%M") : time.strftime("%b %e, %Y - %H:%M") }

@@ -1,0 +1,138 @@
+= raw @statement.html_view
+/ .row
+/   .col-lg-8
+/     %div{style: 'border: 6px solid #EEEEFF;'}
+/       .row
+/         .col-lg-12
+/           %div{style: 'margin-top: 14px; margin-left: 6px; margin-right: 6px; margin-bottom: 4px; background-color: #00ACBA; height: 37px; padding-top: 8px; color: white; text-align: center;'}
+/             %span Invoice
+/       .row
+/         .col-lg-6
+/           %div{style: 'margin-left: 6px;'}
+/             = image_tag 'tenant/invoice_logo.jpg'
+/         .col-lg-6
+/           %p{style: 'text-align: right;'}
+/             Quick Report Systems Inc.
+/             %br/
+/             1857 Daisy Lane.
+/             %br/
+/             Coldwater, Ontario L0K 1E0
+/             %br/
+/             Canada
+/             %br/
+/       .row
+/         .col-lg-3
+/           %div{style: 'margin-left: 6px; margin-top: 14px;'}
+/             %p
+/               %span
+/                 = "#{@customer.first_name} #{@customer.last_name}"
+/                 %br/
+/               %span
+/                 %b
+/                   Billing Address
+/                 %br/
+/               %span
+/                 = @customer.billing_address.line1
+/                 %br/
+/                 = @customer.billing_address.line2
+/                 %br/
+/                 = "#{@customer.billing_address.city}, #{@customer.billing_address.state}"
+/                 %br/
+/                 = @customer.billing_address.country
+/                 %br/
+/                 = @customer.billing_address.zip
+/         .col-lg-5{style: 'text-align: center;'}
+/           - case @invoice.status
+/             - when 'paid'
+/               %h1{style: 'color: LightGreen;'}
+/                 PAID
+/         .col-lg-4
+/           %div
+/             %table
+/               %tbody
+/                 %tr
+/                   %td
+/                     Invoice Number :
+/                   %td{style: 'text-align: right;'}
+/                     = '%04d' % @invoice.id
+/                 %tr
+/                   %td
+/                     Invoice Date :
+/                   %td{style: 'text-align: right;'}
+/                     = Time.at(@invoice.end_date).to_s
+/                 %tr
+/                   %td
+/                     Invoice Amount :
+/                   %td{style: 'text-align: right;'}
+/                     = number_to_currency @invoice.amount / 100.0
+/       .row
+/         .col-lg-12       
+/           %table.text-center{style: 'margin: 6px; width: 98%;'}
+/             %thead
+/               %tr{style: 'border-top: 2px solid LightGrey; border-bottom: 2px solid LightGrey;'}
+/                 %td
+/                   %b
+/                     Date
+/                 %td
+/                   %b
+/                     Description
+/                 %td
+/                   %b
+/                     Unit Cost
+/                 %td
+/                   %b
+/                     Units
+/                 %td
+/                   %b
+/                     Amount
+/               %tbody
+/                 - @invoice.line_items.each do |i|
+/                   %tr
+/                     %td
+/                       = Time.at(i.date_from).to_s
+/                     %td
+/                       = i.description
+/                     %td
+/                       = number_to_currency(i.unit_amount / 100.0)
+/                     %td
+/                       = i.quantity
+/                     %td
+/                       = number_to_currency(i.amount / 100.0)
+/                 %tfoot
+/                   %tr{style: 'border-top: 2px solid black;'}
+/                     %td{colspan: 5, style: 'text-align: right;'}
+/                       %b
+/                         TOTAL
+/                         = number_to_currency(@invoice.amount / 100.0)
+/       .row
+/         .col-lg-12
+/           %div{style: 'margin-left: 6px;'}
+/             %b
+/               PAYMENT STUB
+/             %br/
+/             %table.text-center{style: 'margin: 6px; width: 98%;'}
+/               %thead
+/                 %tr{style: 'border-top: 2px solid LightGrey; border-bottom: 2px solid LightGrey;'}
+/                   %td
+/                     %b
+/                       Date
+/                   %td
+/                     %b
+/                       Card
+/                   %td
+/                     %b
+/                       Status
+/                   %td
+/                     %b
+/                       Amount
+/                 %tbody
+/                   - @invoice.linked_transactions.each do |t|
+/                     %tr
+/                       %td
+/                         = Time.at(t[:txn_date]).to_s
+/                       %td
+/                         = "****-****-****-****"
+/                       %td
+/                         = t[:txn_status].humanize.capitalize
+/                       %td
+/                         = number_to_currency(t[:txn_amount] / 100.0)

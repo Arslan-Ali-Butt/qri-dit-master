@@ -1,0 +1,14 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td= "#{resource.author.try(:name)} (#{resource.author.roles.map(&:name).join(',')})"
+  %td= resource.note.present? ? resource.note : 'No Comment'
+  - time_field = ''
+  - if defined?(submission_note) and !submission_note.nil? and resource.id == submission_note.id
+    - time_field += 'Report submitted at: '
+  - elsif defined?(reception_note) and !reception_note.nil? and resource.id == reception_note.id
+    - time_field += 'Report received at: '
+  - time_field += Time.at(resource.created_at).to_s
+  %td= time_field
+  /
+    %td.center
+      - if current_user.try(:id) == resource.author_id
+        = tenant_button :edit, edit_tenant_report_note_url(report_id: resource.report_id, id: resource.id), remote: true

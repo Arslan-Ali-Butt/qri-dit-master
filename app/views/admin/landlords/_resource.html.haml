@@ -1,0 +1,8 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td= resource.name
+  %td= resource.last_login_at
+  %td.center
+    %span.label.label-success Active
+  %td.center
+    = admin_button :edit, edit_admin_landlord_url(resource), remote: true
+    = admin_button :delete, delete_admin_landlord_url(resource), remote: true

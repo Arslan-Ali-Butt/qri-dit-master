@@ -1,0 +1,11 @@
+- page_title = controller_name.titlecase
+= tenant_page_title page_title
+
+.row
+  .col-sm-6
+    = render 'c_reports'
+  .col-sm-6
+    = render 'c_inbox'
+    
+- if @show_getting_started_popup
+  #getting_started_popup

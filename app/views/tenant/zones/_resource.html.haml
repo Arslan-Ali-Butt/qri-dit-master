@@ -1,0 +1,8 @@
+%tr{data: {'resource-id' => resource.id}}
+  %td= resource.name
+  %td= simple_format(resource.notes)
+  %td.center
+    %span.label.label-success Active
+  %td.center.no-print
+    = tenant_button :edit, url_for(controller: controller_name, action: :edit, id: resource), {remote: true,rel:"tooltip",title:"Edit zone"}
+    = tenant_button :delete, url_for(controller: controller_name, action: :delete, id: resource), {remote: true,rel:"tooltip",title:"Delete zone"}

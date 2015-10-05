@@ -1,0 +1,8 @@
+$('#myModal').modal('hide');
+$('<%= escape_javascript(render('layouts/tenant/flash_message')) %>').appendTo('#flash').hide().fadeIn().delay(3000).fadeOut();
+
+<% if @resource.destroyed? || @resource.status == 'Deleted' %>
+$('[data-resource-id=<%= @resource.id %>]').fadeOut();
+<% else %>
+$('.<%= @resource.class.name.demodulize.downcase %>-collection<%= @resource.respond_to?(:collection_id) ? "#collection_#{@resource.collection_id}" : '' %> [data-resource-id=<%= @resource.id %>]').replaceWith('<%= escape_javascript(render('resource', resource: @resource)) %>');
+<% end %>

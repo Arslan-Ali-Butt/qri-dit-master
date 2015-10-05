@@ -1,0 +1,22 @@
+- if @resource.sites.active.empty?
+  %p Are you sure to delete the client?
+  = hidden_field_tag 'opt', 'destroy'
+- else
+  %p
+    %b WARNING:
+    This client has associated content.
+  %p Would you like to delete this client and all of it's associated sites, QRIDs, the QRIDs assignments, reports and time that has been tracked on those QRIDs or just the client itself?
+  %p
+    - unless @resource.status == 'Deleted'
+      .radio
+        %label
+          = radio_button_tag 'opt', 'disable'
+          Just the client
+    .radio
+      %label
+        = radio_button_tag 'opt', 'destroy'
+        The client and all of it's associated content
+
+  %p#last-warning{style: 'display:none;'}
+    %b Are You Sure?
+    This client and all of it's associated Sites, QRIDs, the QRIDs assignments, reports and time that has been tracked on those QRIDs will be lost.

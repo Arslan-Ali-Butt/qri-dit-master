@@ -1,0 +1,21 @@
+.box
+  .box-header{'data-original-title' => ''}
+    %h2
+      %i.fa.fa-book
+      = succeed "Inbox" do
+        %span.break
+    .box-icon
+      %a.btn-minimize{href: '#'}
+        %i.fa.fa-chevron-up
+  .box-content
+    %table.table.table-striped.table-bordered#inbox
+      %thead
+        %tr
+          %th Manager
+          %th Message
+      %tbody.report-collection
+        - inbox = Tenant::ReportNote.joins(report: [qrid: [:site]], author: [:roles]).includes(:author).includes(:report).where('tenant_roles.name = \'Manager\' OR tenant_roles.name = \'Admin\'').where('tenant_sites.owner_id = ?', current_user.id).where('tenant_reports.unread_by_client=?',true).where('tenant_report_notes.note!=?','').distinct.order(created_at: :desc)
+        - inbox.each do |resource|
+          %tr{data: {'resource-id' => resource.id}}
+            %td= resource.author.name
+            %td=link_to resource.note,tenant_c_report_url(resource.report)

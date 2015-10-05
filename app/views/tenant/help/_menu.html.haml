@@ -1,0 +1,68 @@
+.visible-sm.visible-xs#help-menu-toggle
+  %a{onclick: "toggleHelpMenu()"}
+    .glyphicon.glyphicon-list#help-menu-button Show Menu
+.col-lg-3.col-md-4.col-sm-12#help-sidebar
+  = image_tag 'tenant/QRIDit_logo.svg', id: 'help-logo'
+  #help-menu
+    %ul{style:  "padding-left: 0;"}
+      - if current_user.role?(:admin) || current_user.role?(:manager)
+        %li
+          %div{style:"font-size:130%;margin-bottom:12px;"}For Admin & Manager
+          %ul
+            %li
+              %b The Basics
+              %ul
+                %li= tenant_help_link 'Introduction', '/help', 'index'
+                %li= tenant_help_link 'Add a Client', '/help/add_a_client', 'add_a_client'
+                %li= tenant_help_link 'Add a Site', '/help/add_a_site', 'add_a_site'
+                %li= tenant_help_link 'Add a Team Member', '/help/add_a_team_member', 'add_a_team_member'
+                %li= tenant_help_link 'Create a QRID', '/help/create_a_qrid', 'create_a_qrid'
+                %li= tenant_help_link 'Assign a QRID', '/help/assign_a_qrid', 'assign_a_qrid'
+                %li= tenant_help_link 'Print a QRID', '/help/print_a_qrid', 'print_a_qrid'
+                %li= tenant_help_link 'Receiving Reports', '/help/receiving_reports', 'receiving_reports'
+                %li= tenant_help_link 'Sending Reports to Clients', '/help/sending_reports_to_clients','sending_reports_to_clients'
+            %li
+              %div{style:"margin-top:10px;font-weight: bold;"} About QRIDs
+              %ul
+                %li= tenant_help_link 'What is a QRID?', '/help/what_is_a_qrid', 'what_is_a_qrid'
+                %li= tenant_help_link 'About QRID Creation', '/help/about_qrid_creation', 'about_qrid_creation'
+                %li
+                  = tenant_help_link 'Checklists', '/help/checklists', 'checklists'
+                  %ul
+                    %li=tenant_help_link 'How a Checklist is Organized', '/help/how_a_checklist_is_organized', 'how_a_checklist_is_organized'
+            %li
+              %div{style:"margin-top:10px;font-weight: bold;"} General
+              %ul
+                %li= tenant_help_link 'Roles & Access Levels', '/help/roles_and_access_levels', 'roles_and_access_levels'
+                %li= tenant_help_link 'Templates', '/help/templates', 'templates'
+                %li= tenant_help_link 'Permatasks', '/help/permatasks', 'permatasks'
+                %li= tenant_help_link 'Work Types', '/help/work_types', 'work_types'
+                %li= tenant_help_link 'Client Types', '/help/client_types', 'client_types'
+                %li= tenant_help_link 'Sites', '/help/sites', 'sites'
+                %li= tenant_help_link 'Zones', '/help/zones', 'zones'
+                -#%li GPS Troubleshooting
+                
+      - if current_user.role?(:reporter)
+        %li
+          %div{style:"font-size:130%;margin-bottom:12px;margin-top:12px;"} For Staff
+          %ul
+            %li= tenant_help_link 'Introduction', '/help', 'index'
+            %li= tenant_help_link 'Scanning the QRID', '/help/scanning_a_qrid', 'scanning_a_qrid'
+            %li= tenant_help_link 'Completing the Checklist', '/help/completing_the_checklist', 'completing_the_checklist'
+            %li= tenant_help_link 'Submitting your Report', '/help/submitting_your_report', 'submitting_your_report'
+      -if current_user.role?(:client)
+        %li
+          %div{style:"font-size:130%;margin-bottom:12px;margin-top:12px;"} For Clients
+          %ul
+            %li= tenant_help_link 'Introduction', '/help', 'index'
+            %li
+              %div{style:"margin-top:10px;font-weight: bold;"} Features
+              %ul
+                %li
+                  = tenant_help_link 'Dashboard', '/help/dashboard', 'dashboard'
+                  %ul
+                    %li= tenant_help_link 'Latest Reports', '/help/latest_report','latest_report'
+                    %li= tenant_help_link 'Inbox', '/help/inbox', 'inbox'
+                %li= tenant_help_link 'My Reports', '/help/my_reports','my_reports'
+                %li= tenant_help_link 'My Sites', '/help/my_sites', 'my_sites'
+                

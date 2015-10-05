@@ -1,0 +1,277 @@
+<% if flash.now[:alert] || flash.now[:notice] %>
+    $('#flash .alert').hide();
+<% end %>
+$('<%= escape_javascript(render('layouts/tenant/flash_message')) %>').appendTo('#flash').hide().fadeIn().delay(3000).fadeOut();
+
+<% if @select_permatask %>
+    $('#qrid').html('<%= escape_javascript(render('start_select')) %>');
+    $.timer(updateTimer, 70, true);
+<% elsif defined?(@report_id) && @report_id %>
+    $('#qrid').html('<%= escape_javascript(render('start_report')) %>');
+<% end %>
+
+var sendReportClicked = false;
+// below is some nasty hacky Javascript validation because Rails validation was next to impossible without possibly breaking
+// a lot of things
+$('#send-report').click(function() {
+	$(this).button('loading');
+	$(this).attr('disabled', 'disabled');
+
+	sendReportClicked = true;
+
+	var submit = true;
+	var allAnswered = true;
+	var allInstructionsCompleted = true;
+
+	$('.action:visible').each(function() {
+		$(this).find('.report-instructions:visible').each(function(){
+			if (! $($(this).find('input[type="checkbox"]')[0]).is(':checked')) {
+				allInstructionsCompleted = false;
+			}
+		});
+	});
+
+	// basically find every visible question and make sure it is answered
+	$('.question:visible .checklist-controls:visible').each(function() { 
+		var answered = false;
+
+		$(this).find('.checklist-answers:visible').each(function() {
+
+			if ($($(this).find('.qrid-radio')[0]).is(':checked') ) {
+				answered = true;
+			}
+
+			$(this).find('textarea:visible').each(function() {
+				if ($(this).val() == '')
+				{
+					answered = false;
+				}
+			});
+
+			$(this).find('.report-instructions:visible').each(function(){
+				if (! $($(this).find('input[type="checkbox"]')[0]).is(':checked')) {
+					allInstructionsCompleted = false;
+				}
+			});
+		});
+
+		if (!answered) {
+			submit = false;
+			allAnswered = false;
+			$(this).parents('.question').last().css('border-color', 'red')
+		}
+	});
+
+	if (!allAnswered) {
+		alert('It looks like there are some issues with this report. Please review and revise all issues highlighted in red.');
+	}
+	
+	if (submit) {
+		if (!allInstructionsCompleted) {
+			if (confirm('Instruction(s) have not been marked as complete. Submit report anyway?')) {
+
+				if (!window.navigator.onLine) {
+					alert("You are currently in an area without an internet connection. Please find a connection and try again. Your mobile device will have an icon to indicate whether you are connected or not.");
+					$(this).button('reset');
+					$(this).removeAttr('disabled');
+					sendReportClicked = false;		
+				}
+				else {
+					$('#assignment-checklist-form').submit();
+				}
+			}
+			else {
+				$(this).button('reset');
+				$(this).removeAttr('disabled');
+				sendReportClicked = false;
+
+				return false;
+			}
+		}
+		else if (!window.navigator.onLine) {
+			alert("You are currently in an area without an internet connection. Please find a connection and try again. Your mobile device will have an icon to indicate whether you are connected or not.");
+			$(this).button('reset');
+			$(this).removeAttr('disabled');
+			sendReportClicked = false;
+		}		
+		else {
+			$('#assignment-checklist-form').submit();
+		}
+	}
+	else {
+		$(this).button('reset');
+		$(this).removeAttr('disabled');
+		sendReportClicked = false;
+		
+		return false;
+	}
+});
+
+var progressLostHandler = function() {
+
+	if (sendReportClicked) {
+		return null;
+	}
+	else {
+		return 'Are you sure you want to navigate away from this checklist? All progress will be lost.';
+	}
+};
+Uploaded_Image=function(f) {
+    this.file = f;
+
+    this.OrientAndReplace = function () {
+        loadImage.parseMetaData(
+                this.file,
+                $.proxy(function (data) {
+                    if (!data.imageHead) {
+                        return;
+                    };
+                    options={maxWidth:900,maxHeight:600};
+                    if(data.exif != undefined){
+                        console.log('Orientation: '+data.exif.get('Orientation'))
+                        if(data.exif.get('Orientation')!=0) {
+                            options.orientation = data.exif.get('Orientation');
+                        }else{
+                            options.orientation = 0;
+                        }
+                    }else{
+                        options.orientation = 0;
+                    }
+                    this.getRotated(options);
+                },this),
+                {
+                    maxMetaDataSize: 262144,
+                    disableImageHead: false
+                }
+        );
+    };
+
+    this.getRotated = function (options) {
+        if(options.orientation==0){
+            if(!!(window.File && window.FileReader && window.FileList && window.Blob)){
+                reader = new FileReader();
+                reader.onload = $.proxy(function(e) {
+                    this.uri=e.target.result;
+                    this.replace();
+                },this)
+                reader.readAsDataURL(this.file);
+            }
+        }
+        else {
+            loadImage(
+                    this.file,
+                    $.proxy(function (canvas) {
+                        if (canvas.tagName.toLowerCase() == 'canvas') {
+                            this.uri = canvas.toDataURL();
+                        }
+                        this.replace()
+                    }, this),
+                    options // Options
+            );
+        }
+    };
+    this.replace=function (){
+        this.a.attr('href', this.uri);
+        this.img.attr('src', this.uri);
+        this.img.width(100);
+    };
+    this.assign_elems = function (a, img) {
+        this.a = a;
+        this.img = img;
+        console.log(this.a);
+        console.log(this.img);
+    };
+};
+Unloader.init();
+Unloader.register(progressLostHandler);
+
+fd = <%= @s3_direct_post.fields.to_json.html_safe %>;
+var srctemp=[]
+var a=[]
+var img=[]
+var $progress=new Object();
+var uploading=0;
+$('.report-photo input[type=file]').each(function() {
+  target = $(this);
+  container = target.parent();
+
+  //taskIdInput = target.parent().find('input[type=hidden]');
+
+  $(this).fileupload({
+    url: '<%= @s3_direct_post.url %>',
+    type: 'POST',
+    formData: <%= @s3_direct_post.fields.to_json.html_safe %>,
+    paramName: 'file', // S3 does not like nested name fields i.e. name="user[avatar_url]"
+    dataType: 'XML',
+    maxNumberOfFiles: 10,
+    maxFileSize: 1048576,
+    autoUpload: false,
+    add: function (e, data) {
+      $('#send-report').attr('disabled', 'disabled');
+      types = /(\.|\/)(gif|jpe?g|png)$/i;
+      file = data.files[0];
+      if ((types.test(file.type) || types.test(file.name)) && !(file.name in $progress)) {
+        fd["Content-Type"] = data.files[0].type;  
+        data.formData = fd;
+        //data.context = $(tmpl("template-upload", file));
+        //$('#new_tenant_qrid_photo .progress-container').append(data.context);
+        //$('#upload-qrid-photo').click(function(e) {
+        //  e.preventDefault();
+          task_id = $(this).parent().find('input[type=hidden]').val();
+          $progress[file.name]=$("<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%;'>"+file.name+"</div></div>");
+          $('#progress_'+task_id).append($progress[file.name]);
+        uploading++;
+        data.submit();
+        //});
+      }
+      else {
+        alert("#{file.name} is not a gif, jpg or png image file")
+      }
+    },
+    progress: function (e, data) {
+        if(!!(data.loaded&&data.total)) {
+            progress = parseInt(data.loaded / data.total * 100, 10);
+            $progress[data.files[0].name].children('.progress-bar').attr('aria-valuenow', progress);
+            $progress[data.files[0].name].children('.progress-bar').css('width', progress+"%");
+        }
+    },
+    done: function(e, data) {
+        $progress[data.files[0].name].detach()
+        delete $progress[data.files[0].name];
+        //$('#upload-qrid-photo').prop('disabled', false);
+        //data.context.find('.progress-bar').text("Uploading done");
+
+        // extract key and generate URL from response
+        var key   = $(data.jqXHR.responseXML).find("Key").text();
+        var url   = '//<%= @s3_direct_post.url.host %>/' + key;
+
+        // create hidden field
+        var input = $("<input />", { type:'hidden', name: 'tenant_report_photo[photo_url]', value: url });
+
+        task_id = $(this).parent().find('input[type=hidden]').val();
+
+        form = $('#report-photo-upload');
+        form.append(input);
+
+        $(this).parent().find('input[type=hidden]').clone().appendTo(form);
+        //$(this).parent().find('input[type=hidden]').clone().appendTo(container);
+        $("<div class='thumbnail' data-resource-id='new' style='float:left'><a class='thumbnail loading'><\/a><\/div>").appendTo('.reportphoto-collection#collection_' + task_id).hide().fadeIn();
+        if(!!(window.File && window.FileReader && window.FileList && window.Blob)){
+            srctemp.push(new Uploaded_Image(data.files[0]));
+        }
+        $('#send-report').prop('disabled', true);
+        form.trigger('submit.rails');
+        form.empty();
+
+        //$('#upload-qrid-photo').prop('disabled', false);
+        uploading--;
+        if(uploading==0) {
+            $('#send-report').removeAttr('disabled');
+        }
+    },
+    fail: function (e, data) {
+        uploading--;
+        alert(data.files[data.index].error);
+    }
+  });
+});

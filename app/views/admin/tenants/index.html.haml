@@ -1,0 +1,33 @@
+- page_title = controller_name.titlecase
+= admin_page_title page_title
+
+.row
+  .col-lg-12
+    .box
+      .box-header{'data-original-title' => ''}
+        %h2
+          %i.fa.fa-user
+          = succeed page_title do
+            %span.break
+        .box-icon
+          %a.btn-minimize{href: '#'}
+            %i.fa.fa-chevron-up
+          %a.btn-close{href: '#'}
+            %i.fa.fa-times
+      .box-content
+        %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+          %thead
+            %tr
+              %th Company name
+              %th Subdomain
+              %th Company website
+              %th Admin Name
+              %th Phone
+              %th Admin Email
+              %th Status
+              %th Quick Actions
+          %tbody.tenant-collection
+            = render partial: 'resource', collection: @resources
+
+        %br
+        = link_to 'Add new tenant', new_admin_tenant_url, class: 'btn btn-primary'

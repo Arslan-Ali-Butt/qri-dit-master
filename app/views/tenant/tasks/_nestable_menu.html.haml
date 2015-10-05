@@ -1,0 +1,17 @@
+%menu.nestable-menu
+  - if on_top
+    %span.btn.btn-primary.add-node{data: {'remote' => 'true', 'work-type' => "#{@work_type_id}", 'resource-type' =>'Group', 'client-type' => "#{@client_type}", 'on-top'=> 'true'}} 
+      %div{rel: 'tooltip', title: 'Create main group'}
+        Create New Group
+  - else
+    %span.btn.btn-primary.add-node{data: {'remote' => 'true', 'work-type' => "#{@work_type_id}", 'resource-type' =>'Group', 'client-type' => "#{@client_type}"}} 
+      %div{rel: 'tooltip', title: 'Create new group'}
+        Create New Group
+  %button.btn.btn-info{type: 'button', data: {action: 'expand-all', confirm: 'Expanding all checklist items for large checklists like this one may cause considerable sluggishness in drag and drop behaviour.  Continue?'}} 
+    %div{rel: 'tooltip', title: 'Show all checklist items'}
+      Expand All
+  %button.btn.btn-danger{type: 'button', data: {action: 'collapse-all'}}
+    %div{rel: 'tooltip', title: 'Hide all but main categories'}
+      Collapse All
+  - if params[:work_type_id].present? && params[:client_type].present?
+    = link_to 'Preview All', tenant_template_tasks_trial_path(:format => :js, :client_type => params[:client_type], :work_type_id => params[:work_type_id]), remote: true, class: 'btn btn-success pull-right', role: 'button', rel: 'tooltip', title: 'Preview and test your entire checklist to get a feel for how a reporter will see and use it in the field.'

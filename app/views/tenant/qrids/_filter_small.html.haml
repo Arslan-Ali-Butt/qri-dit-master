@@ -1,0 +1,25 @@
+.panel.panel-default.no-print
+  .panel-heading
+    %h3.panel-title= defined?(trial) ? 'View another QRID' : (defined?(edit) ? 'Edit another QRID' : 'Assign another QRID')
+  .panel-body
+    %form{action: tenant_qrids_url, method: :get, class: "form-horizontal #{defined?(trial) ? 'smart-select-trial' : (defined?(edit) ? 'smart-select-edit' : 'smart-select')}", role: 'form'}
+      .form-group
+        = label_tag :client_type, 'Client Type', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :client_type, options_for_select(Tenant::Client::CLIENT_TYPES), prompt: 'All', class: 'form-control selectize funnel'
+      .form-group
+        = label_tag :owner_id, 'Client', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :owner_id, options_from_collection_for_select(Tenant::Client.by_role('Client').active.order(:name), :id, :name), prompt: 'All', class: 'form-control selectize-client-id funnel'
+      .form-group
+        = label_tag :site_id, 'Site', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :site_id, options_from_collection_for_select(Tenant::Site.active.order(:name), :id, :name), prompt: 'All', class: 'form-control selectize-site-id funnel'
+      .form-group
+        = label_tag :id, 'QRID', class: 'col-sm-4 control-label'
+        .col-sm-8
+          = select_tag :id, options_from_collection_for_select(Tenant::Qrid.active.order(:name), :id, :name), prompt: 'All', class: 'form-control selectize-qrid-id'
+
+      .form-group.form-actions
+        .col-sm-offset-9.col-sm-3
+          = button_tag 'Go', name: nil, type: 'submit', class: 'btn btn-primary pull-right'

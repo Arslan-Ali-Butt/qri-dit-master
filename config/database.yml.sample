@@ -1,0 +1,7 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: qridit
+  username: qridit
+  password: kingdom9
+  host: localhost

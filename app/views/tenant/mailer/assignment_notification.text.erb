@@ -1,0 +1,10 @@
+<% company_name = ''
+if m = Apartment::Database.current_tenant.match(/\d+/)
+  company_name = Admin::Tenant.find(m[0]).try(:company_name)
+end %>
+
+Hello <%=@assignment.assignee.name%>,
+
+You have a new assignment from <%=company_name%>. Click the link below to see the details about your latest assignment.
+
+<%=tenant_my_assignment_url(id: @assignment, subdomain: Admin::Tenant.find(Apartment::Database.current_tenant.scan( /\d+$/ ).first).subdomain)%>

@@ -1,0 +1,31 @@
+.box
+  .box-header{'data-original-title' => ''}
+    %h2
+      %i.fa.fa-calendar
+      = succeed "Current Assignments" do
+        %span.break
+    .box-icon
+      %a.btn-minimize{href: '#'}
+        %i.fa.fa-chevron-up
+  .box-content
+    %table.table.table-striped.table-bordered
+      %thead
+        %tr
+          %th Reporter
+          %th Client
+          %th Site
+          %th QRID
+          %th Start at
+          %th Status
+          %th
+      %tbody.report-collection
+        - @assignments.reject {|row| row.qrid.nil? }.each do |resource|
+          %tr{data: {'resource-id' => resource.id}}
+            %td= link_to resource.assignee.name, tenant_staff_url(id: resource.assignee_id)
+            %td= link_to resource.qrid.site.owner.name, tenant_client_url(id: resource.qrid.site.owner_id)
+            %td= link_to resource.qrid.site.name, tenant_site_url(id: resource.qrid.site_id)
+            %td= link_to resource.qrid.name, trial_tenant_qrid_url(id: resource.qrid_id)
+            %td= resource.start_at
+            %td= resource.status
+            %td.center
+              = tenant_button :show, edit_tenant_assignment_path(id: resource.id), remote: true

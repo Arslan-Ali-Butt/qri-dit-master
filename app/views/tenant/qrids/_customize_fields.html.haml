@@ -1,0 +1,107 @@
+- if !@resource.new_record?
+  :javascript
+    g_gogogadgetqridbuilder = true;
+- else
+  :javascript
+    g_gogogadgetqridbuilder = false;
+.row
+  - unless @resource.new_record?
+    .data-storage{data: {'site-id' => @resource.site.id, 'owner-id' => @resource.site.try(:owner_id), 'client-type' => @resource.site.try(:owner).try(:client_type), 'work-type-id' => @resource.work_type_id, 'qrid-id' => @resource.id}}
+  - main_class= @resource.new_record? ? 'col-sm-12' : 'col-sm-6'
+  %div{class: main_class}
+- unless @resource.new_record?
+  .row
+    .col-sm-12
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title Checklists
+        .panel-body
+          .form-group.form-group-tasks
+            .col-sm-12
+              .loading-big
+              - tasks = Tenant::Task.join_recursive {|query| query.start_with(parent_id: nil).connect_by(id: :parent_id).order_siblings(position: :asc) }.where(active: true).where(qrid_id: @resource.id)
+              - unless tasks.empty?
+                = render 'customize_nestable_menu', client_type: @resource.site.try(:owner).try(:client_type), on_top: true
+              %ol.dd-list.sortable-tree.task-collection.maticulating{data: {rebuild_url: rebuild_tenant_tasks_url, default_url: url_for('#'), max_levels: 8}}
+                = render_sortable_tree tasks, 'tenant/tasks', false
+
+              = render 'customize_nestable_menu', client_type: @resource.site.try(:owner).try(:client_type), on_top: false          
+.row
+  .col-sm-6    
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Confirm Details
+      .panel-body
+        - if @resource.new_record?
+          .col-sm-6
+            .form-group.col-sm-12
+              = f.label :work_type_id, 'Work type', class: 'col-sm-2 control-label'
+              .col-sm-10
+                = f.collection_select :work_type_id, Tenant::WorkType.order(:name), :id, :name, {prompt: true}, {class: 'form-control selectize'}
+            .form-group.col-sm-12
+              = label_tag :client_type, 'Client Type', class: 'col-sm-2 control-label'
+              .col-sm-10
+                = select_tag :client_type, options_for_select(Tenant::Client::CLIENT_TYPES, @resource.site.try(:owner).try(:client_type)), prompt: 'Please select',  class: 'form-control selectize funnel'
+            .form-group.col-sm-12
+              = label_tag :owner_id, 'Client', class: 'col-sm-2 control-label'
+              .col-sm-10
+                = select_tag :owner_id, options_from_collection_for_select(Tenant::Client.by_role('Client').active.where(client_type: @resource.site.try(:owner).try(:client_type)), :id, :name, @resource.site.try(:owner_id)), prompt: 'Please select', class: 'form-control selectize-client-id funnel', disabled: @resource.site.try(:owner).try(:client_type).nil?
+          .col-sm-6
+            .form-group.col-sm-12
+              = f.label :site_id, 'Site', class: 'col-sm-2 control-label'
+              .col-sm-10
+                - if params[:site_id].present?
+                  %p.form-control-static= @resource.site.name
+                  = f.hidden_field :site_id
+                - else
+                  = f.collection_select :site_id, Tenant::Site.active.where(owner_id: @resource.site.try(:owner_id)), :id, :name, {prompt: true}, {class: 'form-control selectize-site-id', disabled: @resource.site.try(:owner_id).nil?}
+            .form-group.col-sm-12
+              = f.label :name, 'QRID', class: 'col-sm-2 control-label'
+              .col-sm-9
+                = f.text_field :name, class: 'form-control'
+              = tenant_tooltip_hint 'Give your QRID an identifying name. You can have multiple QRIDs per site that would represent separate task lists at that specific address. Common QRID name prefixes would identify the site\'s common name. Common QRID name suffixes would be "main house", "yard", "boat house" etc...'
+            .form-group.col-sm-12
+              = f.label :estimated_duration, 'Estimated Duration', class: 'col-sm-2 control-label'
+              .col-sm-9
+                = f.text_field :estimated_duration, class: 'form-control', placeholder: 'Duration in hours'
+              = tenant_tooltip_hint 'The number of hours it should take to complete this QRID. You can use decimals (ie. 2.75 would = 2 hours and 45 minutes)'
+        - else
+          .form-group
+            = label_tag :work_type_id, 'Work Type', class: 'col-sm-2 control-label'
+            .col-sm-10
+              %p.form-control-static= @resource.work_type.name
+          .form-group
+            = label_tag :client_type, 'Client Type', class: 'col-sm-2 control-label'
+            .col-sm-10
+              %p.form-control-static= @resource.site.try(:owner).try(:client_type)
+          .form-group
+            = label_tag :owner_id, 'Client', class: 'col-sm-2 control-label'
+            .col-sm-10
+              = select_tag :owner_id, options_from_collection_for_select(Tenant::Client.by_role('Client').active.where(client_type: @resource.site.try(:owner).try(:client_type)), :id, :name, @resource.site.try(:owner_id)), prompt: 'Please select', class: 'form-control selectize-client-id funnel', disabled: @resource.site.try(:owner).try(:client_type).nil?
+          .form-group
+            = f.label :site_id, 'Site', class: 'col-sm-2 control-label'
+            .col-sm-10
+              - if params[:site_id].present?
+                %p.form-control-static= @resource.site.name
+                = f.hidden_field :site_id
+              - else
+                = f.collection_select :site_id, Tenant::Site.active.where(owner_id: @resource.site.try(:owner_id)), :id, :name, {prompt: true}, {class: 'form-control selectize-site-id', disabled: @resource.site.try(:owner_id).nil?}
+          .form-group
+            = f.label :name, 'QRID', class: 'col-sm-2 control-label'
+            .col-sm-9
+              = f.text_field :name, class: 'form-control'
+            = tenant_tooltip_hint 'Give your QRID an identifying name. You can have multiple QRIDs per site that would represent separate task lists at that specific address. Common QRID name prefixes would identify the site\'s common name.  Common QRID name suffixes would be "main house", "yard", "boat house" etc...'
+          .form-group
+            = f.label :estimated_duration, 'Estimated Duration', class: 'col-sm-2 control-label'
+            .col-sm-9
+              = f.text_field :estimated_duration, class: 'form-control', placeholder: 'Duration in hours'
+            = tenant_tooltip_hint 'The number of hours it should take to complete this QRID. You can use decimals (ie. 2.75 would = 2 hours and 45 minutes)'
+  - unless @resource.new_record?
+    .col-sm-6
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title Add Photos
+        .panel-body
+          = render 'photos'
+- if params[:return_path].present?
+  = hidden_field_tag :return_path, params[:return_path]

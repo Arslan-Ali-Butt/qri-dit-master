@@ -1,0 +1,7 @@
+- permatask = params[:permatask].to_i
+.qrid-checklist
+  %ol.dd-list
+    - if @resource.present?
+      = render_report @resource.descendants.where(origin_id: nil)
+    - else
+      = render_report Tenant::Task.join_recursive {|query| query.start_with(parent_id: nil).connect_by(id: :parent_id).order_siblings(position: :asc)}.where(origin_id: nil, qrid_id: nil, client_type: params[:client_type], work_type_id: params[:work_type_id])

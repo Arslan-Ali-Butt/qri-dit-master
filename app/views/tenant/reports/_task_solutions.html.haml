@@ -1,0 +1,7 @@
+.row.col-sm-offset-1
+  %h3 Possible solutions
+  %table.table.table-striped
+    %tbody.reportsolution-collection{id: "collection_#{task.id}"}
+      = render partial: 'tenant/report_solutions/resource', collection: task.solutions
+
+  = link_to 'Propose new solution', new_tenant_report_solution_url(report_id: task.report_id, report_task_id: task.id), remote: true, class: 'btn btn-primary'

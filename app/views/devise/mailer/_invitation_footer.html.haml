@@ -1,0 +1,34 @@
+-tenant=Admin::Tenant.find(Apartment::Database.current_tenant.match(/\d+/).to_s.to_i)
+-if tenant.is_affiliate?
+  -Apartment::Tenant.switch("tenant#{tenant.parent_id}")
+  -admin=Tenant::User.find_by! super_user: true
+  %p
+    =tenant.affiliate_owner.company_name
+    -unless admin.address.try(:house_number).blank? ||admin.address.try(:street_name).blank?
+      %br
+      ="#{admin.address.try(:house_number)} #{admin.address.try(:street_name)}"
+    -unless admin.address.try(:line_2).blank?
+      %br
+      =admin.address.try(:line_2)
+    -unless admin.address.try(:city).blank? || admin.address.try(:province).blank?
+      %br
+      ="#{address.try(:city)}, #{admin.address.try(:province)}"
+    -unless admin.address.try(:postal_code).blank?
+      %br
+      =admin.address.try(:postal_code)
+    -unless tenant.affiliate_owner.phone.blank?
+      %br
+      %br
+      =tenant.affiliate_owner.phone
+-else
+  %p
+    Quick Report Systems Inc.
+    %br
+    1857 Daisy Lane
+    %br
+    Coldwater, ON
+    %br
+    L0K 1E0
+    %br
+    %br
+    1-800-686-2104

@@ -1,0 +1,95 @@
+- page_title = 'Report Details'
+= tenant_page_title page_title
+
+%h1= page_title
+.row
+  = render partial: 'control_buttons', locals: { meta_button: true }
+  .pull-right.no-print{style:"margin-right: 20px;"}=link_to "See Client View",tenant_c_report_path(@resource)
+.row
+  .col-lg-6
+    .panel.panel-default#report_details
+      .panel-heading
+        %h3.panel-title Summary
+      .panel-body
+        %table.table.table-striped
+          %tr
+            %td
+              %label.control-label Work Type
+            %td
+              %p.form-control-static.pull-right= @resource.qrid.work_type.name
+          %tr
+            %td
+              %label.control-label Report ID
+            %td
+              %p.form-control-static.pull-right= @resource.id
+          - unless @reporter_id
+            %tr
+              %td
+                %label.control-label Client
+              %td
+                %p.form-control-static.pull-right= link_to @resource.qrid.site.owner.name, tenant_client_path(@resource.qrid.site.owner.id)
+
+          = render 'important_report_info'
+  .col-lg-6#report_map
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Location
+      .panel-body
+        %br
+        %input#tenant_site_latitude{type: :hidden, value: @resource.qrid.site.latitude}
+        %input#tenant_site_longitude{type: :hidden, value: @resource.qrid.site.longitude}
+        %input#tenant_site_image{type: :hidden, value: image_path('tenant/mapIcon-Complete.png')}
+        #map_site.no-print
+        #image_map.print-only.text-center
+          %img{src: "https://maps.googleapis.com/maps/api/staticmap?size=430x300&scale=1&zoom=14&markers=icon:http://goo.gl/d1I5ya%7C#{@resource.qrid.site.latitude},#{@resource.qrid.site.longitude}&sensor=false"}
+        .row.col-lg-offset-1.col-lg-10#report_location
+          %label.col-lg-3 Latitude
+          .col-lg-3
+            %p.form-control-static= @resource.qrid.site.latitude
+          %label.col-lg-3 Longitude
+          .col-lg-3
+            %p.form-control-static= @resource.qrid.site.longitude
+        %br
+.row
+  .col-sm-12
+    .panel.panel-default#report_photos
+      .panel-heading
+        %h3.panel-title Photos from the report
+      .panel-body
+        = render 'photos'
+
+.row
+  .col-lg-12
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title Checklist Summary
+      .panel-body
+        %ul#report_qrid.media-list
+          - if @resource.report_tasks.count == 0
+            %li.media
+              .media-body
+                %p{style: 'opacity: 0.8; text-indent: 24px;'} There are no checklist items for this report
+          - else
+            - root_nodes = nil
+            - if @resource.is_permatask_report
+              - root_nodes = Tenant::Permatask.roots.joins(:qrids).where(tenant_qrids: {id: @resource.qrid.id})
+            - else
+              - root_nodes = Tenant::Task.roots.where(qrid_id: @resource.qrid.id)
+            - root_nodes.each do |tsk|
+
+              - if @resource.report_tasks.where(task_id: tsk.descendants.pluck(:id)).count > 0
+                
+                %li.media
+                  .media-body
+                    %h4.media-heading{class:"#{tsk.task_type}"}= tsk.name
+
+                    - tsk.children.each do |child|
+                      = render partial: 'checklist_item', locals: { tsk: child }
+        - unless @resource.comments.empty?          
+          %br{style: 'page-break-after:always; page-break-inside: avoid;'}
+          %dl
+            %dt General Comments
+            %dd= @resource.comments
+
+- unless @reporter_id
+  = render 'notes'

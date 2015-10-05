@@ -1,0 +1,41 @@
+%fieldset
+  %legend Details
+  %p
+    Subdomain:
+    %b= @resource.subdomain
+  %p
+    Company Name:
+    %b= @resource.company_name
+  %p
+    Company Website:
+    %b= @resource.company_website
+  %p
+    Name:
+    %b= @resource.name
+  %p
+    Phone:
+    %b= "#{@resource.phone} ext. #{@resource.phone_ext}"
+  %p
+    Admin Email:
+    %b= @resource.admin_email
+
+%fieldset
+  %legend Billing info
+  %p
+    Payment Card Type:
+    %b= @resource.payment_card_brand
+  %p
+    Payment Card Last 4 digits:
+    %b= @resource.card_last4
+  %p
+    Priceplan:
+    %b= @resource.priceplan.try(:name)
+  %p
+    Payment Recurrence:
+    %b= @resource.payment_recurrence
+  %p
+    Payment Coupon:
+    %b= @resource.payment_coupon
+
+  %br
+  = link_to 'Edit', edit_admin_tenant_url(@resource), class: 'btn btn-primary'

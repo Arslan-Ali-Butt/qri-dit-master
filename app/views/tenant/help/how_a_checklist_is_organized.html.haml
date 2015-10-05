@@ -1,0 +1,39 @@
+= render 'menu'
+.col-lg-9.col-md-8.help_content
+  %h3.pull-right Getting Started
+  %h4 About QRIDs > Checklists
+  %h2 How a Checklist is Organized
+  %p Checklists, Templates and Permatasks are all organized and broken down in the same manner:
+  %ul
+    %li
+      %b Group
+      .btn.btn-primary Create New Group
+      %br
+      A Group is a parent category that consists of all proceeding, related sub-categories. A typical example of a Group would be "Basement", "Exterior Walls" or "Second Floor".
+    %li
+      %b Sub-Group
+      .btn.btn-primary
+        %i.fa.fa-th-large
+      %br
+      A Sub-Group always belongs to a Group and will typically be used as a parent sub-category in which all related questions will exist. A Group can consist of any number of Sub-Groups.
+    %li
+      %b Question
+      .btn.btn-default
+        %i.glyphicon.icon-q
+      %br
+      Questions typically belong to a Sub-Group and will require the assigned team member to make either a yes, no or N/A answer.
+    %li
+      %b Conditional
+      .btn.btn-default Yes
+      .btn.btn-default No
+      .btn.btn-default N/A
+      %br
+      It's up to the author of the Checklist to set the conditionals up but typically an answer which signifies a negative response will lead to a further “conditional” request. A conditional can be set as a request for a comment, a photograph, an instruction or another question. Conditionals provide key information in a completed report as they either require the reporter to give deeper insight into a problem, support a statement or provide a truly definitive answer.
+    %li
+      %b Instruction
+      .btn.btn-default
+        %i.glyphicon.glyphicon-info-sign
+      %br
+      Instructions typically belong to a Sub-Group as well and provide reporters with straight forward directives.  For example; “Check the PH Level in the pool”. Although the reporter will not be asked to provide a Yes, No, N/A answer to an instruction, they will be expected to confirm that the instruction has been carried out by simply selecting a checkbox located to the right of the directive provided. As the author of the Checklist, the administrator/manager may choose to request that the reporter provides photographic evidence or a comment to support the declared confirmation of completion.
+      
+      

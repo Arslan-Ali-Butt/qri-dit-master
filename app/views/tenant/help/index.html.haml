@@ -1,0 +1,9 @@
+= render 'menu'
+.col-lg-9.col-md-8.help_content
+  %h3.pull-right Getting Started
+  %h4 The Basics >
+  %h2 Introduction
+  -if current_user.role?(:client)
+    =render "client_index"
+  -else
+    =render "staff_index"

@@ -1,0 +1,7 @@
+<% if @logo.new_record? %>
+  alert("Failed to upload: <%= j @logo.errors.full_messages.join(', ').html_safe %>");
+<% else %>
+  $(function(){
+    $(".uploads .thumbnails").html("<%= j render('logo') %>");
+  });
+<% end %>

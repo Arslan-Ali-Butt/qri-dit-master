@@ -1,0 +1,12 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button.close{'aria-hidden' => 'true', 'data-dismiss' => 'modal', type: 'button'} &times;
+      %h4.modal-title Getting Started
+    .modal-body
+      .text-center
+        %p Welcome to QRIDit Home Watch!
+        %p We have created a simple guide to introduce you to the core concepts to give you a basic understanding of how the system works and act as a guide to help you use the system effectively.
+    .modal-footer
+      = link_to 'Thanks. Take me there', tenant_help_url, class: 'btn btn-primary', role: 'button'
+      %button.btn.btn-default{'data-dismiss' => 'modal', type: 'button'} No thanks. I'm a pro already.

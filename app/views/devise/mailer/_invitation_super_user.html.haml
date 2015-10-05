@@ -1,0 +1,144 @@
+- callToActionUrl = accept_user_invitation_url(invitation_token: @token, subdomain: Admin::Tenant.find(Apartment::Database.current_tenant.scan( /\d+$/ ).first).subdomain )
+-tenant=Admin::Tenant.find(Apartment::Database.current_tenant.match(/\d+/).to_s.to_i)
+:css
+  body {
+    font-family: "Times New Roman", Times, serif;
+  }
+
+  h1 {
+    color: #2EB4BF;
+    font-size: 32pt;
+    text-align: center;
+    font-family: "Arial Regular", Arial, Helvetica, sans-serif;
+  }
+
+  .emailBlastFooter {
+    text-align: center;
+    color: #ffffff;
+    background-color: #27B5BF;
+    font-family: "Arial Regular", Arial, Helvetica, sans-serif;
+  }
+
+  .actionButton > a {
+    text-decoration: none;
+    text-align: center;
+    margin: 0 auto;
+    color: #fff;
+    font-family: "Arial Regular", Arial, Helvetica, sans-serif;
+    max-width: 200px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  .actionButton {
+    padding: 0.5em;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .actionButton > .secondRowButton {
+    text-transform: uppercase;
+    font-size: 125%;
+  }
+
+  html,body {
+    margin: 0;
+  }
+
+  .eBlastTextContainer {
+    background-color: #ffffff;
+    padding-bottom: 1em;
+  }
+
+  .footerBold {
+    font-size: 24pt;
+  }
+
+  .phoneNumber {
+    margin-right: 1em;
+  }
+
+  .webLink > a {
+    color: #ffffff;
+  }
+
+  .rightImage > img {
+    margin-right: 1em;
+  } 
+
+  .mainContent {
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 0.5em;
+  }
+
+  .header {
+    padding-top: 1em;
+  }
+
+%table{cellpadding: 0, cellspacing: 0}
+  %tbody
+    %tr
+      %td
+        -unless tenant.is_affiliate?
+          =image_tag(attachments['emailBanner.png'].url)
+      %td.rightImage{align: "right"}
+        -if tenant.is_affiliate?
+          -current_tenant=Apartment::Tenant.current_tenant
+          -Apartment::Tenant.switch("tenant#{tenant.parent_id}")
+          -unless tenant.affiliate_owner.logo.nil?
+            =image_tag(tenant.affiliate_owner.logo.photo.expiring_url(9999999, :thumbnail)) #TODO find way to show logo without timeout
+          -Apartment::Tenant.switch(current_tenant)
+        -else
+          =image_tag(attachments['bannerLogo.png'].url)
+    %tr
+      %td.mainContent.header{colspan: 2}
+        -if tenant.is_affiliate_owner?
+          %h1="Welcome to #{tenant.affiliate_owner.company_name}, Home Watch Reporting Software"
+        -else
+          %h1 Welcome to QRIDit Home Watch Edition
+    %tr
+      %td.mainContent{colspan: 2}
+        %p Hello #{@resource.name},
+        -if tenant.is_affiliate?
+          %p="Thank you for purchasing the #{tenant.affiliate_owner.company_name}, Home Watch Reporting Software. You have made a great decision."
+        -else
+          %p Thank you for purchasing the QRIDit Homewatch Edition Software. You have made a great decision.
+        %p In order to ensure you are the owner of this email account, please click the link below to activate your account. You will be prompted to create your account password as well.
+
+        = render "layouts/emailbrand/call_to_action_button", :line1 => "Click here to", :line2 => "Activate Your Account", :line3 => "", :linkUrl => callToActionUrl
+
+        %p
+          Welcome aboard!
+          %br
+          -if tenant.is_affiliate?
+            ="- The #{tenant.affiliate_owner.company_name} Team"
+          -else
+            \- The Quick Report Systems Team
+
+        = render partial: 'devise/mailer/invitation_footer'
+    %tr.emailBlastFooter
+      %td{colspan: 2}
+        -unless tenant.is_affiliate?
+          =image_tag(attachments['footerImage.png'].url)
+    %tr.emailBlastFooter
+      %td.mainContent{colspan: 2, align: "right"}
+        %span.phoneNumber.footerBold
+          -if tenant.is_affiliate?
+            -unless tenant.affiliate_owner.phone.blank?
+              =tenant.affiliate_owner.phone
+          -else
+            800.686.2104
+        %span.webLink.footerBold
+          -if tenant.is_affiliate?
+            -unless tenant.affiliate_owner.company_website.blank?
+              =link_to  tenant.affiliate_owner.company_website, tenant.affiliate_owner.company_website
+          -else
+            =link_to 'www.qridithomewatch.com', 'https://www.qridithomewatch.com'
+    -unless tenant.is_affiliate_owner?
+      %tr.emailBlastFooter
+        %td.mainContent{colspan: 2, align: "right"}
+          QRIDit Homewatch Edition Software was designed by Home Watch Business Owners specifically for the Home Watch industry and has been endorsed by the National Home Watch Association (NHWA).

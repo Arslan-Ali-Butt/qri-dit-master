@@ -1,0 +1,12 @@
+- company_name = ''
+- if m = Apartment::Database.current_tenant.match(/\d+/)
+  - company_name = Admin::Tenant.find(m[0]).try(:company_name)
+- content_for(:header, "An Assignment From #{company_name} has been Cancelled.")
+%p
+  Hello #{@assignment.assignee.name},
+%p The assignment for #{company_name} has been cancelled.
+%p Assignment details:
+%ul
+  %li QRID: #{@assignment.qrid.name}
+  %li Site: #{@assignment.qrid.site.address.house_number} #{@assignment.qrid.site.address.street_name}, #{@assignment.qrid.site.address.city}, #{@assignment.qrid.site.address.province}, #{@assignment.qrid.site.address.country}
+  %li #{@assignment.start_at} - #{@assignment.end_at}
